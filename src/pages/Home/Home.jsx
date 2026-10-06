@@ -1,7 +1,9 @@
+import SpecialPackages from "./SpecialPackages";
+
 export default function Home() {
   return (
     <>
-      <h1>hello</h1>
+      <SpecialPackages />{" "}
     </>
   );
 }
