@@ -2,6 +2,7 @@ import React from "react";
 import SpecialPackages from "./SpecialPackages";
 import VisaCard from "./VisaCard";
 import { visaRequirements } from "../Home/data/VisaRequirements"; // استيراد المصفوفة من الملف الجديد
+import MoreForYou from "./MoreForYou";
 
 // بيانات بطاقات متطلبات التأشيرة
 
@@ -31,6 +32,8 @@ export default function Home() {
           </div>
         </div>
       </section>{" "}
+
+      <MoreForYou />
     </>
   );
 }
