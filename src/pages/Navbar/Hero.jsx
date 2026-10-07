@@ -163,7 +163,7 @@ export default function Hero({ isMenuOpen }) {
       </main>
 
       {/* Decorative Bottom Leaf - مخفية على الشاشات الصغير والمتوسطة (hidden) وتظهر فقط بداية من الشاشات الكبيرة (lg:block) */}
-      <div className="hidden lg:block absolute left-0 top-[70px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none">
+      <div className="hidden lg:block absolute left-0 top-[130px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none">
         <img
           src="/images/Isolation_Mode.png"
           alt="Leaf Decorative Art"
