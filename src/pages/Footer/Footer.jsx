@@ -145,7 +145,7 @@ export default function Footer() {
 
           {/* Payment Badges */}
           <div className="flex items-center gap-2 flex-wrap">
-           <img className="h-6 w-auto object-contain" src="../../../public/images/Group2.png" />
+           <img className="h-6 w-auto object-contain" src="/images/Group2.png" />
           </div>
         </div>
       </div>
