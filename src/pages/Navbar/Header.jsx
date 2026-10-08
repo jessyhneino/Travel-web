@@ -7,7 +7,7 @@ const AVATAR_IMAGE_URL =
 export default function Header({ isMenuOpen, setIsMenuOpen }) {
   return (
     <>
-      <header className="relative z-30 w-[95%] mx-auto pt-4 px-2 sm:px-4 flex items-center justify-between">
+      <header className="relative z-50 w-[95%] mx-auto pt-4 px-2 sm:px-4 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-2.5 cursor-pointer select-none">
           <div className="relative w-48 sm:w-55 lg:w-60 flex items-center justify-center transition-all duration-200">
