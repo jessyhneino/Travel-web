@@ -1,9 +1,12 @@
-import React from "react";
-import { Star, MapPin, Coffee, Waves } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { Star, Waves, Coffee, MapPin } from 'lucide-react';
 
-export default function HotelCard({ imgSrc }) {
+export default function HotelCard({ id, imgSrc }) {
   return (
-    <div className="bg-white rounded-2xl p-0 overflow-hidden flex flex-col md:flex-row gap-5 border border-slate-100 hover:shadow-md transition-shadow">
+    <Link 
+      to={`/hotels/${id}`}
+      className="bg-white rounded-2xl p-0 overflow-hidden flex flex-col md:flex-row gap-5 border border-slate-100 hover:shadow-md transition-shadow block"
+    >
       {/* Hotel Image Container */}
       <div className="relative w-full md:w-64 h-44 flex-shrink-0">
         <img
@@ -57,6 +60,6 @@ export default function HotelCard({ imgSrc }) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

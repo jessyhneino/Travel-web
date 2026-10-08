@@ -5,10 +5,10 @@ import HotelCard from "./HotelCard";
 
 export default function Hotels() {
   const hotelImages = [
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80",
+    "/images/Rectangle16.png",
+    "/images/Rectangle16.png",
+    "/images/Rectangle16.png",
+    "/images/Rectangle16.png",
   ];
 
   return (
