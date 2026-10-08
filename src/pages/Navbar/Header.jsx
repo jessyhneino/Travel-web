@@ -1,5 +1,6 @@
 import React from "react";
 import { User, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const AVATAR_IMAGE_URL =
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80";
@@ -67,13 +68,13 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                   <span>Notifications</span>
                   <span className="w-2 h-2 rounded-full bg-sky-400 -mt-2"></span>
                 </a>
-                <a
-                  href="#about"
+                <Link
+                  to="/hotels"
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
                 >
                   About
-                </a>
+                </Link>
                 <a
                   href="#contact"
                   onClick={() => setIsMenuOpen(false)}
@@ -175,13 +176,13 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
               <span>Notifications</span>
               <span className="w-2 h-2 rounded-full bg-sky-400 -mt-2"></span>
             </a>
-            <a
-              href="#about"
+            <Link
+                  to="/hotels"
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
             >
               About
-            </a>
+            </Link>
             <a
               href="#contact"
               onClick={() => setIsMenuOpen(false)}
