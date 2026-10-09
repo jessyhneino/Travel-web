@@ -7,7 +7,7 @@ export default function ImageGallery() {
   const secondaryImages = IMAGES.slice(1);
 
   return (
-    <div className="w-full my-6 overflow-hidden rounded-2xl">
+    <div className="w-full my-6 px-4 md:px-0 overflow-hidden rounded-2xl">
       <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-12">
         {/* الصورة الرئيسية الكبيرة */}
         <div className="col-span-2 h-[240px] sm:h-[320px] md:col-span-6 md:h-[340px] lg:h-[400px]">

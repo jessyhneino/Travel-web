@@ -26,7 +26,7 @@ export default function HotelOverview() {
   const [paymentMethod, setPaymentMethod] = useState("mastercard");
 
   return (
-    <div className="my-6">
+    <div className="my-6 px-4 md:px-0">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-3 mb-6 gap-4">
         {/* Navigation Tabs Header */}
         <div className="flex items-center gap-4 sm:gap-8 text-sm font-medium overflow-x-auto no-scrollbar scroll-smooth -mb-3 pb-3">

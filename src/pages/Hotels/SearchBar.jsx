@@ -81,7 +81,7 @@ export default function SearchBar() {
   return (
     <div ref={searchBarRef} className="relative w-full">
       {/* ================= SEARCH BAR ================= */}
-      <div className="bg-white p-4 max-lg:p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap lg:flex-nowrap max-lg:flex-col items-center max-lg:items-stretch gap-3 max-lg:gap-2.5 w-full">
+      <div className="bg-white p-4 flex item-center justify-center max-lg:p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap lg:flex-nowrap max-lg:flex-col items-center max-lg:items-stretch gap-3 max-lg:gap-2.5 w-[100%]">
         {/* Location Selector */}
         <div
           onClick={() =>

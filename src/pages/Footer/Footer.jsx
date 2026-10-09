@@ -3,7 +3,7 @@ import { Plane, Palmtree, Landmark, Globe, Compass } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white text-gray-600 font-sans py-12 px-6 md:px-16 border-t border-gray-100">
+    <footer className="w-full bg-white text-gray-600 font-sans py-12 px-4 sm:px-12 md:px-16 border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         {/* Logo Header Section */}
         <div className="mb-8">

@@ -6,7 +6,7 @@ import { NEARBY_PLACES } from "./data/nearby";
 
 export default function AreaSection() {
   return (
-    <section className="w-full py-6 sm:py-8">
+    <section className="w-full px-4 md:px-0 py-6 sm:py-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
         {/* Area Information */}
         <div className="min-w-0 space-y-6 sm:space-y-8 lg:col-span-6">

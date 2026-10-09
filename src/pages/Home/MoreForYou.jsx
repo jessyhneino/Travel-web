@@ -4,12 +4,12 @@ import { topCardsData } from "../Home/data/TopCardsData";
 
 export default function MoreForYou() {
   return (
-    <section className="relative w-full max-w-7xl mx-auto px-4 py-12 md:py-16 bg-slate-50/50 min-h-screen flex flex-col justify-center font-sans overflow-hidden">
+    <section className="relative w-full px-4 sm:px-12 md:px-16   py-12 md:py-16 bg-slate-50/50 min-h-screen flex flex-col justify-center font-sans overflow-hidden">
       {/* Background Decorative Waves (matching subtle lines on edges) */}
       <div className="absolute top-0 -left-12 w-32 h-32 rounded-full border border-sky-300/40 pointer-events-none -z-0" />
       <div className="absolute bottom-0 -right-12 w-48 h-48 rounded-full border border-sky-300/40 pointer-events-none -z-0" />
 
-      <div className="relative z-10 max-w-6xl mx-auto w-full space-y-8">
+      <div className="relative z-10   w-full space-y-8">
         {}
         <div className="text-center">
           <h2 className="text-xl md:text-2xl font-bold tracking-wider text-[#1e293b] uppercase">

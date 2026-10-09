@@ -7,7 +7,7 @@ import { INITIAL_REVIEWS } from "./data/initialReview";
 function ReviewItem({ review, isLast }) {
   return (
     <article
-      className={`pb-4 sm:pb-5 ${!isLast ? "border-b border-gray-100" : ""}`}
+      className={`pb-4 px-4 md:px-0 sm:pb-5 ${!isLast ? "border-b border-gray-100" : ""}`}
     >
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
         <span className="text-sm font-bold text-slate-800">{review.name}</span>
@@ -33,7 +33,7 @@ function RatingStars({ rating, onSelectRating }) {
 
   return (
     <div
-      className="flex items-center gap-2 mb-4"
+      className="flex items-center px-4 md:px-0 gap-2 mb-4"
       role="group"
       aria-label="Choose your rating"
     >
@@ -87,7 +87,7 @@ export default function ReviewsSection() {
   };
 
   return (
-    <section className="w-full min-w-0 pt-5 sm:pt-6 lg:pt-8">
+    <section className="w-full pt-5 px-4 md:px-0 sm:pt-6 lg:pt-8">
       {/* عنوان القسم */}
       <h2 className="mb-5 text-lg sm:text-xl font-bold text-slate-800">
         Reviews

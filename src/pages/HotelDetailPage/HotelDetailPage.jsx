@@ -7,7 +7,7 @@ import ReviewsSection from "./ReviewsSection";
 
 export default function HotelDetailPage() {
   return (
-    <div className="bg-[#fcfdff] min-h-screen py-6 px-4 md:px-12 lg:px-20 max-w-7xl mx-auto font-sans antialiased text-slate-800">
+    <div className="bg-[#fcfdff] min-h-screen py-6  md:px-12 lg:px-17 font-sans antialiased text-slate-800">
       {/* Component 1: Image Gallery Grid */}
       <ImageGallery />
 

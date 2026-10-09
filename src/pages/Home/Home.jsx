@@ -5,7 +5,6 @@ import { visaRequirements } from "../Home/data/VisaRequirements"; // استير�
 import MoreForYou from "./MoreForYou";
 import Hero from "./Hero";
 
-
 // بيانات بطاقات متطلبات التأشيرة
 
 export default function Home() {
@@ -14,8 +13,8 @@ export default function Home() {
       {/* 4. تمرير حالة القائمة إلى Hero لإظهار أو إخفاء القائمة الجانبية */}
       <Hero />
       <SpecialPackages />
-      <section className="w-full  bg-[#f8faff] py-12 px-4 sm:px-6 lg:px-12 flex flex-col justify-center">
-        <div className="max-w-7xl mx-auto w-full">
+      <section className="bg-[#f8faff] py-12 px-4 sm:px-12 md:px-16 flex flex-col justify-center">
+        <div className=" mx-auto w-full">
           {/* Section Title */}
           <h2 className="text-xl sm:text-2xl font-black text-[#1e293b] tracking-wider uppercase mb-6 sm:mb-8 text-left">
             VISA REQUIREMENTS
@@ -33,7 +32,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>{" "}
+      </section>
       <MoreForYou />
     </>
   );

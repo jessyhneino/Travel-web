@@ -3,7 +3,7 @@ import RoomCard from "./RoomCard";
 
 export default function RoomSelection() {
   return (
-    <section className="w-full my-6 sm:my-8 lg:my-10 px-3 sm:px-4 lg:px-0">
+    <section className="w-full my-6 sm:my-8 lg:my-10 px-4 md:px-0">
       {/* Section Title */}
       <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-4 sm:mb-5">
         Choose your room
