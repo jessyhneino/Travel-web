@@ -110,8 +110,8 @@ export default function HotelOverview() {
 
       {/* ================= Modal الحجز مع خلفية مغبشة ================= */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md my-auto max-h-[90vh] overflow-y-auto p-5 text-slate-800 relative animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50  flex items-center justify-center p-4 bg-black/40 backdrop-blur-md overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 text-slate-800 relative animate-in fade-in duration-200">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
               <h3 className="text-base font-bold text-slate-800">Reserve</h3>
@@ -126,7 +126,7 @@ export default function HotelOverview() {
             {/* Room Image */}
             <div className="rounded-xl overflow-hidden mb-4 h-40 w-full">
               <img
-                src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=800"
+                src="/images/Rectangle18.png"
                 alt="Room"
                 className="w-full h-full object-cover"
               />
@@ -155,7 +155,7 @@ export default function HotelOverview() {
               <h5 className="text-xs font-bold text-slate-800 mb-2">
                 Room Amenities
               </h5>
-              <div className="grid grid-cols-2 gap-y-2 text-[11px] text-slate-500">
+              <div className="grid  grid-cols-2 sm:grid-cols-3  gap-y-2 text-[11px] text-slate-500">
                 <div className="flex items-center gap-1.5">
                   <Wifi className="w-3.5 h-3.5 text-sky-500" /> Free WiFi
                 </div>
@@ -318,8 +318,8 @@ export default function HotelOverview() {
                     </span>
                   </div>
                   <div className="flex -space-x-1.5 items-center">
-                    <span className="w-4 h-4 rounded-full bg-red-500 inline-block opacity-90"></span>
-                    <span className="w-4 h-4 rounded-full bg-amber-400 inline-block opacity-90"></span>
+                    <img className="w-[44px] h-[25px]" src="/images/Mastercard_logo1.png" />
+
                   </div>
                 </label>
 
@@ -343,9 +343,9 @@ export default function HotelOverview() {
                       Mada
                     </span>
                   </div>
-                  <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                    مدى mada
-                  </span>
+                  <div>
+                    <img className="w-[44px] h-[14px]" src="/images/Group2109.png" />
+                  </div>
                 </label>
 
                 {/* Visa */}
@@ -368,9 +368,9 @@ export default function HotelOverview() {
                       Visa
                     </span>
                   </div>
-                  <span className="text-xs font-black italic tracking-tighter text-blue-800">
-                    VISA
-                  </span>
+                  <div>
+                    <img className="w-[44px] h-[14px]" src="/images/symbols.png" alt="" />
+                  </div>
                 </label>
               </div>
             </div>
