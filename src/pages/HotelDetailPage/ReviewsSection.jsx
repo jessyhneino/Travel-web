@@ -6,7 +6,7 @@ import { INITIAL_REVIEWS } from "./data/initialReview";
 // مكون عرض المراجعة الفردية
 function ReviewItem({ review, isLast }) {
   return (
-    <article
+    <article 
       className={`pb-4 px-4 md:px-0 sm:pb-5 ${!isLast ? "border-b border-gray-100" : ""}`}
     >
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
@@ -87,7 +87,7 @@ export default function ReviewsSection() {
   };
 
   return (
-    <section className="w-full pt-5 px-4 md:px-0 sm:pt-6 lg:pt-8">
+    <section id="reviews" className="w-full pt-5 px-4 md:px-0 sm:pt-6 lg:pt-8">
       {/* عنوان القسم */}
       <h2 className="mb-5 text-lg sm:text-xl font-bold text-slate-800">
         Reviews
