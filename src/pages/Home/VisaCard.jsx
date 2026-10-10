@@ -2,7 +2,7 @@ import React from "react";
 
 export default function VisaCard({ country, imageSrc, flagSrc }) {
   return (
-    <div className="flex flex-col gap-3 group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+    <div className="flex flex-col gap-3 group transition-transform duration-300">
       {/* Container for the image and flag icon */}
       <div className="relative w-full aspect-[16/10] bg-slate-200 rounded-xl md:rounded-2xl overflow-hidden shadow-sm border border-slate-100">
         {/* Main Background Image */}

@@ -2,71 +2,152 @@ import React, { useState } from "react";
 import { Star } from "lucide-react";
 import { INITIAL_REVIEWS } from "./data/initialReview";
 
-
-// مكون عرض المراجعة الفردية
+// عرض المراجعة - بدون تعديل
 function ReviewItem({ review, isLast }) {
   return (
-    <article 
-      className={`pb-4 px-4 md:px-0 sm:pb-5 ${!isLast ? "border-b border-gray-100" : ""}`}
+    <article
+      className={`pb-4 ${
+        !isLast ? "border-b border-slate-200" : ""
+      }`}
     >
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
-        <span className="text-sm font-bold text-slate-800">{review.name}</span>
+      <div className="flex items-center gap-3 mb-1.5">
+        <span className="text-[13px] font-medium text-[#202746]">
+          {review.name}
+        </span>
 
         <div className="flex items-center gap-1">
-          <span className="text-xs sm:text-sm font-semibold text-blue-600">
-            {review.rating}
+          <span className="text-[13px] font-medium text-blue-500">
+            {Number(review.rating).toFixed(1).replace(/\.0$/, "")}
           </span>
-          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+
+          <Star
+            className="w-3.5 h-3.5 fill-amber-400 text-amber-400"
+            strokeWidth={1.5}
+          />
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-gray-500 leading-6 break-words">
+      <p className="text-xs text-[#858da3] leading-[19px] break-words">
         {review.comment}
       </p>
     </article>
   );
 }
 
-// مكون تقييم النجوم التفاعلي
+// النجوم التفاعلية - دعم نصف نجمة
 function RatingStars({ rating, onSelectRating }) {
-  const [hoveredRating, setHoveredRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(null);
+  const activeRating = hoveredRating ?? rating;
 
   return (
-    <div
-      className="flex items-center px-4 md:px-0 gap-2 mb-4"
-      role="group"
-      aria-label="Choose your rating"
-    >
-      {[1, 2, 3, 4, 5].map((star) => {
-        const isFilled = star <= (hoveredRating || rating);
+    <div className="mb-4">
+      <div
+        className="flex items-center gap-1.5"
+        role="group"
+        aria-label="Choose your rating"
+        onMouseLeave={() => setHoveredRating(null)}
+      >
+        {[1, 2, 3, 4, 5].map((star) => {
+          const fill = Math.max(
+            0,
+            Math.min(1, activeRating - star + 1)
+          );
 
-        return (
-          <button
-            key={star}
-            type="button"
-            onClick={() => onSelectRating(star)}
-            onMouseEnter={() => setHoveredRating(star)}
-            onMouseLeave={() => setHoveredRating(0)}
-            aria-label={`Rate ${star} out of 5 stars`}
-            aria-pressed={rating === star}
-            className="flex items-center justify-center min-w-8 min-h-8 rounded-md transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-          >
-            <Star
-              className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors ${
-                isFilled
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-gray-300 hover:text-amber-300"
-              }`}
-            />
-          </button>
-        );
-      })}
+          return (
+            <button
+              key={star}
+              type="button"
+              aria-label={`Rate ${star} stars or ${star - 0.5} stars`}
+              aria-pressed={
+                rating === star || rating === star - 0.5
+              }
+              className="
+                relative flex items-center justify-center
+                w-7 h-8 rounded-md
+                transition-transform duration-200
+                hover:scale-110 active:scale-95
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-amber-300
+              "
+            >
+              <span className="relative block w-6 h-6 pointer-events-none">
+                {/* النجمة غير الممتلئة */}
+                <Star
+                  className="absolute inset-0 w-6 h-6"
+                  fill="#FFF1C2"
+                  stroke="#F5C56A"
+                  strokeWidth={1.8}
+                />
+
+                {/* الجزء الذهبي الممتلئ */}
+                <span
+                  className="absolute inset-y-0 left-0 overflow-hidden"
+                  style={{ width: `${fill * 100}%` }}
+                >
+                  <Star
+                    className="w-6 h-6 max-w-none"
+                    fill="#FBBF24"
+                    stroke="#F59E0B"
+                    strokeWidth={1.8}
+                  />
+                </span>
+              </span>
+
+              {/* النصف الأيسر: نصف نجمة */}
+              <span
+                className="absolute inset-y-0 left-0 w-1/2 cursor-pointer"
+                onMouseEnter={() =>
+                  setHoveredRating(star - 0.5)
+                }
+                onClick={() =>
+                  onSelectRating(star - 0.5)
+                }
+              />
+
+              {/* النصف الأيمن: نجمة كاملة */}
+              <span
+                className="absolute inset-y-0 right-0 w-1/2 cursor-pointer"
+                onMouseEnter={() =>
+                  setHoveredRating(star)
+                }
+                onClick={() => onSelectRating(star)}
+              />
+            </button>
+          );
+        })}
+      </div>
+
+      {/* قيمة التقييم */}
+      <p className="mt-2 text-xs text-slate-500">
+        {activeRating > 0 ? (
+          <span className="inline-flex items-center gap-1.5">
+            <span className="font-semibold text-amber-600">
+              {activeRating.toFixed(1).replace(/\.0$/, "")} / 5
+            </span>
+            <span className="text-slate-400">
+              {activeRating === 5
+                ? "— Excellent"
+                : activeRating >= 4
+                ? "— Very good"
+                : activeRating >= 3
+                ? "— Good"
+                : activeRating >= 2
+                ? "— Fair"
+                : "— Needs improvement"}
+            </span>
+          </span>
+        ) : (
+          "Select your rating"
+        )}
+      </p>
     </div>
   );
 }
 
-// المكون الرئيسي
+// القسم الرئيسي
 export default function ReviewsSection() {
+  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
@@ -77,68 +158,131 @@ export default function ReviewsSection() {
 
     if (isFormInvalid) return;
 
-    console.log({
+    const newReview = {
+      id: Date.now(),
+      name: "Review Name",
       rating,
       comment: reviewText.trim(),
-    });
+    };
 
+    setReviews((prevReviews) => [newReview, ...prevReviews]);
     setRating(0);
     setReviewText("");
   };
 
   return (
-    <section id="reviews" className="w-full pt-5 px-4 md:px-0 sm:pt-6 lg:pt-8">
+    <section
+      id="reviews"
+      className="w-full bg-[#f8faff] pt-5 sm:pt-6 lg:pt-6 px-4 sm:px-5 lg:px-0"
+    >
       {/* عنوان القسم */}
-      <h2 className="mb-5 text-lg sm:text-xl font-bold text-slate-800">
+      <h2 className="text-sm font-semibold text-[#202746] mb-7">
         Reviews
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-6 xl:gap-10 items-start">
-        {/* قائمة المراجعات */}
-        <div className="min-w-0 lg:col-span-7 lg:border-r lg:border-gray-200 lg:pr-6 xl:pr-8">
-          <div className="space-y-4 sm:space-y-5">
-            {INITIAL_REVIEWS.map((review, index) => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-[18px] items-start">
+        {/* قائمة المراجعات - بدون تعديل */}
+        <div className="min-w-0 lg:pr-5 lg:border-r-2 lg:border-slate-200 lg:relative">
+          <div
+            className="
+              space-y-4
+              lg:max-h-[340px]
+              lg:overflow-y-auto
+              lg:pr-5
+              lg:mr-0
+              lg:scrollbar-thin
+              lg:scrollbar-thumb-slate-400
+              lg:scrollbar-track-slate-100
+            "
+          >
+            {reviews.map((review, index) => (
               <ReviewItem
                 key={review.id}
                 review={review}
-                isLast={index === INITIAL_REVIEWS.length - 1}
+                isLast={index === reviews.length - 1}
               />
             ))}
           </div>
         </div>
 
-        {/* نموذج إضافة مراجعة */}
-        <div className="min-w-0 lg:col-span-5">
+        {/* نموذج إضافة مراجعة - تم تعديل القسم اليميني فقط */}
+        <div className="min-w-0">
           <form
             onSubmit={handleSubmit}
-            className="w-full bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 md:p-6 shadow-sm"
+            className="
+              w-full
+              bg-white
+              border border-[#dceeff]
+              rounded-xl
+              px-5 py-5
+              sm:px-[22px] sm:py-[22px]
+              shadow-[0_4px_20px_rgba(37,99,235,0.04)]
+              transition-shadow duration-300
+              hover:shadow-[0_8px_28px_rgba(37,99,235,0.07)]
+            "
           >
-            <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-2">
+            <h3 className="text-sm sm:text-[15px] font-semibold text-[#202746] mb-3">
               Add Review
             </h3>
 
-            <p className="text-xs sm:text-sm text-gray-400 leading-5 mb-4">
-              Please add review, this will help us to improve your experience.
+            <p className="text-xs sm:text-[13px] text-[#858da3] leading-5 mb-4">
+              Please add review, this will help us to improve your experience
             </p>
 
             {/* النجوم التفاعلية */}
-            <RatingStars rating={rating} onSelectRating={setRating} />
+            <RatingStars
+              rating={rating}
+              onSelectRating={setRating}
+            />
 
-            {/* حقل النص */}
+            {/* حقل كتابة المراجعة */}
             <textarea
               rows={4}
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              placeholder="Type Here.."
+              placeholder="Share your experience..."
               aria-label="Write your review"
-              className="w-full min-h-28 sm:min-h-32 bg-slate-50 border border-gray-200 rounded-xl p-3 sm:p-4 text-sm text-slate-700 placeholder:text-gray-400 leading-6 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent mb-4 resize-y"
+              className="
+                block
+                w-full
+                h-[94px]
+                min-h-[94px]
+                bg-white
+                border border-[#cfe3f8]
+                rounded-lg
+                px-3 py-2
+                text-xs text-slate-700
+                placeholder:text-[#a0a0a0]
+                leading-5
+                focus:outline-none
+                focus:border-sky-400
+                focus:ring-2 focus:ring-sky-100
+                mb-5
+                resize-none
+                transition-all duration-200
+              "
             />
 
             {/* زر الإرسال */}
             <button
               type="submit"
               disabled={isFormInvalid}
-              className="w-full min-h-11 bg-sky-400 text-white font-semibold text-sm rounded-xl px-4 py-3 transition-colors duration-200 hover:bg-sky-500 active:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="
+                w-full
+                h-10
+                bg-[#27b5f5]
+                hover:bg-[#16a8ec]
+                active:bg-[#0799df]
+                text-white
+                text-xs
+                font-semibold
+                rounded-lg
+                shadow-sm shadow-sky-100
+                transition-all duration-200
+                hover:shadow-md
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+              "
             >
               Add Review
             </button>

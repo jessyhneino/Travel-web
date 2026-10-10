@@ -213,8 +213,17 @@ export default function SearchBar() {
               min="10"
               max="50"
               value={distance}
-              onChange={(e) => setDistance(e.target.value)}
-              className="w-full h-1 bg-blue-100 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              onChange={(e) => setDistance(Number(e.target.value))}
+              style={{
+                background: `linear-gradient(
+      to right,
+      #2563eb 0%,
+      #2563eb ${((distance - 10) / (50 - 10)) * 100}%,
+      #dbeafe ${((distance - 10) / (50 - 10)) * 100}%,
+      #dbeafe 100%
+    )`,
+              }}
+              className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
             <div className="flex justify-between text-[11px] text-blue-600 font-semibold mt-1">
               <span>{distance} K.m</span>

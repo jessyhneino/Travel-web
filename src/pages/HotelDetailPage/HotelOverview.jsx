@@ -143,284 +143,309 @@ export default function HotelOverview() {
         </div>
       </div>
 
-      {/* ================= Modal الحجز مع خلفية مغبشة ================= */}
+      {/* ================= Modal الحجز ================= */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50  flex items-center justify-center p-4 bg-black/40 backdrop-blur-md overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 text-slate-800 relative animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/50 backdrop-blur-md overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
+            {" "}
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
-              <h3 className="text-base font-bold text-slate-800">Reserve</h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-[#202747]">Reserve</h3>
+
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-full bg-sky-100 text-sky-500 hover:bg-sky-200 transition"
+                className="p-2 rounded-full bg-[#D9F3FF] text-[#25B9F5] hover:bg-[#C5EDFF] transition"
+                aria-label="Close reservation"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
-
             {/* Room Image */}
-            <div className="rounded-xl overflow-hidden mb-4 h-40 w-full">
+            <div className="rounded-md overflow-hidden mb-6 h-40 sm:h-44 w-full">
               <img
                 src="/images/Rectangle18.png"
                 alt="Room"
                 className="w-full h-full object-cover"
               />
             </div>
-
             {/* Room Title */}
-            <h4 className="font-bold text-slate-800 text-sm mb-2">
+            <h4 className="font-bold text-lg text-[#202747] mb-3">
               MEconomy Double Room, 1 Double Bed, Non Smoking
             </h4>
-
             {/* Room Sub-info */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 mb-4">
-              <span className="flex items-center gap-1">
-                <Maximize2 className="w-3.5 h-3.5" /> 108 sq ft
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[#8A90A5] mb-7">
+              <span className="flex items-center gap-1.5">
+                <Maximize2 className="w-4 h-4 text-[#3478FF]" />
+                108 sq ft
               </span>
-              <span className="flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" /> Sleeps 2
+
+              <span className="flex items-center gap-1.5">
+                <Users className="w-4 h-4 text-[#3478FF]" />
+                Sleeps 2
               </span>
-              <span className="flex items-center gap-1">
-                <BedDouble className="w-3.5 h-3.5" /> 1 Double Bed
+
+              <span className="flex items-center gap-1.5">
+                <BedDouble className="w-4 h-4 text-[#3478FF]" />1 Double Bed
               </span>
             </div>
-
             {/* Room Amenities */}
-            <div className="mb-5">
-              <h5 className="text-xs font-bold text-slate-800 mb-2">
+            <div className="mb-6">
+              <h5 className="text-base font-bold text-[#202747] mb-4">
                 Room Amenities
               </h5>
-              <div className="grid  grid-cols-2 sm:grid-cols-3  gap-y-2 text-[11px] text-slate-500">
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-5 text-sm text-[#81879C]">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="w-3.5 h-3.5 text-sky-500" /> Free WiFi
+                  <Wifi className="w-4 h-4 shrink-0 text-[#3478FF]" />
+                  Free WiFi
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-500" />{" "}
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-[#3478FF]" />
                   Housekeeping
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <Dog className="w-3.5 h-3.5 text-sky-500" /> Pet friendly
+                  <Dog className="w-4 h-4 shrink-0 text-[#3478FF]" />
+                  Pet friendly
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <Snowflake className="w-3.5 h-3.5 text-sky-500" /> Air
-                  conditioning
+                  <Snowflake className="w-4 h-4 shrink-0 text-[#3478FF]" />
+                  Air conditioning
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-sky-500" /> 24/7 front desk
+                  <Clock className="w-4 h-4 shrink-0 text-[#3478FF]" />
+                  24/7 front desk
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <Coffee className="w-3.5 h-3.5 text-sky-500" /> Breakfast
-                  available
+                  <Coffee className="w-4 h-4 shrink-0 text-[#3478FF]" />
+                  Breakfast available
                 </div>
               </div>
             </div>
-
             {/* Check-in / Guest Box */}
-            <div className="bg-sky-50/60 rounded-xl p-3.5 mb-5 border border-sky-100">
-              <div className="flex justify-between items-start text-xs mb-3">
+            <div className="bg-[#EAF9FE] rounded-lg p-4 mb-6">
+              <div className="grid grid-cols-2 gap-4 text-sm mb-5">
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-medium">
+                  <span className="text-sm text-[#818BA2] block mb-1">
                     Check In - Check Out
                   </span>
-                  <span className="font-semibold text-slate-700">
+
+                  <span className="font-semibold text-[#202747]">
                     15-03 / 22-04
                   </span>
                 </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-400 block font-medium">
+
+                <div>
+                  <span className="text-sm text-[#818BA2] block mb-1">
                     Country
                   </span>
-                  <span className="font-semibold text-slate-700">France</span>
+
+                  <span className="font-semibold text-[#202747]">France</span>
                 </div>
               </div>
 
-              <div className="border-t border-dashed border-sky-200 my-2.5" />
+              <div className="border-t-2 border-dashed border-[#6CD7FF] mb-5" />
 
-              <div className="flex justify-between text-xs text-slate-700 font-medium">
+              <div className="grid grid-cols-2 gap-4 text-sm text-[#202747]">
                 <div className="flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-sky-500" /> 8 Adults
+                  <User className="w-4 h-4 text-[#25B9F5]" />8 Adults
                 </div>
+
                 <div className="flex items-center gap-1.5">
-                  <Baby className="w-3.5 h-3.5 text-sky-500" /> 3 Children
+                  <Baby className="w-4 h-4 text-[#25B9F5]" />3 Children
                 </div>
               </div>
             </div>
-
             {/* Extras */}
-            <div className="mb-5">
-              <h5 className="text-xs font-bold text-slate-800 mb-2.5">
+            <div className="mb-7">
+              <h5 className="text-base font-bold text-[#202747] mb-4">
                 Extras
               </h5>
-              <div className="space-y-2">
-                <label className="flex items-center justify-between text-xs cursor-pointer">
-                  <div className="flex items-center gap-2">
+
+              <div className="space-y-4">
+                <label className="flex items-center justify-between text-base cursor-pointer">
+                  <div className="flex items-center gap-2.5">
                     <input
                       type="radio"
                       name="extras"
                       checked={selectedExtra === "no-extras"}
                       onChange={() => setSelectedExtra("no-extras")}
-                      className="accent-sky-500 w-4 h-4"
+                      className="accent-[#25B9F5] w-5 h-5"
                     />
-                    <span className="text-slate-700 font-medium">
-                      No extras
-                    </span>
+
+                    <span className="text-[#202747]">No extras</span>
                   </div>
-                  <span className="text-slate-400 text-[11px]">+ $0</span>
+
+                  <span className="text-[#8A90A5]">+$0</span>
                 </label>
 
-                <label className="flex items-center justify-between text-xs cursor-pointer">
-                  <div className="flex items-center gap-2">
+                <label className="flex items-center justify-between text-base cursor-pointer">
+                  <div className="flex items-center gap-2.5">
                     <input
                       type="radio"
                       name="extras"
                       checked={selectedExtra === "breakfast"}
                       onChange={() => setSelectedExtra("breakfast")}
-                      className="accent-sky-500 w-4 h-4"
+                      className="accent-[#25B9F5] w-5 h-5"
                     />
-                    <span className="text-slate-700 font-medium">
-                      Breakfast buffet
-                    </span>
+
+                    <span className="text-[#202747]">Breakfast buffet</span>
                   </div>
-                  <span className="text-slate-400 text-[11px]">+ $15</span>
+
+                  <span className="text-[#8A90A5]">+$15</span>
                 </label>
               </div>
             </div>
-
             {/* Price Details */}
-            <div className="bg-slate-50/80 rounded-xl p-3.5 mb-5 space-y-2 text-xs">
-              <h5 className="font-bold text-slate-800 mb-1">Price details</h5>
-              <div className="flex justify-between text-slate-500">
-                <span>Room</span>
-                <span className="text-sky-600 font-medium">960.00</span>
+            <div className="bg-[#F8F9FE] rounded-lg p-5 mb-7 space-y-4 text-base">
+              <h5 className="font-semibold text-[#202747] mb-6">
+                Price details
+              </h5>
+
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-[#303956]">Room</span>
+                <span className="text-[#3478FF] font-medium">960.00</span>
               </div>
-              <div className="flex justify-between text-slate-500">
-                <span>Fully refundable</span>
-                <span className="text-sky-600 font-medium">30.00</span>
+
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-[#303956]">Fully refundable</span>
+                <span className="text-[#3478FF] font-medium">30.00</span>
               </div>
-              <div className="flex justify-between text-slate-500">
-                <span>
+
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-[#303956]">
                   Extras{" "}
-                  <span className="text-[10px] text-slate-400">
-                    Breakfast buffet
+                  <span className="text-xs text-[#3478FF] ml-1">
+                    {selectedExtra === "breakfast" ? "Breakfast buffet" : ""}
                   </span>
                 </span>
-                <span className="text-sky-600 font-medium">25.00</span>
-              </div>
-              <div className="flex justify-between text-slate-500">
-                <span>Taxes</span>
-                <span className="text-sky-600 font-medium">30.00</span>
+
+                <span className="text-[#3478FF] font-medium">
+                  {selectedExtra === "breakfast" ? "25.00" : "0.00"}
+                </span>
               </div>
 
-              <div className="border-t border-slate-200 my-2 pt-2 flex justify-between items-center">
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-[#303956]">Taxes</span>
+                <span className="text-[#3478FF] font-medium">30.00</span>
+              </div>
+
+              <div className="border-t border-[#D8E4FF] pt-4 mt-5 flex justify-between items-center gap-3">
                 <div>
-                  <span className="font-bold text-slate-800 text-xs block">
+                  <span className="font-bold text-[#202747] text-base block">
                     Total (incl. VAT)
                   </span>
-                  <span className="text-[10px] text-slate-400 block">
-                    includes taxes & fees
+
+                  <span className="text-sm text-[#81879C] block mt-0.5">
+                    includes taxes &amp; fees
                   </span>
                 </div>
-                <span className="font-bold text-sky-500 text-sm">
-                  1698.00 SAR
+
+                <span className="font-bold text-[#25B9F5] text-lg whitespace-nowrap">
+                  {(1698 + (selectedExtra === "breakfast" ? 25 : -25)).toFixed(
+                    2
+                  )}{" "}
+                  SAR
                 </span>
               </div>
             </div>
-
             {/* Payment Method */}
-            <div className="mb-6">
-              <h5 className="text-xs font-bold text-slate-800 mb-2.5">
+            <div className="mb-7">
+              <h5 className="text-base font-bold text-[#202747] mb-5">
                 Choose Payment Method
               </h5>
-              <div className="space-y-2">
+
+              <div className="space-y-3">
                 {/* Mastercard */}
                 <label
-                  className={`flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
                     paymentMethod === "mastercard"
-                      ? "border-sky-300 bg-sky-50/30"
-                      : "border-slate-100 bg-slate-50/50"
+                      ? "border-transparent bg-[#F8F9FD]"
+                      : "border-transparent bg-[#F8F9FD]"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "mastercard"}
                       onChange={() => setPaymentMethod("mastercard")}
-                      className="accent-sky-500 w-4 h-4"
+                      className="accent-[#25B9F5] w-5 h-5"
                     />
-                    <span className="text-xs font-medium text-slate-700">
+
+                    <span className="text-base text-[#303956]">
                       Master Card
                     </span>
                   </div>
-                  <div className="flex -space-x-1.5 items-center">
-                    <img
-                      className="w-[44px] h-[25px]"
-                      src="/images/Mastercard_logo1.png"
-                    />
-                  </div>
+
+                  <img
+                    className="w-[55px] h-[31px] object-contain"
+                    src="/images/Mastercard_logo1.png"
+                    alt="Mastercard"
+                  />
                 </label>
 
                 {/* Mada */}
                 <label
-                  className={`flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
                     paymentMethod === "mada"
-                      ? "border-sky-300 bg-sky-50/30"
-                      : "border-slate-100 bg-slate-50/50"
+                      ? "border-transparent bg-[#F8F9FD]"
+                      : "border-transparent bg-[#F8F9FD]"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "mada"}
                       onChange={() => setPaymentMethod("mada")}
-                      className="accent-sky-500 w-4 h-4"
+                      className="accent-[#25B9F5] w-5 h-5"
                     />
-                    <span className="text-xs font-medium text-slate-700">
-                      Mada
-                    </span>
+
+                    <span className="text-base text-[#303956]">Mada</span>
                   </div>
-                  <div>
-                    <img
-                      className="w-[44px] h-[14px]"
-                      src="/images/Group2109.png"
-                    />
-                  </div>
+
+                  <img
+                    className="w-[55px] h-[25px] object-contain"
+                    src="/images/Group2109.png"
+                    alt="Mada"
+                  />
                 </label>
 
                 {/* Visa */}
                 <label
-                  className={`flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
                     paymentMethod === "visa"
-                      ? "border-sky-300 bg-sky-50/30"
-                      : "border-slate-100 bg-slate-50/50"
+                      ? "border-transparent bg-[#F8F9FD]"
+                      : "border-transparent bg-[#F8F9FD]"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "visa"}
                       onChange={() => setPaymentMethod("visa")}
-                      className="accent-sky-500 w-4 h-4"
+                      className="accent-[#25B9F5] w-5 h-5"
                     />
-                    <span className="text-xs font-medium text-slate-700">
-                      Visa
-                    </span>
+
+                    <span className="text-base text-[#303956]">Visa</span>
                   </div>
-                  <div>
-                    <img
-                      className="w-[44px] h-[14px]"
-                      src="/images/symbols.png"
-                      alt=""
-                    />
-                  </div>
+
+                  <img
+                    className="w-[55px] h-[25px] object-contain"
+                    src="/images/symbols.png"
+                    alt="Visa"
+                  />
                 </label>
               </div>
             </div>
-
             {/* Reserve Button */}
-            <button className="w-full bg-sky-400 hover:bg-sky-500 text-white font-semibold py-3 rounded-xl transition shadow-sm text-sm active:scale-[0.99]">
+            <button className="w-full bg-[#25B9F5] hover:bg-[#13A9E8] text-white font-semibold py-4 rounded-xl transition shadow-sm text-base active:scale-[0.99]">
               Reserve
             </button>
           </div>

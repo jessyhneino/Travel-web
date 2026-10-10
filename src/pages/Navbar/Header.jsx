@@ -10,6 +10,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
     <>
       <header className="relative z-50 w-[95%] mx-auto pt-4 px-2 sm:px-8 flex items-center justify-between">
         {/* Brand Logo */}
+        <Link to="/">
         <div className="flex items-center gap-2.5 cursor-pointer select-none">
           <div className="relative w-48 sm:w-55 lg:w-60 flex items-center justify-center transition-all duration-200">
             <img
@@ -19,6 +20,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             />
           </div>
         </div>
+        </Link>
 
         {/* Menu Container / User Profile Button */}
         <div className="relative">

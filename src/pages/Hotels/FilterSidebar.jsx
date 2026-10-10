@@ -114,12 +114,20 @@ function PriceFilter({ price, setPrice }) {
           max="300"
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
-          className="w-full h-1.5 bg-blue-100 rounded-lg appearance-none cursor-pointer accent-blue-600"
+          style={{
+            background: `linear-gradient(
+      to right,
+      #2563eb 0%,
+      #2563eb ${((price - 10) / (300 - 10)) * 100}%,
+      #dbeafe ${((price - 10) / (300 - 10)) * 100}%,
+      #dbeafe 100%
+    )`,
+          }}
+          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
-
-        <div className="flex justify-between items-center text-xs text-blue-600 font-semibold mt-2">
-          <span>$10</span>
-          <span>${price}</span>
+        <div className="flex justify-between text-xs font-semibold mt-2">
+          <span className="text-blue-600">${price}</span>
+          <span className="text-slate-400">$300</span>
         </div>
       </div>
     </div>

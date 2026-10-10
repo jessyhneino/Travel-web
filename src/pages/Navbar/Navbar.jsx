@@ -4,7 +4,7 @@ import Header from "./Header";
 
 export default function Navbar() {
   // 2. إدارة حالة القائمة الجانبية في المكون الأب لنقلها بين Header و Hero
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className=" relative font-sans bg-white text-slate-800">
