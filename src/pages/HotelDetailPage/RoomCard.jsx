@@ -8,11 +8,11 @@ const RoomCard = () => {
   return (
     <div className="flex h-full w-full min-w-0 flex-col justify-between gap-4 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-4 lg:p-5">
       {/* Room Image */}
-      <div className="w-full overflow-hidden rounded-xl">
+      <div className="w-full overflow-hidden rounded-m">
         <img
           src="/images/Rectangle17.png"
           alt={t("Economy Double Room")}
-          className="h-40 w-full rounded-xl object-cover transition-transform duration-300 hover:scale-105 xs:h-44 sm:h-48 md:h-44 lg:h-48 xl:h-52"
+          className="h-40 w-full rounded-m object-cover transition-transform duration-300 hover:scale-105 xs:h-44 sm:h-48 md:h-44 lg:h-48 xl:h-30"
         />
       </div>
 

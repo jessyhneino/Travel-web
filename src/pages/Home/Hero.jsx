@@ -661,8 +661,14 @@ export default function Hero() {
 
       {/* Decorative Bottom Leaf */}
       <motion.div
-        className="hidden lg:block absolute left-0 top-[130px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none"
-        initial={{ opacity: 0, x: -80, scale: 0.95 }}
+        className={`hidden lg:block absolute top-[130px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none ${
+          i18n.language.startsWith("ar") ? "right-0" : "left-0"
+        }`}
+        initial={{
+          opacity: 0,
+          x: i18n.language.startsWith("ar") ? 80 : -80,
+          scale: 0.95,
+        }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{
           duration: 1.8,
@@ -673,7 +679,9 @@ export default function Hero() {
         <img
           src="/images/Isolation_Mode.png"
           alt={t("Leaf Decorative Art")}
-          className="w-[300px] h-[624px] transform"
+          className={`w-[300px] h-[624px] transform ${
+            i18n.language.startsWith("ar") ? "scale-x-[-1]" : ""
+          }`}
         />
       </motion.div>
     </div>
