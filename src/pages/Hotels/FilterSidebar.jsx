@@ -1,63 +1,119 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X, SlidersHorizontal } from "lucide-react";
-
 import { FILTER_DATA } from "./data/filterData";
-export default function FilterSidebar() {
-  const [price, setPrice] = useState(200);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const closeSidebar = () => setIsOpen(false);
+export const INITIAL_FILTERS = {
+  price: 200,
+  guestRating: [],
+  starRating: [],
+  propertyType: [],
+};
+
+export default function FilterSidebar({
+  filters = INITIAL_FILTERS,
+  onApplyFilters = () => {},
+}) {
+  const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [draftFilters, setDraftFilters] = useState(filters);
+
+  useEffect(() => {
+    setDraftFilters(filters);
+  }, [filters]);
+
+  // تطبيق الفلاتر مباشرة عند تغييرها
+  const applyUpdatedFilters = (updatedFilters) => {
+    setDraftFilters(updatedFilters);
+    onApplyFilters({ ...updatedFilters });
+  };
+
+  // تحديث السعر فور تحريك شريط السعر
+  const updatePrice = (price) => {
+    const updatedFilters = {
+      ...draftFilters,
+      price,
+    };
+
+    applyUpdatedFilters(updatedFilters);
+  };
+
+  // تحديث خيارات Checkbox فورًا
+  const toggleOption = (section, value) => {
+    const selected = draftFilters[section] || [];
+
+    const updatedFilters = {
+      ...draftFilters,
+      [section]: selected.includes(value)
+        ? selected.filter((item) => item !== value)
+        : [...selected, value],
+    };
+
+    applyUpdatedFilters(updatedFilters);
+  };
+
+  // إعادة ضبط الفلاتر وتطبيقها مباشرة
+  const resetFilters = () => {
+    const reset = {
+      price: 300,
+      guestRating: [],
+      starRating: [],
+      propertyType: [],
+    };
+
+    applyUpdatedFilters(reset);
+  };
+
+  const contentProps = {
+    filters: draftFilters,
+    updatePrice,
+    toggleOption,
+    onReset: resetFilters,
+  };
 
   return (
     <>
-      {/* =====================================================
-          DESKTOP SIDEBAR
-      ====================================================== */}
+      {/* DESKTOP SIDEBAR */}
       <aside className="hidden lg:block w-full max-w-[260px] bg-white p-5 rounded-2xl shadow-sm">
-        <FilterContent
-          price={price}
-          setPrice={setPrice}
-          onClose={closeSidebar}
-        />
+        <FilterContent {...contentProps} />
       </aside>
 
-      {/* =====================================================
-          MOBILE FILTER BUTTON
-      ====================================================== */}
+      {/* MOBILE FILTER BUTTON */}
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className="lg:hidden fixed bottom-5 w-[90%] left-1/2 -translate-x-1/2 z-40 flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-95 transition-all duration-200"
       >
         <SlidersHorizontal size={25} />
-        <span className="text-[25px]">Filters</span>
+        <span className="text-[25px]">{t("Filters")}</span>
       </button>
 
-      {/* =====================================================
-          MOBILE OVERLAY & BOTTOM SHEET
-      ====================================================== */}
+      {/* MOBILE OVERLAY */}
       {isOpen && (
         <div
           className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]"
-          onClick={closeSidebar}
+          onClick={() => setIsOpen(false)}
         />
       )}
 
+      {/* MOBILE BOTTOM SHEET */}
       <div
+        aria-hidden={!isOpen}
         className={`lg:hidden fixed left-0 right-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[85vh] overflow-y-auto ${
-          isOpen ? "translate-y-0" : "translate-y-full"
+          isOpen
+            ? "translate-y-0"
+            : "translate-y-full pointer-events-none"
         }`}
       >
-        {/* Drag Indicator */}
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 rounded-full bg-slate-300" />
         </div>
 
         <div className="p-5 pb-8">
           <FilterContent
-            price={price}
-            setPrice={setPrice}
-            onClose={closeSidebar}
+            {...contentProps}
             isMobile
+            onClose={() => setIsOpen(false)}
           />
         </div>
       </div>
@@ -65,46 +121,93 @@ export default function FilterSidebar() {
   );
 }
 
-/* =====================================================
-    SUB-COMPONENTS (مكونات فرعية لتنظيم الكود)
-====================================================== */
+function FilterContent({
+  filters,
+  updatePrice,
+  toggleOption,
+  onReset,
+  isMobile = false,
+  onClose,
+}) {
+  const { t } = useTranslation();
 
-// المكون الرئيسي لمحتوى الفلتر
-function FilterContent({ price, setPrice, onClose, isMobile = false }) {
   return (
     <div className="flex flex-col gap-6 text-left">
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h2 className="text-lg font-bold text-slate-800">Filter by</h2>
+        <h2 className="text-lg font-bold text-slate-800">
+          {t("Filter by")}
+        </h2>
 
-        {/* Close Button - Mobile Only */}
-        {isMobile && (
+        <div className="flex items-center gap-3">
           <button
-            onClick={onClose}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 transition"
+            type="button"
+            onClick={onReset}
+            className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition"
           >
-            <X size={18} />
+            {t("Reset")}
           </button>
-        )}
+
+          {isMobile && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={t("Close filters")}
+              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 transition"
+            >
+              <X size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Price Filter */}
-      <PriceFilter price={price} setPrice={setPrice} />
+      {/* PRICE FILTER */}
+      <PriceFilter
+        price={filters.price}
+        setPrice={updatePrice}
+      />
 
-      {/* Checkbox Group Filters */}
-      <FilterSection title="Guest rating" items={FILTER_DATA.guestRating} />
-      <FilterSection title="Star rating" items={FILTER_DATA.starRating} />
-      <FilterSection title="Property type" items={FILTER_DATA.propertyType} />
+      {/* GUEST RATING */}
+      <FilterSection
+        title="Guest rating"
+        items={FILTER_DATA.guestRating}
+        selected={filters.guestRating}
+        onToggle={(value) =>
+          toggleOption("guestRating", value)
+        }
+      />
+
+      {/* STAR RATING */}
+      <FilterSection
+        title="Star rating"
+        items={FILTER_DATA.starRating}
+        selected={filters.starRating}
+        onToggle={(value) =>
+          toggleOption("starRating", value)
+        }
+      />
+
+      {/* PROPERTY TYPE */}
+      <FilterSection
+        title="Property type"
+        items={FILTER_DATA.propertyType}
+        selected={filters.propertyType}
+        onToggle={(value) =>
+          toggleOption("propertyType", value)
+        }
+      />
     </div>
   );
 }
 
-// مكون فلتر السعر
 function PriceFilter({ price, setPrice }) {
+  const { t } = useTranslation();
+  const percentage = ((price - 10) / 290) * 100;
+
   return (
     <div className="flex flex-col gap-3">
       <span className="text-sm font-semibold text-slate-700">
-        Price per night
+        {t("Price per night")}
       </span>
 
       <div className="relative pt-1">
@@ -113,46 +216,63 @@ function PriceFilter({ price, setPrice }) {
           min="10"
           max="300"
           value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
+          onChange={(e) =>
+            setPrice(Number(e.target.value))
+          }
+          aria-label={t("Price per night")}
           style={{
-            background: `linear-gradient(
-      to right,
-      #2563eb 0%,
-      #2563eb ${((price - 10) / (300 - 10)) * 100}%,
-      #dbeafe ${((price - 10) / (300 - 10)) * 100}%,
-      #dbeafe 100%
-    )`,
+            background: `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #dbeafe ${percentage}%, #dbeafe 100%)`,
           }}
           className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
+
         <div className="flex justify-between text-xs font-semibold mt-2">
-          <span className="text-blue-600">${price}</span>
-          <span className="text-slate-400">$300</span>
+          <span className="text-blue-600">
+            ${price}
+          </span>
+
+          <span className="text-slate-400">
+            $300
+          </span>
         </div>
       </div>
     </div>
   );
 }
 
-// مكون أقسام الفلتر القابلة للتكرار (Checkboxes)
-function FilterSection({ title, items }) {
+function FilterSection({
+  title,
+  items,
+  selected = [],
+  onToggle,
+}) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-2.5">
-      <span className="text-sm font-semibold text-slate-700">{title}</span>
+      <span className="text-sm font-semibold text-slate-700">
+        {t(title)}
+      </span>
 
-      {items.map((item) => (
-        <label
-          key={item.id}
-          className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-500 hover:text-slate-800 transition"
-        >
-          <input
-            type="checkbox"
-            defaultChecked={item.checked}
-            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
-          />
-          <span>{item.label}</span>
-        </label>
-      ))}
+      {items.map((item) => {
+        const value = item.value ?? item.id;
+
+        return (
+          <label
+            key={item.id}
+            className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-500 hover:text-slate-800 transition"
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(value)}
+              onChange={() => onToggle(value)}
+              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
+            />
+
+            <span>{t(item.label)}</span>
+          </label>
+        );
+      })}
     </div>
   );
 }

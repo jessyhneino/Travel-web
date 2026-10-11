@@ -1,12 +1,18 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import RoomCard from "./RoomCard";
 
 export default function RoomSelection() {
+  const { t } = useTranslation();
+
   return (
-    <section id="rooms" className="w-full my-6 sm:my-8 lg:my-10 px-4 md:px-0">
+    <section
+      id="rooms"
+      className="w-full my-6 sm:my-8 lg:my-10 px-4 md:px-0"
+    >
       {/* Section Title */}
       <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-4 sm:mb-5">
-        Choose your room
+        {t("Choose your room")}
       </h2>
 
       {/* Date Selectors */}
@@ -19,10 +25,11 @@ export default function RoomSelection() {
           >
             <div className="min-w-0">
               <span className="text-[11px] sm:text-xs text-gray-400 block mb-1">
-                Check in:
+                {t("Check in:")}
               </span>
+
               <span className="font-semibold text-blue-600 text-sm sm:text-base">
-                Oct 23
+                {t("Oct 23")}
               </span>
             </div>
 

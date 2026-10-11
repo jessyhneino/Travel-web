@@ -87,96 +87,96 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div>
       <Hero />
+      <div className="px-3 md:px-10 lg:px-25">
+        <SpecialPackages />
 
-      <SpecialPackages />
+        {/* VISA REQUIREMENTS CAROUSEL */}
+        <section className="bg-[#f8faff] py-12 px-4 sm:px-12 md:px-16">
+          <div className="mx-auto w-full">
+            {/* Section Title */}
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-black text-[#1e293b] tracking-wider uppercase">
+                VISA REQUIREMENTS
+              </h2>
 
-      {/* VISA REQUIREMENTS CAROUSEL */}
-      <section className="bg-[#f8faff] py-12 px-4 sm:px-12 md:px-16">
-        <div className="mx-auto w-full">
-          {/* Section Title */}
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-black text-[#1e293b] tracking-wider uppercase">
-              VISA REQUIREMENTS
-            </h2>
-
-            {/* Navigation Arrows */}
-            <div className="flex items-center gap-2">
-              {/* Previous Button */}
-              <button
-                type="button"
-                aria-label="Previous visa cards"
-                onClick={() => scrollCarousel(-1)}
-                className="w-10 h-10 rounded-full bg-white
+              {/* Navigation Arrows */}
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  type="button"
+                  aria-label="Previous visa cards"
+                  onClick={() => scrollCarousel(-1)}
+                  className="w-10 h-10 rounded-full bg-white
                   shadow-sm border border-slate-200
                   flex items-center justify-center text-slate-700
                   hover:bg-[#2563eb] hover:text-white
                   hover:border-[#2563eb]
                   transition-all duration-300 active:scale-90"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                 >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
 
-              {/* Next Button */}
-              <button
-                type="button"
-                aria-label="Next visa cards"
-                onClick={() => scrollCarousel(1)}
-                className="w-10 h-10 rounded-full bg-white
+                {/* Next Button */}
+                <button
+                  type="button"
+                  aria-label="Next visa cards"
+                  onClick={() => scrollCarousel(1)}
+                  className="w-10 h-10 rounded-full bg-white
                   shadow-sm border border-slate-200
                   flex items-center justify-center text-slate-700
                   hover:bg-[#2563eb] hover:text-white
                   hover:border-[#2563eb]
                   transition-all duration-300 active:scale-90"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                 >
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Carousel Container */}
-          <div className="relative">
-            <div
-              ref={carouselRef}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerCancel={handlePointerUp}
-              onLostPointerCapture={handlePointerUp}
-              onClickCapture={(e) => {
-                if (dragState.current.moved) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  dragState.current.moved = false;
-                }
-              }}
-              onDragStart={(e) => e.preventDefault()}
-              className={`flex gap-5 md:gap-6 overflow-x-auto
+            {/* Carousel Container */}
+            <div className="relative">
+              <div
+                ref={carouselRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onLostPointerCapture={handlePointerUp}
+                onClickCapture={(e) => {
+                  if (dragState.current.moved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dragState.current.moved = false;
+                  }
+                }}
+                onDragStart={(e) => e.preventDefault()}
+                className={`flex gap-5 md:gap-6 overflow-x-auto
                 pb-3 select-none
                 [scrollbar-width:none]
                 [&::-webkit-scrollbar]:hidden
@@ -185,41 +185,42 @@ export default function Home() {
                     ? "cursor-grabbing snap-none"
                     : "cursor-grab snap-x snap-mandatory"
                 }`}
-              style={{
-                WebkitOverflowScrolling: "touch",
-                scrollBehavior: "auto",
-                touchAction: "pan-y",
-                overscrollBehaviorX: "contain",
-              }}
-            >
-              {visaRequirements.map((item) => (
-                <div
-                  key={item.id}
-                  data-visa-card
-                  className="flex-none w-[80%]
+                style={{
+                  WebkitOverflowScrolling: "touch",
+                  scrollBehavior: "auto",
+                  touchAction: "pan-y",
+                  overscrollBehaviorX: "contain",
+                }}
+              >
+                {visaRequirements.map((item) => (
+                  <div
+                    key={item.id}
+                    data-visa-card
+                    className="flex-none w-[80%]
                     sm:w-[calc(50%-10px)]
                     md:w-[calc(33.333%-16px)]
                     lg:w-[calc(25%-18px)]
                     snap-start"
-                >
-                  <VisaCard
-                    country={item.country}
-                    imageSrc={item.imageSrc}
-                    flagSrc={item.flagSrc}
-                  />
-                </div>
-              ))}
+                  >
+                    <VisaCard
+                      country={item.country}
+                      imageSrc={item.imageSrc}
+                      flagSrc={item.flagSrc}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Mobile Hint */}
+            <p className="mt-3 text-xs text-slate-400 sm:hidden">
+              اسحبي لاكتشاف المزيد من الدول ←
+            </p>
           </div>
+        </section>
 
-          {/* Mobile Hint */}
-          <p className="mt-3 text-xs text-slate-400 sm:hidden">
-            اسحبي لاكتشاف المزيد من الدول ←
-          </p>
-        </div>
-      </section>
-
-      <MoreForYou />
-    </>
+        <MoreForYou />
+      </div>
+    </div>
   );
 }

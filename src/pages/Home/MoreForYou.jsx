@@ -1,23 +1,24 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import { topCardsData } from "../Home/data/TopCardsData";
 
 export default function MoreForYou() {
+  const { t } = useTranslation();
+
   return (
-    <section className="relative w-full px-4 sm:px-12 md:px-16   py-12 md:py-16 bg-slate-50/50 min-h-screen flex flex-col justify-center font-sans overflow-hidden">
-      {/* Background Decorative Waves (matching subtle lines on edges) */}
+    <section className="relative w-full px-4 sm:px-12 md:px-16 py-12 md:py-16 bg-slate-50/50 min-h-screen flex flex-col justify-center font-sans overflow-hidden">
+      {/* Background Decorative Waves */}
       <div className="absolute top-0 -left-12 w-32 h-32 rounded-full border border-sky-300/40 pointer-events-none -z-0" />
       <div className="absolute bottom-0 -right-12 w-48 h-48 rounded-full border border-sky-300/40 pointer-events-none -z-0" />
 
-      <div className="relative z-10   w-full space-y-8">
-        {}
+      <div className="relative z-10 w-full space-y-8">
+        {/* Section Title */}
         <div className="text-center">
           <h2 className="text-xl md:text-2xl font-bold tracking-wider text-[#1e293b] uppercase">
-            MORE FOR YOU
+            {t("MORE FOR YOU")}
           </h2>
         </div>
 
-        {}
         <div className="space-y-6">
           {/* Top Row: 3 Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -30,10 +31,11 @@ export default function MoreForYou() {
                 <div className="w-full h-48 sm:h-52 md:h-44 lg:h-52 rounded-2xl overflow-hidden bg-slate-200 border border-slate-100 relative shadow-sm group-hover:shadow-md transition-shadow">
                   <img
                     src={card.imageSrc}
-                    alt={card.title}
+                    alt={t(card.title)}
                     className="w-full h-full object-cover"
                   />
-                  {/* Subtle placeholder icon shown when src is empty */}
+
+                  {/* Placeholder Icon */}
                   {!card.imageSrc && (
                     <div className="absolute inset-0 flex items-center justify-center text-slate-400">
                       <svg
@@ -55,44 +57,45 @@ export default function MoreForYou() {
                 {/* Card Info */}
                 <div className="mt-3 px-1">
                   <h3 className="text-base font-bold text-[#334155] leading-snug group-hover:text-blue-600 transition-colors">
-                    {card.title}
+                    {t(card.title)}
                   </h3>
+
                   <p className="mt-1 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-[90%]">
-                    {card.description}
+                    {t(card.description)}
                   </p>
                 </div>
               </div>
             ))}
           </div>
 
-          {}
+          {/* Bottom Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Bottom Left Card (Spans 2 columns on desktop) */}
+            {/* Quick Trips Card */}
             <div className="md:col-span-2 group relative h-60 sm:h-64 md:h-56 lg:h-64 rounded-2xl overflow-hidden bg-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
               <img
                 src="/images/Rect4.png"
-                alt="Quick Trips"
+                alt={t("Quick Trips")}
                 className="w-full h-full object-cover"
               />
 
-              {/* Empty state placeholder pattern */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end p-6">
                 <h3 className="text-xl sm:text-2xl font-bold text-white drop-shadow-md">
-                  Quick Trips
+                  {t("Quick Trips")}
                 </h3>
               </div>
             </div>
 
-            {/* Bottom Right Blue Banner Card (Spans 1 column) */}
+            {/* Blue Banner Card */}
             <div className="md:col-span-1 bg-[#2563eb] rounded-2xl p-6 sm:p-8 flex flex-col justify-between h-60 sm:h-64 md:h-56 lg:h-64 text-white shadow-md hover:shadow-lg hover:bg-blue-700 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
               <div className="space-y-2">
                 <h3 className="text-2xl sm:text-3xl font-extrabold leading-tight tracking-tight">
-                  Show all the packages, view now
+                  {t("Show all the packages, view now")}
                 </h3>
               </div>
+
               <div>
                 <p className="text-blue-100 text-sm sm:text-base font-normal">
-                  Discover dream destinations
+                  {t("Discover dream destinations")}
                 </p>
               </div>
             </div>

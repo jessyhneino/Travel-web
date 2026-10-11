@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { Star } from "lucide-react";
 import { INITIAL_REVIEWS } from "./data/initialReview";
+import { useTranslation } from "react-i18next";
 
-// عرض المراجعة - بدون تعديل
+// عرض المراجعة
 function ReviewItem({ review, isLast }) {
+  const { t } = useTranslation();
+
   return (
-    <article
-      className={`pb-4 ${
-        !isLast ? "border-b border-slate-200" : ""
-      }`}
-    >
+    <article className={`pb-4 ${!isLast ? "border-b border-slate-200" : ""}`}>
       <div className="flex items-center gap-3 mb-1.5">
         <span className="text-[13px] font-medium text-[#202746]">
-          {review.name}
+          {t(review.name)}
         </span>
 
         <div className="flex items-center gap-1">
@@ -28,7 +27,7 @@ function ReviewItem({ review, isLast }) {
       </div>
 
       <p className="text-xs text-[#858da3] leading-[19px] break-words">
-        {review.comment}
+        {t(review.comment)}
       </p>
     </article>
   );
@@ -36,6 +35,7 @@ function ReviewItem({ review, isLast }) {
 
 // النجوم التفاعلية - دعم نصف نجمة
 function RatingStars({ rating, onSelectRating }) {
+  const { t } = useTranslation();
   const [hoveredRating, setHoveredRating] = useState(null);
   const activeRating = hoveredRating ?? rating;
 
@@ -44,23 +44,21 @@ function RatingStars({ rating, onSelectRating }) {
       <div
         className="flex items-center gap-1.5"
         role="group"
-        aria-label="Choose your rating"
+        aria-label={t("Choose your rating")}
         onMouseLeave={() => setHoveredRating(null)}
       >
         {[1, 2, 3, 4, 5].map((star) => {
-          const fill = Math.max(
-            0,
-            Math.min(1, activeRating - star + 1)
-          );
+          const fill = Math.max(0, Math.min(1, activeRating - star + 1));
 
           return (
             <button
               key={star}
               type="button"
-              aria-label={`Rate ${star} stars or ${star - 0.5} stars`}
-              aria-pressed={
-                rating === star || rating === star - 0.5
-              }
+              aria-label={t("Rate {{full}} stars or {{half}} stars", {
+                full: star,
+                half: star - 0.5,
+              })}
+              aria-pressed={rating === star || rating === star - 0.5}
               className="
                 relative flex items-center justify-center
                 w-7 h-8 rounded-md
@@ -97,20 +95,14 @@ function RatingStars({ rating, onSelectRating }) {
               {/* النصف الأيسر: نصف نجمة */}
               <span
                 className="absolute inset-y-0 left-0 w-1/2 cursor-pointer"
-                onMouseEnter={() =>
-                  setHoveredRating(star - 0.5)
-                }
-                onClick={() =>
-                  onSelectRating(star - 0.5)
-                }
+                onMouseEnter={() => setHoveredRating(star - 0.5)}
+                onClick={() => onSelectRating(star - 0.5)}
               />
 
               {/* النصف الأيمن: نجمة كاملة */}
               <span
                 className="absolute inset-y-0 right-0 w-1/2 cursor-pointer"
-                onMouseEnter={() =>
-                  setHoveredRating(star)
-                }
+                onMouseEnter={() => setHoveredRating(star)}
                 onClick={() => onSelectRating(star)}
               />
             </button>
@@ -125,20 +117,21 @@ function RatingStars({ rating, onSelectRating }) {
             <span className="font-semibold text-amber-600">
               {activeRating.toFixed(1).replace(/\.0$/, "")} / 5
             </span>
+
             <span className="text-slate-400">
               {activeRating === 5
-                ? "— Excellent"
+                ? `— ${t("Excellent")}`
                 : activeRating >= 4
-                ? "— Very good"
+                ? `— ${t("Very good")}`
                 : activeRating >= 3
-                ? "— Good"
+                ? `— ${t("Good")}`
                 : activeRating >= 2
-                ? "— Fair"
-                : "— Needs improvement"}
+                ? `— ${t("Fair")}`
+                : `— ${t("Needs improvement")}`}
             </span>
           </span>
         ) : (
-          "Select your rating"
+          t("Select your rating")
         )}
       </p>
     </div>
@@ -147,6 +140,8 @@ function RatingStars({ rating, onSelectRating }) {
 
 // القسم الرئيسي
 export default function ReviewsSection() {
+  const { t } = useTranslation();
+
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -160,7 +155,7 @@ export default function ReviewsSection() {
 
     const newReview = {
       id: Date.now(),
-      name: "Review Name",
+      name: t("Review Name"),
       rating,
       comment: reviewText.trim(),
     };
@@ -177,11 +172,11 @@ export default function ReviewsSection() {
     >
       {/* عنوان القسم */}
       <h2 className="text-sm font-semibold text-[#202746] mb-7">
-        Reviews
+        {t("Reviews")}
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-[18px] items-start">
-        {/* قائمة المراجعات - بدون تعديل */}
+        {/* قائمة المراجعات */}
         <div className="min-w-0 lg:pr-5 lg:border-r-2 lg:border-slate-200 lg:relative">
           <div
             className="
@@ -205,7 +200,7 @@ export default function ReviewsSection() {
           </div>
         </div>
 
-        {/* نموذج إضافة مراجعة - تم تعديل القسم اليميني فقط */}
+        {/* نموذج إضافة مراجعة */}
         <div className="min-w-0">
           <form
             onSubmit={handleSubmit}
@@ -222,26 +217,25 @@ export default function ReviewsSection() {
             "
           >
             <h3 className="text-sm sm:text-[15px] font-semibold text-[#202746] mb-3">
-              Add Review
+              {t("Add Review")}
             </h3>
 
             <p className="text-xs sm:text-[13px] text-[#858da3] leading-5 mb-4">
-              Please add review, this will help us to improve your experience
+              {t(
+                "Please add review, this will help us to improve your experience"
+              )}
             </p>
 
             {/* النجوم التفاعلية */}
-            <RatingStars
-              rating={rating}
-              onSelectRating={setRating}
-            />
+            <RatingStars rating={rating} onSelectRating={setRating} />
 
             {/* حقل كتابة المراجعة */}
             <textarea
               rows={4}
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              placeholder="Share your experience..."
-              aria-label="Write your review"
+              placeholder={t("Share your experience...")}
+              aria-label={t("Write your review")}
               className="
                 block
                 w-full
@@ -284,7 +278,7 @@ export default function ReviewsSection() {
                 disabled:cursor-not-allowed
               "
             >
-              Add Review
+              {t("Add Review")}
             </button>
           </form>
         </div>

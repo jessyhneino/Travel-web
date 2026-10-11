@@ -1,51 +1,76 @@
-import React from "react";
 import { User, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const AVATAR_IMAGE_URL =
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80";
 
 export default function Header({ isMenuOpen, setIsMenuOpen }) {
+  const { t, i18n } = useTranslation();
+
+  const currentLanguage = i18n.resolvedLanguage || i18n.language;
+  const isArabic = currentLanguage.startsWith("ar");
+
+  const toggleLanguage = async () => {
+    const newLanguage = isArabic ? "en" : "ar";
+
+    await i18n.changeLanguage(newLanguage);
+
+    document.documentElement.lang = newLanguage;
+    document.documentElement.dir = newLanguage === "ar" ? "rtl" : "ltr";
+
+    setIsMenuOpen(false);
+  };
+
   return (
     <>
-      <header className="relative z-50 w-[95%] mx-auto pt-4 px-2 sm:px-8 flex items-center justify-between">
+      <header
+        dir={isArabic ? "rtl" : "ltr"}
+        className="relative z-50 w-[95%] mx-auto pt-4 px-2 sm:px-8 flex items-center justify-between"
+      >
         {/* Brand Logo */}
         <Link to="/">
-        <div className="flex items-center gap-2.5 cursor-pointer select-none">
-          <div className="relative w-48 sm:w-55 lg:w-60 flex items-center justify-center transition-all duration-200">
-            <img
-              src="/images/logo.png"
-              alt="Travel Tent Logo"
-              className="w-full object-contain"
-            />
+          <div className="flex items-center gap-2.5 cursor-pointer select-none">
+            <div className="relative w-48 sm:w-55 lg:w-60 flex items-center justify-center transition-all duration-200">
+              <img
+                src="/images/logo.png"
+                alt={t("Travel Tent Logo")}
+                className="w-full object-contain"
+              />
+            </div>
           </div>
-        </div>
         </Link>
 
-        {/* Menu Container / User Profile Button */}
+        {/* User Profile Button */}
         <div className="relative">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle user menu"
+            aria-label={t("Toggle user menu")}
             className="bg-[rgba(38,187,253,1)] hover:bg-cyan-400 text-white p-1.5 sm:p-2 rounded-lg shadow-sm transition-colors duration-200 flex items-center gap-1 focus:outline-none cursor-pointer"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5" />
             <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          {/* Large Screens (lg+) Dropdown Menu */}
+          {/* Desktop Dropdown */}
           {isMenuOpen && (
-            <div className="hidden lg:block absolute right-0 top-full mt-2 z-50 bg-white rounded-xl shadow-xl p-6 border border-slate-100/80 w-[280px] text-slate-800">
+            <div
+              dir={isArabic ? "rtl" : "ltr"}
+              className={`hidden lg:block absolute ${
+                isArabic ? "left-0" : "right-0"
+              } top-full mt-2 z-50 bg-white rounded-xl shadow-xl p-6 border border-slate-100/80 w-[280px] text-slate-800`}
+            >
               {/* User Info */}
               <div className="flex items-center gap-3.5 pb-6 border-b border-slate-100">
                 <img
                   src={AVATAR_IMAGE_URL}
-                  alt="John Dou"
+                  alt={t("John Dou")}
                   className="w-12 h-12 rounded-full object-cover shrink-0"
                 />
+
                 <div className="overflow-hidden">
                   <h3 className="font-bold text-slate-900 text-base leading-tight">
-                    John Dou
+                    {t("John Dou")}
                   </h3>
                   <p className="text-xs text-slate-500 truncate mt-1 font-normal">
                     Johndouemail@gmail.com
@@ -53,36 +78,39 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 </div>
               </div>
 
-              {/* Primary Nav Links */}
+              {/* Primary Links */}
               <div className="py-6 space-y-5">
                 <a
                   href="#requests"
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
                 >
-                  My Requests
+                  {t("My Requests")}
                 </a>
+
                 <a
                   href="#notifications"
                   onClick={() => setIsMenuOpen(false)}
                   className="inline-flex items-center gap-1 text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
                 >
-                  <span>Notifications</span>
+                  <span>{t("Notifications")}</span>
                   <span className="w-2 h-2 rounded-full bg-sky-400 -mt-2"></span>
                 </a>
+
                 <Link
                   to="/hotels"
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
                 >
-                  About
+                  {t("About")}
                 </Link>
+
                 <a
                   href="#contact"
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
                 >
-                  Contact
+                  {t("Contact")}
                 </a>
               </div>
 
@@ -95,21 +123,23 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
                 >
-                  Edit Profile
+                  {t("Edit Profile")}
                 </a>
-                <a
-                  href="#language"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+
+                <button
+                  type="button"
+                  onClick={toggleLanguage}
+                  className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
                 >
-                  Language
-                </a>
+                  {t("Language")} · {isArabic ? "English" : "العربية"}
+                </button>
+
                 <a
                   href="#logout"
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-slate-400 hover:text-red-500 text-sm font-medium transition-colors"
                 >
-                  Logout
+                  {t("Logout")}
                 </a>
               </div>
             </div>
@@ -117,7 +147,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         </div>
       </header>
 
-      {/* Backdrop overlay (Small/Medium screens only) */}
+      {/* Backdrop */}
       <div
         className={`lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
           isMenuOpen
@@ -127,10 +157,21 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         onClick={() => setIsMenuOpen(false)}
       />
 
-      {/* Sidebar Drawer (Small/Medium screens only) */}
+      {/* Mobile Sidebar */}
       <aside
-        className={`lg:hidden fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-white shadow-2xl z-50 p-6 border-l border-slate-100 flex flex-col justify-between overflow-y-auto transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        dir={isArabic ? "rtl" : "ltr"}
+        className={`lg:hidden fixed top-0 ${
+          isArabic ? "left-0" : "right-0"
+        } h-full w-[280px] sm:w-[320px] bg-white shadow-2xl z-50 p-6 border-slate-100 flex flex-col justify-between overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+          isArabic
+            ? "border-r"
+            : "border-l"
+        } ${
+          isMenuOpen
+            ? "translate-x-0"
+            : isArabic
+              ? "-translate-x-full"
+              : "translate-x-full"
         }`}
       >
         <div>
@@ -139,12 +180,13 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <div className="flex items-center gap-3.5">
               <img
                 src={AVATAR_IMAGE_URL}
-                alt="John Dou"
+                alt={t("John Dou")}
                 className="w-12 h-12 rounded-full object-cover shrink-0"
               />
+
               <div className="overflow-hidden">
                 <h3 className="font-bold text-slate-900 text-base leading-tight">
-                  John Dou
+                  {t("John Dou")}
                 </h3>
                 <p className="text-xs text-slate-500 truncate mt-1 font-normal">
                   Johndouemail@gmail.com
@@ -155,42 +197,45 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <button
               onClick={() => setIsMenuOpen(false)}
               className="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition-colors cursor-pointer"
-              aria-label="Close menu"
+              aria-label={t("Close menu")}
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Primary Nav Links */}
+          {/* Primary Links */}
           <nav className="py-6 space-y-5">
             <a
               href="#requests"
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
             >
-              My Requests
+              {t("My Requests")}
             </a>
+
             <a
               href="#notifications"
               onClick={() => setIsMenuOpen(false)}
               className="inline-flex items-center gap-1 text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
             >
-              <span>Notifications</span>
+              <span>{t("Notifications")}</span>
               <span className="w-2 h-2 rounded-full bg-sky-400 -mt-2"></span>
             </a>
+
             <Link
-                  to="/hotels"
+              to="/hotels"
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
             >
-              About
+              {t("About")}
             </Link>
+
             <a
               href="#contact"
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
             >
-              Contact
+              {t("Contact")}
             </a>
           </nav>
 
@@ -203,21 +248,23 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
             >
-              Edit Profile
+              {t("Edit Profile")}
             </a>
-            <a
-              href="#language"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
             >
-              Language
-            </a>
+              {t("Language")} · {isArabic ? "English" : "العربية"}
+            </button>
+
             <a
               href="#logout"
               onClick={() => setIsMenuOpen(false)}
               className="block text-slate-400 hover:text-red-500 text-sm font-medium transition-colors"
             >
-              Logout
+              {t("Logout")}
             </a>
           </div>
         </div>

@@ -3,7 +3,6 @@ import {
   Wifi,
   Snowflake,
   CheckCircle2,
-  Home,
   Dog,
   Coffee,
   Star,
@@ -15,9 +14,12 @@ import {
   User,
   Baby,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { features } from "./data/features";
 
 export default function HotelOverview() {
+  const { t } = useTranslation();
+
   // حالة فتح وإغلاق النافذة
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,7 +41,7 @@ export default function HotelOverview() {
             }
             className="text-blue-600 border-b-2 border-blue-600 pb-3 -mb-3 font-semibold whitespace-nowrap transition-colors"
           >
-            Overview
+            {t("Overview")}
           </button>
 
           <button
@@ -51,7 +53,7 @@ export default function HotelOverview() {
             }
             className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
           >
-            Rooms
+            {t("Rooms")}
           </button>
 
           <button
@@ -63,7 +65,7 @@ export default function HotelOverview() {
             }
             className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
           >
-            Location
+            {t("Location")}
           </button>
 
           <button
@@ -75,7 +77,7 @@ export default function HotelOverview() {
             }
             className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
           >
-            Reviews
+            {t("Reviews")}
           </button>
         </div>
 
@@ -84,22 +86,27 @@ export default function HotelOverview() {
           onClick={() => setIsModalOpen(true)}
           className="w-full sm:w-auto bg-blue-600 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-blue-700 active:scale-95 transition-all shadow-sm shrink-0"
         >
-          Reserve a room
+          {t("Reserve a room")}
         </button>
       </div>
 
       {/* Hotel Title & Rating */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-800 mb-1">
-          My Cloud Transit Hotel
+          {t("My Cloud Transit Hotel")}
         </h1>
+
         <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 mb-1">
           <span>4.5</span>
           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
         </div>
-        <p className="text-sm font-medium text-slate-500">4.2/5 Very Good</p>
+
+        <p className="text-sm font-medium text-slate-500">
+          {t("4.2/5 Very Good")}
+        </p>
+
         <p className="text-xs text-gray-400 mt-1">
-          Guests rated this property 4.0/5 for cleanliness.
+          {t("Guests rated this property 4.0/5 for cleanliness.")}
         </p>
       </div>
 
@@ -107,12 +114,15 @@ export default function HotelOverview() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         {/* Features list */}
         <div className="md:col-span-7">
-          <h2 className="text-base font-bold text-slate-800 mb-4">Features</h2>
+          <h2 className="text-base font-bold text-slate-800 mb-4">
+            {t("Features")}
+          </h2>
+
           <div className="grid grid-cols-3 gap-y-3 gap-x-2 text-xs text-slate-600">
             {features.map((item, index) => (
               <div key={index} className="flex items-center gap-2">
                 {item.icon}
-                <span>{item.text}</span>
+                <span>{t(item.text)}</span>
               </div>
             ))}
           </div>
@@ -120,118 +130,133 @@ export default function HotelOverview() {
 
         {/* Small Location Map Preview */}
         <div className="md:col-span-5">
-          <h2 className="text-base font-bold text-slate-800 mb-3">Location</h2>
+          <h2 className="text-base font-bold text-slate-800 mb-3">
+            {t("Location")}
+          </h2>
+
           <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm mb-2">
             <img
               src="/images/Rectan1.png"
-              alt="Map View"
+              alt={t("Map View")}
               className="w-full h-36 object-cover bg-slate-100"
             />
           </div>
+
           <div className="flex justify-between items-start text-[11px] text-gray-500">
             <p>
-              Terminal 1 / Gate z 25, frankfurt am Main/ Airport, Frankfurt,
-              Hessen, 60549
+              {t(
+                "Terminal 1 / Gate z 25, frankfurt am Main/ Airport, Frankfurt, Hessen, 60549"
+              )}
             </p>
+
             <a
               href="#map"
               className="text-blue-600 font-medium whitespace-nowrap hover:underline"
             >
-              View in a map
+              {t("View in a map")}
             </a>
           </div>
         </div>
       </div>
 
-      {/* ================= Modal الحجز ================= */}
+      {/* Reservation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/50 backdrop-blur-md overflow-y-auto">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
-            {" "}
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-[#202747]">Reserve</h3>
+              <h3 className="text-xl font-bold text-[#202747]">
+                {t("Reserve")}
+              </h3>
 
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 rounded-full bg-[#D9F3FF] text-[#25B9F5] hover:bg-[#C5EDFF] transition"
-                aria-label="Close reservation"
+                aria-label={t("Close reservation")}
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
+
             {/* Room Image */}
             <div className="rounded-md overflow-hidden mb-6 h-40 sm:h-44 w-full">
               <img
                 src="/images/Rectangle18.png"
-                alt="Room"
+                alt={t("Room")}
                 className="w-full h-full object-cover"
               />
             </div>
+
             {/* Room Title */}
             <h4 className="font-bold text-lg text-[#202747] mb-3">
-              MEconomy Double Room, 1 Double Bed, Non Smoking
+              {t(
+                "MEconomy Double Room, 1 Double Bed, Non Smoking"
+              )}
             </h4>
+
             {/* Room Sub-info */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[#8A90A5] mb-7">
               <span className="flex items-center gap-1.5">
                 <Maximize2 className="w-4 h-4 text-[#3478FF]" />
-                108 sq ft
+                108 {t("sq ft")}
               </span>
 
               <span className="flex items-center gap-1.5">
                 <Users className="w-4 h-4 text-[#3478FF]" />
-                Sleeps 2
+                {t("Sleeps 2")}
               </span>
 
               <span className="flex items-center gap-1.5">
-                <BedDouble className="w-4 h-4 text-[#3478FF]" />1 Double Bed
+                <BedDouble className="w-4 h-4 text-[#3478FF]" />
+                {t("1 Double Bed")}
               </span>
             </div>
+
             {/* Room Amenities */}
             <div className="mb-6">
               <h5 className="text-base font-bold text-[#202747] mb-4">
-                Room Amenities
+                {t("Room Amenities")}
               </h5>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-5 text-sm text-[#81879C]">
                 <div className="flex items-center gap-1.5">
                   <Wifi className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  Free WiFi
+                  {t("Free WiFi")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  Housekeeping
+                  {t("Housekeeping")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   <Dog className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  Pet friendly
+                  {t("Pet friendly")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   <Snowflake className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  Air conditioning
+                  {t("Air conditioning")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  24/7 front desk
+                  {t("24/7 front desk")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   <Coffee className="w-4 h-4 shrink-0 text-[#3478FF]" />
-                  Breakfast available
+                  {t("Breakfast available")}
                 </div>
               </div>
             </div>
+
             {/* Check-in / Guest Box */}
             <div className="bg-[#EAF9FE] rounded-lg p-4 mb-6">
               <div className="grid grid-cols-2 gap-4 text-sm mb-5">
                 <div>
                   <span className="text-sm text-[#818BA2] block mb-1">
-                    Check In - Check Out
+                    {t("Check In - Check Out")}
                   </span>
 
                   <span className="font-semibold text-[#202747]">
@@ -241,10 +266,12 @@ export default function HotelOverview() {
 
                 <div>
                   <span className="text-sm text-[#818BA2] block mb-1">
-                    Country
+                    {t("Country")}
                   </span>
 
-                  <span className="font-semibold text-[#202747]">France</span>
+                  <span className="font-semibold text-[#202747]">
+                    {t("France")}
+                  </span>
                 </div>
               </div>
 
@@ -252,18 +279,21 @@ export default function HotelOverview() {
 
               <div className="grid grid-cols-2 gap-4 text-sm text-[#202747]">
                 <div className="flex items-center gap-1.5">
-                  <User className="w-4 h-4 text-[#25B9F5]" />8 Adults
+                  <User className="w-4 h-4 text-[#25B9F5]" />
+                  {t("8 Adults")}
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Baby className="w-4 h-4 text-[#25B9F5]" />3 Children
+                  <Baby className="w-4 h-4 text-[#25B9F5]" />
+                  {t("3 Children")}
                 </div>
               </div>
             </div>
+
             {/* Extras */}
             <div className="mb-7">
               <h5 className="text-base font-bold text-[#202747] mb-4">
-                Extras
+                {t("Extras")}
               </h5>
 
               <div className="space-y-4">
@@ -277,7 +307,9 @@ export default function HotelOverview() {
                       className="accent-[#25B9F5] w-5 h-5"
                     />
 
-                    <span className="text-[#202747]">No extras</span>
+                    <span className="text-[#202747]">
+                      {t("No extras")}
+                    </span>
                   </div>
 
                   <span className="text-[#8A90A5]">+$0</span>
@@ -293,34 +325,45 @@ export default function HotelOverview() {
                       className="accent-[#25B9F5] w-5 h-5"
                     />
 
-                    <span className="text-[#202747]">Breakfast buffet</span>
+                    <span className="text-[#202747]">
+                      {t("Breakfast buffet")}
+                    </span>
                   </div>
 
                   <span className="text-[#8A90A5]">+$15</span>
                 </label>
               </div>
             </div>
+
             {/* Price Details */}
             <div className="bg-[#F8F9FE] rounded-lg p-5 mb-7 space-y-4 text-base">
               <h5 className="font-semibold text-[#202747] mb-6">
-                Price details
+                {t("Price details")}
               </h5>
 
               <div className="flex justify-between items-center gap-3">
-                <span className="text-[#303956]">Room</span>
-                <span className="text-[#3478FF] font-medium">960.00</span>
-              </div>
-
-              <div className="flex justify-between items-center gap-3">
-                <span className="text-[#303956]">Fully refundable</span>
-                <span className="text-[#3478FF] font-medium">30.00</span>
+                <span className="text-[#303956]">{t("Room")}</span>
+                <span className="text-[#3478FF] font-medium">
+                  960.00
+                </span>
               </div>
 
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">
-                  Extras{" "}
+                  {t("Fully refundable")}
+                </span>
+                <span className="text-[#3478FF] font-medium">
+                  30.00
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-[#303956]">
+                  {t("Extras")}{" "}
                   <span className="text-xs text-[#3478FF] ml-1">
-                    {selectedExtra === "breakfast" ? "Breakfast buffet" : ""}
+                    {selectedExtra === "breakfast"
+                      ? t("Breakfast buffet")
+                      : ""}
                   </span>
                 </span>
 
@@ -330,33 +373,36 @@ export default function HotelOverview() {
               </div>
 
               <div className="flex justify-between items-center gap-3">
-                <span className="text-[#303956]">Taxes</span>
-                <span className="text-[#3478FF] font-medium">30.00</span>
+                <span className="text-[#303956]">{t("Taxes")}</span>
+                <span className="text-[#3478FF] font-medium">
+                  30.00
+                </span>
               </div>
 
               <div className="border-t border-[#D8E4FF] pt-4 mt-5 flex justify-between items-center gap-3">
                 <div>
                   <span className="font-bold text-[#202747] text-base block">
-                    Total (incl. VAT)
+                    {t("Total (incl. VAT)")}
                   </span>
 
                   <span className="text-sm text-[#81879C] block mt-0.5">
-                    includes taxes &amp; fees
+                    {t("includes taxes & fees")}
                   </span>
                 </div>
 
                 <span className="font-bold text-[#25B9F5] text-lg whitespace-nowrap">
-                  {(1698 + (selectedExtra === "breakfast" ? 25 : -25)).toFixed(
-                    2
-                  )}{" "}
+                  {(
+                    1698 + (selectedExtra === "breakfast" ? 25 : -25)
+                  ).toFixed(2)}{" "}
                   SAR
                 </span>
               </div>
             </div>
+
             {/* Payment Method */}
             <div className="mb-7">
               <h5 className="text-base font-bold text-[#202747] mb-5">
-                Choose Payment Method
+                {t("Choose Payment Method")}
               </h5>
 
               <div className="space-y-3">
@@ -378,7 +424,7 @@ export default function HotelOverview() {
                     />
 
                     <span className="text-base text-[#303956]">
-                      Master Card
+                      {t("Master Card")}
                     </span>
                   </div>
 
@@ -406,7 +452,9 @@ export default function HotelOverview() {
                       className="accent-[#25B9F5] w-5 h-5"
                     />
 
-                    <span className="text-base text-[#303956]">Mada</span>
+                    <span className="text-base text-[#303956]">
+                      {t("Mada")}
+                    </span>
                   </div>
 
                   <img
@@ -433,7 +481,9 @@ export default function HotelOverview() {
                       className="accent-[#25B9F5] w-5 h-5"
                     />
 
-                    <span className="text-base text-[#303956]">Visa</span>
+                    <span className="text-base text-[#303956]">
+                      {t("Visa")}
+                    </span>
                   </div>
 
                   <img
@@ -444,9 +494,10 @@ export default function HotelOverview() {
                 </label>
               </div>
             </div>
+
             {/* Reserve Button */}
             <button className="w-full bg-[#25B9F5] hover:bg-[#13A9E8] text-white font-semibold py-4 rounded-xl transition shadow-sm text-base active:scale-[0.99]">
-              Reserve
+              {t("Reserve")}
             </button>
           </div>
         </div>
