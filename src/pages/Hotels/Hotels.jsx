@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +24,11 @@ const getHotelStars = (hotel) =>
   Number(hotel.stars ?? hotel.starRating ?? hotel.star_rating ?? 0);
 
 const getHotelType = (hotel) =>
-  hotel.propertyType ?? hotel.property_type ?? hotel.type ?? hotel.category ?? "";
+  hotel.propertyType ??
+  hotel.property_type ??
+  hotel.type ??
+  hotel.category ??
+  "";
 
 function getOptionDetails(section, selectedValue) {
   const items = FILTER_DATA[section] ?? [];
@@ -55,7 +58,6 @@ function matchesNumericFilter(
 
   return selectedValues.some((selected) => {
     const option = getOptionDetails(section, selected);
-
     const text = `${option.value} ${option.label}`;
     const numbers = text.match(/\d+(?:\.\d+)?/g);
 
@@ -81,23 +83,41 @@ function matchesPropertyType(hotel, selectedValues) {
   return selectedValues.some((selected) => {
     const option = getOptionDetails("propertyType", selected);
 
-    return [option.value, option.label].some(
-      (value) =>
-        normalize(value) === hotelType ||
-        normalize(value).includes(hotelType) ||
-        hotelType.includes(normalize(value))
-    );
+    return [option.value, option.label].some((value) => {
+      const normalizedValue = normalize(value);
+
+      return (
+        normalizedValue === hotelType ||
+        normalizedValue.includes(hotelType) ||
+        hotelType.includes(normalizedValue)
+      );
+    });
   });
+}
+
+function getHotelLocation(hotel) {
+  return normalize([
+    hotel.city,
+    hotel.location,
+    hotel.country,
+    hotel.address,
+    hotel.destination,
+    hotel.name,
+  ].filter(Boolean).join(" "));
 }
 
 export default function Hotels() {
   const { t } = useTranslation();
 
-  const [filters, setFilters] = useState({
-    ...INITIAL_FILTERS,
-    guestRating: [],
-    starRating: [],
-    propertyType: [],
+  const [filters, setFilters] = useState(INITIAL_FILTERS);
+
+  const [search, setSearch] = useState({
+    destination: "",
+    checkIn: "",
+    checkOut: "",
+    rooms: 2,
+    travelers: 4,
+    guests: [{ adults: 1, children: 0 }],
   });
 
   const filteredHotels = useMemo(() => {
@@ -106,8 +126,10 @@ export default function Hotels() {
       const rating = getHotelRating(hotel);
       const stars = getHotelStars(hotel);
 
+      // PRICE
       const matchesPrice = price <= filters.price;
 
+      // GUEST RATING
       const matchesGuestRating = matchesNumericFilter(
         rating,
         filters.guestRating,
@@ -115,31 +137,50 @@ export default function Hotels() {
         true
       );
 
+      // STAR RATING
       const matchesStarRating = matchesNumericFilter(
         stars,
         filters.starRating,
         "starRating"
       );
 
+      // PROPERTY TYPE
       const matchesType = matchesPropertyType(
         hotel,
         filters.propertyType
       );
 
+      // DESTINATION
+      const matchesDestination = search.destination
+        ? getHotelLocation(hotel).includes(
+            normalize(search.destination)
+          )
+        : true;
+
       return (
         matchesPrice &&
         matchesGuestRating &&
         matchesStarRating &&
-        matchesType
+        matchesType &&
+        matchesDestination
       );
     });
-  }, [filters]);
+  }, [filters, search.destination]);
+
+  const resetFilters = () => {
+    setFilters({
+      ...INITIAL_FILTERS,
+      guestRating: [],
+      starRating: [],
+      propertyType: [],
+    });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50/50 px-7 md:px-20 lg:px-35 py-5 md:py-10 xl:py-13 font-sans">
       <div className="flex flex-col gap-8">
         {/* SEARCH BAR */}
-        <SearchBar />
+        <SearchBar onSearch={setSearch} />
 
         {/* MAIN CONTENT */}
         <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -191,14 +232,7 @@ export default function Hotels() {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setFilters({
-                      price: 300,
-                      guestRating: [],
-                      starRating: [],
-                      propertyType: [],
-                    })
-                  }
+                  onClick={resetFilters}
                   className="px-5 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
                 >
                   {t("Reset filters")}

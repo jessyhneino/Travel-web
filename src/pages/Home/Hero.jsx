@@ -194,12 +194,10 @@ export default function Hero() {
       </div>
 
       {/* Main Content */}
-      <main className="relative z-20 max-w-7xl mx-auto px-8 sm:px-6 lg:px-8 pt-4 pb-12 sm:pb-16 lg:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-10">
-          <div className="hidden lg:block lg:col-span-2" />
-
+      <main className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-12 sm:pb-16 lg:pb-24 min-[1000px]:-translate-y-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6 sm:mt-8 lg:mt-10">
           {/* Search Card */}
-          <div className="flex flex-col items-center w-full pt-2 lg:col-span-7">
+          <div className="flex flex-col items-center justify-center w-full pt-2 lg:col-span-12">
             {/* Logo */}
             <motion.div
               className="mb-3 opacity-90"
@@ -220,7 +218,7 @@ export default function Hero() {
 
             {/* Search Box */}
             <motion.div
-              className="w-full max-w-full sm:max-w-md md:max-w-lg bg-white rounded-2xl p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
+              className="w-full max-w-[315px] sm:max-w-[450px] bg-white rounded-xl p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
               variants={SLOW_FADE_IN}
               initial="hidden"
               animate="visible"

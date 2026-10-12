@@ -16,7 +16,6 @@ export default function HotelCard({
   description = "Hotel description",
 }) {
   const { t, i18n } = useTranslation();
-
   const isArabic = i18n.language.startsWith("ar");
 
   return (
@@ -39,8 +38,7 @@ export default function HotelCard({
           className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        {/* RATING */}
-        <div className="absolute bottom-2 left-2 bg-white px-2.5 py-1 rounded-md shadow-sm flex items-center gap-1 text-xs font-bold text-slate-700 transition-transform duration-300 group-hover:scale-105">
+        <div className="absolute bottom-0 left-0 bg-white px-2.5 py-1 shadow-sm flex items-center gap-1 text-xs font-bold text-slate-700 transition-transform duration-300 group-hover:scale-105">
           <span>{Number(rating).toFixed(1)}</span>
           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
         </div>
@@ -54,12 +52,10 @@ export default function HotelCard({
         }`}
       >
         <div>
-          {/* HOTEL NAME */}
           <h3 className="text-base font-bold text-slate-800 mb-2 transition-colors duration-300 group-hover:text-blue-600">
             {t(name)}
           </h3>
 
-          {/* PROPERTY TYPE & STARS */}
           <div className="flex items-center gap-2 mb-2 text-xs text-slate-500">
             <span>{t(propertyType)}</span>
 
@@ -79,7 +75,6 @@ export default function HotelCard({
             </span>
           </div>
 
-          {/* AMENITIES */}
           <div className="flex flex-wrap items-center gap-4 text-xs text-blue-400 mb-2">
             {amenities.includes("Pool") && (
               <div className="flex items-center gap-1">
@@ -96,10 +91,8 @@ export default function HotelCard({
             )}
           </div>
 
-          {/* LOCATION */}
           <div className="flex items-center gap-1 text-xs text-amber-500 mb-3">
             <MapPin className="w-3.5 h-3.5 shrink-0" />
-
             <span>
               {t("{{distance}} K.m from the city centre", {
                 distance,
@@ -107,13 +100,11 @@ export default function HotelCard({
             </span>
           </div>
 
-          {/* DESCRIPTION */}
           <p className="text-xs text-slate-400 line-clamp-2 max-w-lg">
             {t(description)}
           </p>
         </div>
 
-        {/* PRICE */}
         <div className="flex flex-col items-end justify-end mt-2">
           <span
             dir="ltr"

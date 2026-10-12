@@ -17,6 +17,35 @@ import {
 export default function SearchBar() {
   const { t } = useTranslation();
 
+  const COUNTRIES = [
+    "Germany",
+    "Saudi Arabia",
+    "United Arab Emirates",
+    "Turkey",
+    "France",
+    "Italy",
+    "Spain",
+    "United Kingdom",
+    "United States",
+    "Romania",
+    "Switzerland",
+    "Austria",
+    "Egypt",
+    "Qatar",
+    "Kuwait",
+    "Bahrain",
+    "Oman",
+    "Jordan",
+    "Lebanon",
+    "Japan",
+    "Thailand",
+    "Malaysia",
+    "Maldives",
+  ];
+
+  const [selectedCountry, setSelectedCountry] = useState("Germany");
+  const [showCountries, setShowCountries] = useState(false);
+
   const [activeModal, setActiveModal] = useState(null);
   const [distance, setDistance] = useState(10);
   const [rooms, setRooms] = useState([
@@ -34,6 +63,7 @@ export default function SearchBar() {
         !searchBarRef.current.contains(event.target)
       ) {
         setActiveModal(null);
+        setShowCountries(false);
       }
     }
 
@@ -91,9 +121,11 @@ export default function SearchBar() {
         {/* Location Selector */}
         <div
           onClick={() =>
-            setActiveModal((prev) =>
-              prev === "location" ? null : "location"
-            )
+            setActiveModal((prev) => {
+              if (prev === "location") return null;
+              setShowCountries(false);
+              return "location";
+            })
           }
           className="flex-1 min-w-[240px] max-lg:w-full max-lg:min-w-0 flex items-center gap-3 border border-blue-200 rounded-xl px-4 py-2.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
         >
@@ -141,7 +173,7 @@ export default function SearchBar() {
               prev === "travelers" ? null : "travelers"
             )
           }
-          className="flex-1 min-w-[200px] max-lg:w-full max-lg:min-w-0 flex items-center justify-between border border-blue-200 rounded-xl px-4 py-2.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
+          className="flex-1 min-w-[200px] max-lg:w-full max-lg:min-w-0 flex items-center justify-between border border-blue-200 rounded-xl px-4 py-4.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
         >
           <div className="flex items-center gap-3 min-w-0">
             <Users className="w-5 h-5 text-blue-600 flex-shrink-0" />
@@ -181,7 +213,10 @@ export default function SearchBar() {
       {activeModal && (
         <div
           className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
-          onClick={() => setActiveModal(null)}
+          onClick={() => {
+            setActiveModal(null);
+            setShowCountries(false);
+          }}
         />
       )}
 
@@ -212,7 +247,10 @@ export default function SearchBar() {
             <button
               type="button"
               aria-label={t("Close")}
-              onClick={() => setActiveModal(null)}
+              onClick={() => {
+                setActiveModal(null);
+                setShowCountries(false);
+              }}
               className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
             >
               <X className="w-4 h-4" />
@@ -220,12 +258,64 @@ export default function SearchBar() {
           </div>
 
           <div className="space-y-2 mb-4">
-            <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-400">
-              <span className="opacity-60">
-                🌐 {t("Country")}
-              </span>
+            {/* Country Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() =>
+                  setShowCountries((prev) => !prev)
+                }
+                className="w-full flex items-center justify-between gap-2 border border-slate-200 rounded-lg px-3 py-3 text-xs text-slate-600 hover:border-blue-400 transition-colors"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <span>🌐</span>
+
+                  <span className="text-slate-400">
+                    {t("Country")}
+                  </span>
+
+                  <span className="font-semibold text-blue-600 truncate">
+                    {t(selectedCountry)}
+                  </span>
+                </span>
+
+                <ChevronDown
+                  className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${
+                    showCountries ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {showCountries && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-[80] max-h-52 overflow-y-auto">
+                  {COUNTRIES.map((country) => (
+                    <button
+                      key={country}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCountry(country);
+                        setShowCountries(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-blue-50 ${
+                        selectedCountry === country
+                          ? "bg-blue-50 text-blue-600 font-semibold"
+                          : "text-slate-700"
+                      }`}
+                    >
+                      <span className="flex items-center justify-between">
+                        {t(country)}
+
+                        {selectedCountry === country && (
+                          <span className="text-blue-600">✓</span>
+                        )}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
+            {/* Destination Input */}
             <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-400">
               <MapPin className="w-4 h-4 text-slate-400" />
               <span>{t("Where are you going?")}</span>
@@ -562,7 +652,9 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Decrease children")}
-                      onClick={() => updateGuests(room.id, "children", -1)}
+                      onClick={() =>
+                        updateGuests(room.id, "children", -1)
+                      }
                       className="w-6 h-6 border rounded-md flex items-center justify-center text-slate-400 hover:border-slate-400"
                     >
                       <Minus className="w-3 h-3" />
@@ -575,7 +667,9 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Increase children")}
-                      onClick={() => updateGuests(room.id, "children", 1)}
+                      onClick={() =>
+                        updateGuests(room.id, "children", 1)
+                      }
                       className="w-6 h-6 border rounded-md flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
                     >
                       <Plus className="w-3 h-3" />

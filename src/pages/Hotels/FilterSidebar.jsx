@@ -4,7 +4,7 @@ import { X, SlidersHorizontal } from "lucide-react";
 import { FILTER_DATA } from "./data/filterData";
 
 export const INITIAL_FILTERS = {
-  price: 200,
+  price: 300,
   guestRating: [],
   starRating: [],
   propertyType: [],
@@ -22,23 +22,18 @@ export default function FilterSidebar({
     setDraftFilters(filters);
   }, [filters]);
 
-  // تطبيق الفلاتر مباشرة عند تغييرها
   const applyUpdatedFilters = (updatedFilters) => {
     setDraftFilters(updatedFilters);
-    onApplyFilters({ ...updatedFilters });
+    onApplyFilters(updatedFilters);
   };
 
-  // تحديث السعر فور تحريك شريط السعر
   const updatePrice = (price) => {
-    const updatedFilters = {
+    applyUpdatedFilters({
       ...draftFilters,
       price,
-    };
-
-    applyUpdatedFilters(updatedFilters);
+    });
   };
 
-  // تحديث خيارات Checkbox فورًا
   const toggleOption = (section, value) => {
     const selected = draftFilters[section] || [];
 
@@ -52,7 +47,6 @@ export default function FilterSidebar({
     applyUpdatedFilters(updatedFilters);
   };
 
-  // إعادة ضبط الفلاتر وتطبيقها مباشرة
   const resetFilters = () => {
     const reset = {
       price: 300,
@@ -91,7 +85,7 @@ export default function FilterSidebar({
       {/* MOBILE OVERLAY */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]"
+          className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-[2px] z-50"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -161,40 +155,30 @@ function FilterContent({
         </div>
       </div>
 
-      {/* PRICE FILTER */}
       <PriceFilter
         price={filters.price}
         setPrice={updatePrice}
       />
 
-      {/* GUEST RATING */}
       <FilterSection
         title="Guest rating"
         items={FILTER_DATA.guestRating}
         selected={filters.guestRating}
-        onToggle={(value) =>
-          toggleOption("guestRating", value)
-        }
+        onToggle={(value) => toggleOption("guestRating", value)}
       />
 
-      {/* STAR RATING */}
       <FilterSection
         title="Star rating"
         items={FILTER_DATA.starRating}
         selected={filters.starRating}
-        onToggle={(value) =>
-          toggleOption("starRating", value)
-        }
+        onToggle={(value) => toggleOption("starRating", value)}
       />
 
-      {/* PROPERTY TYPE */}
       <FilterSection
         title="Property type"
         items={FILTER_DATA.propertyType}
         selected={filters.propertyType}
-        onToggle={(value) =>
-          toggleOption("propertyType", value)
-        }
+        onToggle={(value) => toggleOption("propertyType", value)}
       />
     </div>
   );
@@ -216,9 +200,7 @@ function PriceFilter({ price, setPrice }) {
           min="10"
           max="300"
           value={price}
-          onChange={(e) =>
-            setPrice(Number(e.target.value))
-          }
+          onChange={(e) => setPrice(Number(e.target.value))}
           aria-label={t("Price per night")}
           style={{
             background: `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #dbeafe ${percentage}%, #dbeafe 100%)`,
@@ -227,13 +209,8 @@ function PriceFilter({ price, setPrice }) {
         />
 
         <div className="flex justify-between text-xs font-semibold mt-2">
-          <span className="text-blue-600">
-            ${price}
-          </span>
-
-          <span className="text-slate-400">
-            $300
-          </span>
+          <span className="text-blue-600">${price}</span>
+          <span className="text-slate-400">$300</span>
         </div>
       </div>
     </div>

@@ -192,7 +192,7 @@ export default function SpecialPackages() {
       </div>
 
       {/* Navigation Footer */}
-      <div className="relative flex items-center justify-between mx-8 mt-8 sm:mt-10 lg:mt-12 pt-5 sm:pt-6 border-t border-gray-100 text-sm font-medium text-sky-500">
+      <div className="relative flex items-center justify-between min-[640px]:mx-4 min-[755px]:mx-8  mt-8 sm:mt-10 lg:mt-12 pt-5 sm:pt-6 border-t border-gray-100 text-sm font-medium text-sky-500">
         <motion.button
           onClick={handlePrev}
           whileHover={{ x: -4 }}
