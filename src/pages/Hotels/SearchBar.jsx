@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 
-export default function SearchBar() {
+export default function SearchBar({ onSearch = () => {} }) {
   const { t, i18n } = useTranslation();
 
   const isRTL = i18n.language?.startsWith("ar");
@@ -50,6 +50,19 @@ export default function SearchBar() {
   const [activeModal, setActiveModal] = useState(null);
   const [distance, setDistance] = useState(10);
 
+  const [checkIn, setCheckIn] = useState("2026-10-23");
+  const [checkOut, setCheckOut] = useState("2026-11-20");
+
+  // التقويم الأول: Check-in
+  const [calendarMonth, setCalendarMonth] = useState(9);
+  const [calendarYear, setCalendarYear] = useState(2026);
+
+  // التقويم الثاني: Check-out مستقل عن التقويم الأول
+  const [checkOutCalendarMonth, setCheckOutCalendarMonth] = useState(10);
+  const [checkOutCalendarYear, setCheckOutCalendarYear] = useState(2026);
+
+  const [selectingCheckOut, setSelectingCheckOut] = useState(false);
+
   const [rooms, setRooms] = useState([
     { id: 1, adults: 1, children: 1 },
     { id: 2, adults: 1, children: 1 },
@@ -57,7 +70,6 @@ export default function SearchBar() {
 
   const searchBarRef = useRef(null);
 
-  // Close popups when clicking outside the search bar
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -76,30 +88,25 @@ export default function SearchBar() {
     };
   }, []);
 
-  // Update travelers
   const updateGuests = (roomId, type, delta) => {
     setRooms((prevRooms) =>
       prevRooms.map((room) => {
-        if (room.id === roomId) {
-          const newVal = room[type] + delta;
+        if (room.id !== roomId) return room;
 
-          // Keep at least one adult in each room
-          if (type === "adults" && newVal < 1) {
-            return room;
-          }
+        const newVal = room[type] + delta;
 
-          return {
-            ...room,
-            [type]: Math.max(0, newVal),
-          };
+        if (type === "adults" && newVal < 1) {
+          return room;
         }
 
-        return room;
+        return {
+          ...room,
+          [type]: Math.max(0, newVal),
+        };
       })
     );
   };
 
-  // Add a room
   const addRoom = () => {
     if (rooms.length >= 8) return;
 
@@ -113,7 +120,6 @@ export default function SearchBar() {
     ]);
   };
 
-  // Remove a room
   const removeRoom = (id) => {
     setRooms((prevRooms) => {
       if (prevRooms.length <= 1) return prevRooms;
@@ -129,6 +135,197 @@ export default function SearchBar() {
   const closeModal = () => {
     setActiveModal(null);
     setShowCountries(false);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(`${dateString}T12:00:00`);
+
+    return new Intl.DateTimeFormat(isRTL ? "ar" : "en", {
+      day: "numeric",
+      month: "short",
+    }).format(date);
+  };
+
+  const dateSummary = `${formatDate(checkIn)} - ${formatDate(checkOut)}`;
+
+  const hasValidDates =
+    Boolean(checkIn) && Boolean(checkOut) && checkOut > checkIn;
+
+  const handleSearch = () => {
+    if (!hasValidDates) {
+      setActiveModal("date");
+      setSelectingCheckOut(!checkIn || !checkOut);
+      return;
+    }
+
+    onSearch({
+      destination: selectedCountry,
+      checkIn,
+      checkOut,
+      rooms: rooms.length,
+      travelers: totalTravelers,
+      guests: rooms.map(({ adults, children }) => ({
+        adults,
+        children,
+      })),
+    });
+
+    closeModal();
+  };
+
+  // اختيار Check-in ثم Check-out
+  const handleDateSelect = (day, year, month) => {
+    const selectedDate = [
+      year,
+      String(month + 1).padStart(2, "0"),
+      String(day).padStart(2, "0"),
+    ].join("-");
+
+    // بدء فترة حجز جديدة عند اختيار Check-in
+    if (!selectingCheckOut || !checkIn || checkOut) {
+      setCheckIn(selectedDate);
+      setCheckOut("");
+      setSelectingCheckOut(true);
+      return;
+    }
+
+    // يجب أن يكون Check-out بعد Check-in بيوم واحد على الأقل
+    if (selectedDate <= checkIn) {
+      // عند اختيار تاريخ أقدم أو مساوٍ، اعتبريه Check-in جديدًا
+      setCheckIn(selectedDate);
+      setCheckOut("");
+      setSelectingCheckOut(true);
+      return;
+    }
+
+    // حفظ تاريخ المغادرة الصحيح
+    setCheckOut(selectedDate);
+    setSelectingCheckOut(false);
+  };
+
+  // تغيير شهر تقويم محدد دون تغيير التقويم الآخر
+  const changeMonth = (delta, calendarIndex) => {
+    if (calendarIndex === 0) {
+      const nextDate = new Date(calendarYear, calendarMonth + delta, 1);
+
+      setCalendarMonth(nextDate.getMonth());
+      setCalendarYear(nextDate.getFullYear());
+    } else {
+      const nextDate = new Date(
+        checkOutCalendarYear,
+        checkOutCalendarMonth + delta,
+        1
+      );
+
+      setCheckOutCalendarMonth(nextDate.getMonth());
+      setCheckOutCalendarYear(nextDate.getFullYear());
+    }
+  };
+
+  const getMonthDays = (year, month) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getMonthOffset = (year, month) => {
+    const day = new Date(year, month, 1).getDay();
+
+    return (day + 6) % 7;
+  };
+
+  const renderCalendar = (year, month, calendarIndex) => {
+    const days = getMonthDays(year, month);
+    const offset = getMonthOffset(year, month);
+
+    const monthName = new Intl.DateTimeFormat(isRTL ? "ar" : "en", {
+      month: "long",
+    }).format(new Date(year, month, 1));
+
+    const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+    return (
+      <div key={`${calendarIndex}-${year}-${month}`}>
+        <div className="flex items-center justify-between mb-3">
+          <button
+            type="button"
+            aria-label={t("Previous month")}
+            onClick={() => changeMonth(-1, calendarIndex)}
+            className="text-slate-400 hover:text-slate-600"
+          >
+            <ChevronLeft className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
+          </button>
+
+          <span className="text-xs font-semibold text-slate-600">
+            {monthName} {year}
+          </span>
+
+          <button
+            type="button"
+            aria-label={t("Next month")}
+            onClick={() => changeMonth(1, calendarIndex)}
+            className="text-slate-400 hover:text-slate-600"
+          >
+            <ChevronRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+
+        <div
+          dir="ltr"
+          className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-slate-400 mb-2"
+        >
+          {weekdays.map((day) => (
+            <span key={day}>{t(day)}</span>
+          ))}
+        </div>
+
+        <div dir="ltr" className="grid grid-cols-7 gap-1 text-center text-xs">
+          {Array.from({ length: offset }, (_, i) => (
+            <span key={`empty-${i}`} />
+          ))}
+
+          {Array.from({ length: days }, (_, i) => i + 1).map((day) => {
+            const dateString = `${year}-${String(month + 1).padStart(
+              2,
+              "0"
+            )}-${String(day).padStart(2, "0")}`;
+
+            const isSelected =
+              dateString === checkIn || dateString === checkOut;
+
+            const isBetween =
+              checkIn &&
+              checkOut &&
+              dateString > checkIn &&
+              dateString < checkOut;
+
+            return (
+              <button
+                type="button"
+                key={day}
+                aria-pressed={isSelected}
+                aria-label={`${day} ${monthName} ${year}`}
+                onClick={() => handleDateSelect(day, year, month)}
+                className={`
+                  h-7 w-7 rounded-full
+                  flex items-center justify-center
+                  text-[11px] mx-auto
+                  ${
+                    isSelected
+                      ? "bg-blue-600 text-white font-bold"
+                      : isBetween
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }
+                `}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   const popupPosition = `
@@ -153,9 +350,9 @@ export default function SearchBar() {
       dir={isRTL ? "rtl" : "ltr"}
       className="relative w-full"
     >
-      {/* ================= SEARCH BAR ================= */}
+      {/* SEARCH BAR */}
       <div
-        className={`
+        className="
           bg-white p-4
           flex items-center justify-center
           flex-wrap lg:flex-nowrap
@@ -165,9 +362,9 @@ export default function SearchBar() {
           border border-[#26BBFD29]
           rounded-l-[6px]
           w-full max-lg:p-3
-        `}
+        "
       >
-        {/* Location Selector */}
+        {/* LOCATION SELECTOR */}
         <button
           type="button"
           onClick={() =>
@@ -201,17 +398,22 @@ export default function SearchBar() {
             </span>
 
             <span className="text-sm font-semibold text-blue-600 truncate">
-              {t("Berlin (and vicinity), Germany")}
+              {t(selectedCountry)}
             </span>
           </div>
         </button>
 
-        {/* Date Selector */}
+        {/* DATE SELECTOR */}
         <button
           type="button"
-          onClick={() =>
-            setActiveModal((prev) => (prev === "date" ? null : "date"))
-          }
+          onClick={() => {
+            setActiveModal((prev) => {
+              if (prev === "date") return null;
+
+              setSelectingCheckOut(false);
+              return "date";
+            });
+          }}
           aria-expanded={activeModal === "date"}
           className="
             flex-1 min-w-[200px]
@@ -237,7 +439,7 @@ export default function SearchBar() {
               </span>
 
               <span className="text-sm font-semibold text-blue-600 truncate">
-                {t("Oct 23 - Nov 20")}
+                {hasValidDates ? dateSummary : t("Select dates")}
               </span>
             </div>
           </div>
@@ -245,7 +447,7 @@ export default function SearchBar() {
           <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
         </button>
 
-        {/* Travelers Selector */}
+        {/* TRAVELERS SELECTOR */}
         <button
           type="button"
           onClick={() =>
@@ -279,9 +481,7 @@ export default function SearchBar() {
 
               <span className="text-sm font-semibold text-blue-600 truncate">
                 {t("{{count}} room", { count: rooms.length })}{" "}
-                {t("{{count}} travelers", {
-                  count: totalTravelers,
-                })}
+                {t("{{count}} travelers", { count: totalTravelers })}
               </span>
             </div>
           </div>
@@ -289,9 +489,10 @@ export default function SearchBar() {
           <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
         </button>
 
-        {/* Search Button */}
+        {/* SEARCH BUTTON */}
         <button
           type="button"
+          onClick={handleSearch}
           className="
             bg-blue-600 hover:bg-blue-700
             text-white font-medium
@@ -305,14 +506,11 @@ export default function SearchBar() {
           "
         >
           <Search className="w-5 h-5" />
-
-          <span className="text-xs font-semibold">
-            {t("Find Now")}
-          </span>
+          <span className="text-xs font-semibold">{t("Find Now")}</span>
         </button>
       </div>
 
-      {/* ================= MOBILE BACKDROP ================= */}
+      {/* MOBILE BACKDROP */}
       {activeModal && (
         <div
           className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
@@ -321,7 +519,7 @@ export default function SearchBar() {
         />
       )}
 
-      {/* ================= LOCATION MODAL ================= */}
+      {/* LOCATION MODAL */}
       {activeModal === "location" && (
         <div
           dir={isRTL ? "rtl" : "ltr"}
@@ -335,7 +533,6 @@ export default function SearchBar() {
             p-5 z-50 text-start
           `}
         >
-          {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-bold text-slate-800">
               {t("Location")}
@@ -345,31 +542,19 @@ export default function SearchBar() {
               type="button"
               aria-label={t("Close")}
               onClick={closeModal}
-              className="
-                lg:hidden w-8 h-8 rounded-full
-                bg-slate-100 flex items-center justify-center
-                text-slate-500 hover:bg-slate-200
-                transition-colors
-              "
+              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           <div className="space-y-2 mb-4">
-            {/* Country Dropdown */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowCountries((prev) => !prev)}
                 aria-expanded={showCountries}
-                className="
-                  w-full flex items-center justify-between gap-2
-                  border border-slate-200 rounded-[6px]
-                  px-3 py-3 text-xs text-slate-600
-                  hover:border-blue-400 transition-colors
-                  text-start
-                "
+                className="w-full flex items-center justify-between gap-2 border border-slate-200 rounded-[6px] px-3 py-3 text-xs text-slate-600 hover:border-blue-400 transition-colors text-start"
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <span className="shrink-0">🌐</span>
@@ -384,23 +569,14 @@ export default function SearchBar() {
                 </span>
 
                 <ChevronDown
-                  className={`
-                    w-4 h-4 text-slate-400 shrink-0
-                    transition-transform
-                    ${showCountries ? "rotate-180" : ""}
-                  `}
+                  className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${
+                    showCountries ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
               {showCountries && (
-                <div
-                  className="
-                    absolute top-full start-0 end-0 mt-1
-                    bg-white border border-slate-200
-                    rounded-[6px] shadow-xl z-[80]
-                    max-h-52 overflow-y-auto
-                  "
-                >
+                <div className="absolute top-full start-0 end-0 mt-1 bg-white border border-slate-200 rounded-[6px] shadow-xl z-[80] max-h-52 overflow-y-auto">
                   {COUNTRIES.map((country) => (
                     <button
                       key={country}
@@ -409,24 +585,17 @@ export default function SearchBar() {
                         setSelectedCountry(country);
                         setShowCountries(false);
                       }}
-                      className={`
-                        w-full text-start
-                        px-4 py-2.5 text-sm
-                        transition-colors hover:bg-blue-50
-                        ${
-                          selectedCountry === country
-                            ? "bg-blue-50 text-blue-600 font-semibold"
-                            : "text-slate-700"
-                        }
-                      `}
+                      className={`w-full text-start px-4 py-2.5 text-sm transition-colors hover:bg-blue-50 ${
+                        selectedCountry === country
+                          ? "bg-blue-50 text-blue-600 font-semibold"
+                          : "text-slate-700"
+                      }`}
                     >
                       <span className="flex items-center justify-between gap-2">
                         <span className="truncate">{t(country)}</span>
 
                         {selectedCountry === country && (
-                          <span className="text-blue-600 shrink-0">
-                            ✓
-                          </span>
+                          <span className="text-blue-600 shrink-0">✓</span>
                         )}
                       </span>
                     </button>
@@ -435,38 +604,20 @@ export default function SearchBar() {
               )}
             </div>
 
-            {/* Destination Input */}
-            <button
-              type="button"
-              className="
-                w-full flex items-center gap-2
-                border border-slate-200 rounded-[6px]
-                px-3 py-2.5 text-xs text-slate-400
-                hover:border-blue-400 transition-colors
-                text-start
-              "
-            >
+            <div className="w-full flex items-center gap-2 border border-slate-200 rounded-[6px] px-3 py-2.5 text-xs text-slate-400">
               <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-
               <span>{t("Where are you going?")}</span>
-            </button>
+            </div>
           </div>
 
-          {/* Set Point On Map */}
           <button
             type="button"
-            className="
-              flex items-center gap-1.5
-              text-xs font-medium text-blue-600
-              hover:underline mb-4
-            "
+            className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:underline mb-4"
           >
             <MapPin className="w-3.5 h-3.5 shrink-0" />
-
             {t("Set Point On Map")}
           </button>
 
-          {/* Distance Slider */}
           <div className="mb-4">
             <span className="text-xs font-semibold text-slate-700 block mb-2">
               {t("Distance from my location")}
@@ -481,35 +632,24 @@ export default function SearchBar() {
               aria-label={t("Distance from my location")}
               style={{
                 background: isRTL
-                  ? `linear-gradient(
-                      to left,
-                      #2563eb 0%,
-                      #2563eb ${((distance - 10) / 40) * 100}%,
-                      #dbeafe ${((distance - 10) / 40) * 100}%,
-                      #dbeafe 100%
-                    )`
-                  : `linear-gradient(
-                      to right,
-                      #2563eb 0%,
-                      #2563eb ${((distance - 10) / 40) * 100}%,
-                      #dbeafe ${((distance - 10) / 40) * 100}%,
-                      #dbeafe 100%
-                    )`,
+                  ? `linear-gradient(to left, #2563eb 0%, #2563eb ${
+                      ((distance - 10) / 40) * 100
+                    }%, #dbeafe ${((distance - 10) / 40) * 100}%, #dbeafe 100%)`
+                  : `linear-gradient(to right, #2563eb 0%, #2563eb ${
+                      ((distance - 10) / 40) * 100
+                    }%, #dbeafe ${
+                      ((distance - 10) / 40) * 100
+                    }%, #dbeafe 100%)`,
               }}
-              className="
-                w-full h-1.5 rounded-[6px]
-                appearance-none cursor-pointer accent-blue-600
-              "
+              className="w-full h-1.5 rounded-[6px] appearance-none cursor-pointer accent-blue-600"
             />
 
             <div className="flex justify-between text-[11px] text-blue-600 font-semibold mt-1">
               <span>{t("{{distance}} Km", { distance })}</span>
-
               <span>{t("{{distance}} Km", { distance: 50 })}</span>
             </div>
           </div>
 
-          {/* Results */}
           <div>
             <span className="text-xs font-semibold text-slate-700 block mb-2">
               {t("Results")}
@@ -520,11 +660,11 @@ export default function SearchBar() {
                 <button
                   key={item}
                   type="button"
-                  className="
-                    w-full flex items-start gap-2
-                    cursor-pointer hover:bg-slate-50
-                    p-2 rounded-[6px] text-start
-                  "
+                  onClick={() => {
+                    setSelectedCountry("Saudi Arabia");
+                    setShowCountries(false);
+                  }}
+                  className="w-full flex items-start gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-[6px] text-start"
                 >
                   <MapPin className="w-3.5 h-3.5 text-slate-500 mt-0.5 shrink-0" />
 
@@ -544,23 +684,23 @@ export default function SearchBar() {
         </div>
       )}
 
-      {/* ================= DATE MODAL ================= */}
+      {/* DATE MODAL */}
       {activeModal === "date" && (
         <div
           dir={isRTL ? "rtl" : "ltr"}
           className={`
-            absolute top-full
+            absolute top-full mt-2
             ${isRTL ? "right-1/4" : "left-1/4"}
-            mt-2 w-[480px]
-            ${popupPosition}
-            bg-white rounded-[6px] shadow-xl
+            w-[480px] ${popupPosition}
+            bg-white rounded-xl shadow-2xl
             border border-slate-100
             p-6 z-50 text-start
+            transition-all duration-200 ease-out
           `}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-slate-800">
+            <h3 className="text-base font-bold text-slate-800">
               {t("Check in-out")}
             </h3>
 
@@ -568,179 +708,74 @@ export default function SearchBar() {
               type="button"
               aria-label={t("Close")}
               onClick={closeModal}
-              className="
-                lg:hidden w-8 h-8 rounded-full
-                bg-slate-100 flex items-center justify-center
-                text-slate-500 hover:bg-slate-200
-                transition-colors
-              "
+              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Date Summary */}
-          <div className="flex items-center justify-between gap-2 bg-slate-50/70 rounded-[6px] p-3 mb-6">
+          {/* Selected Dates Summary Box */}
+          <div className="flex items-center justify-between gap-3 bg-slate-50 border border-slate-100 rounded-lg p-3.5 mb-5">
             <div className="text-start">
-              <p className="text-base font-bold text-slate-700">
-                {t("13 Oct")}
+              <p className="text-xs font-medium text-slate-400 mb-1">
+                {t("Check in")}
               </p>
 
-              <p className="text-xs text-slate-400">
-                {t("Thursday")}
+              <p className="text-sm font-bold text-slate-700">
+                {checkIn ? formatDate(checkIn) : t("Add date")}
               </p>
             </div>
 
             <div
-              className={`
-                w-8 h-8 rounded-full bg-sky-400
-                text-white flex items-center justify-center
-                shrink-0 ${arrowClass}
-              `}
+              className={`w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center shrink-0 shadow-sm ${arrowClass}`}
             >
               →
             </div>
 
             <div className="text-end">
-              <p className="text-base font-bold text-slate-700">
-                {t("19 Oct")}
+              <p className="text-xs font-medium text-slate-400 mb-1">
+                {t("Check out")}
               </p>
 
-              <p className="text-xs text-slate-400">
-                {t("Saturday")}
+              <p className="text-sm font-bold text-slate-700">
+                {checkOut ? formatDate(checkOut) : t("Add date")}
               </p>
             </div>
           </div>
 
-          {/* Calendar Grid */}
+          {/* Selection Status Prompt */}
+          <p className="text-xs font-medium text-slate-500 mb-4">
+            {t(
+              selectingCheckOut
+                ? "Select check-out date"
+                : "Select check-in date"
+            )}
+          </p>
+
+          {/* Calendars Grid */}
           <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-6 max-sm:gap-8">
-            {/* February */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <button
-                  type="button"
-                  aria-label={t("Previous month")}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  <ChevronLeft
-                    className={`w-4 h-4 ${arrowClass}`}
-                  />
-                </button>
+            {renderCalendar(calendarYear, calendarMonth, 0)}
 
-                <span className="text-xs font-semibold text-slate-600">
-                  {t("February")}
-                </span>
-
-                <span className="w-4" />
-              </div>
-
-              {/* Keep weekday order consistent in both languages */}
-              <div
-                dir="ltr"
-                className="
-                  grid grid-cols-7 gap-1 text-center
-                  text-[10px] font-medium text-slate-400 mb-2
-                "
-              >
-                {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(
-                  (day) => (
-                    <span key={day}>{t(day)}</span>
-                  )
-                )}
-              </div>
-
-              <div
-                dir="ltr"
-                className="grid grid-cols-7 gap-1 text-center text-xs"
-              >
-                {Array.from({ length: 28 }, (_, i) => i + 1).map(
-                  (day) => (
-                    <button
-                      type="button"
-                      key={day}
-                      className={`
-                        h-7 w-7 rounded-full
-                        flex items-center justify-center
-                        text-[11px]
-                        ${
-                          day === 23
-                            ? "bg-blue-600 text-white font-bold"
-                            : "text-slate-600 hover:bg-slate-100"
-                        }
-                      `}
-                    >
-                      {day}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-
-            {/* March */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="w-4" />
-
-                <span className="text-xs font-semibold text-slate-600">
-                  {t("March")}
-                </span>
-
-                <button
-                  type="button"
-                  aria-label={t("Next month")}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  <ChevronRight
-                    className={`w-4 h-4 ${arrowClass}`}
-                  />
-                </button>
-              </div>
-
-              <div
-                dir="ltr"
-                className="
-                  grid grid-cols-7 gap-1 text-center
-                  text-[10px] font-medium text-slate-400 mb-2
-                "
-              >
-                {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(
-                  (day) => (
-                    <span key={day}>{t(day)}</span>
-                  )
-                )}
-              </div>
-
-              <div
-                dir="ltr"
-                className="grid grid-cols-7 gap-1 text-center text-xs"
-              >
-                {Array.from({ length: 28 }, (_, i) => i + 1).map(
-                  (day) => (
-                    <button
-                      type="button"
-                      key={day}
-                      className={`
-                        h-7 w-7 rounded-full
-                        flex items-center justify-center
-                        text-[11px]
-                        ${
-                          day === 27
-                            ? "bg-blue-600 text-white font-bold"
-                            : "text-slate-600 hover:bg-slate-100"
-                        }
-                      `}
-                    >
-                      {day}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
+            {renderCalendar(checkOutCalendarYear, checkOutCalendarMonth, 1)}
           </div>
+
+          {/* Confirm Button */}
+          <button
+            type="button"
+            disabled={!hasValidDates}
+            onClick={() => {
+              if (hasValidDates) {
+                closeModal();
+              }
+            }}
+            className="w-full mt-6 py-3 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+          >
+            {t("Confirm dates")}
+          </button>
         </div>
       )}
 
-      {/* ================= TRAVELERS MODAL ================= */}
+      {/* TRAVELERS MODAL */}
       {activeModal === "travelers" && (
         <div
           dir={isRTL ? "rtl" : "ltr"}
@@ -754,7 +789,6 @@ export default function SearchBar() {
             p-5 z-50 text-start
           `}
         >
-          {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-slate-800">
               {t("Travelers")}
@@ -764,18 +798,12 @@ export default function SearchBar() {
               type="button"
               aria-label={t("Close")}
               onClick={closeModal}
-              className="
-                lg:hidden w-8 h-8 rounded-full
-                bg-slate-100 flex items-center justify-center
-                text-slate-500 hover:bg-slate-200
-                transition-colors
-              "
+              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Rooms */}
           <div className="space-y-5 max-h-72 overflow-y-auto pe-1">
             {rooms.map((room, idx) => (
               <div
@@ -784,9 +812,7 @@ export default function SearchBar() {
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold text-slate-700">
-                    {t("Room {{number}}", {
-                      number: idx + 1,
-                    })}
+                    {t("Room {{number}}", { number: idx + 1 })}
                   </span>
 
                   {rooms.length > 1 && (
@@ -803,27 +829,17 @@ export default function SearchBar() {
                   )}
                 </div>
 
-                {/* Adults */}
+                {/* ADULTS */}
                 <div className="flex items-center justify-between gap-3 mb-2">
-                  <span className="text-xs text-slate-500">
-                    {t("Adults")}
-                  </span>
+                  <span className="text-xs text-slate-500">{t("Adults")}</span>
 
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       aria-label={t("Decrease adults")}
                       disabled={room.adults <= 1}
-                      onClick={() =>
-                        updateGuests(room.id, "adults", -1)
-                      }
-                      className="
-                        w-6 h-6 border rounded-[6px]
-                        flex items-center justify-center
-                        text-slate-400
-                        hover:border-slate-400
-                        disabled:opacity-40 disabled:cursor-not-allowed
-                      "
+                      onClick={() => updateGuests(room.id, "adults", -1)}
+                      className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-slate-400 hover:border-slate-400 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -835,27 +851,18 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Increase adults")}
-                      onClick={() =>
-                        updateGuests(room.id, "adults", 1)
-                      }
-                      className="
-                        w-6 h-6 border rounded-[6px]
-                        flex items-center justify-center
-                        text-blue-600 border-blue-200
-                        hover:border-blue-400
-                      "
+                      onClick={() => updateGuests(room.id, "adults", 1)}
+                      className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
 
-                {/* Children */}
+                {/* CHILDREN */}
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs text-slate-500">
-                      {t("Children")}
-                    </p>
+                    <p className="text-xs text-slate-500">{t("Children")}</p>
 
                     <p className="text-[9px] text-slate-400">
                       {t("Age: 0-17")}
@@ -867,15 +874,8 @@ export default function SearchBar() {
                       type="button"
                       aria-label={t("Decrease children")}
                       disabled={room.children <= 0}
-                      onClick={() =>
-                        updateGuests(room.id, "children", -1)
-                      }
-                      className="
-                        w-6 h-6 border rounded-[6px]
-                        flex items-center justify-center
-                        text-slate-400 hover:border-slate-400
-                        disabled:opacity-40 disabled:cursor-not-allowed
-                      "
+                      onClick={() => updateGuests(room.id, "children", -1)}
+                      className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-slate-400 hover:border-slate-400 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -887,15 +887,8 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Increase children")}
-                      onClick={() =>
-                        updateGuests(room.id, "children", 1)
-                      }
-                      className="
-                        w-6 h-6 border rounded-[6px]
-                        flex items-center justify-center
-                        text-blue-600 border-blue-200
-                        hover:border-blue-400
-                      "
+                      onClick={() => updateGuests(room.id, "children", 1)}
+                      className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -905,18 +898,11 @@ export default function SearchBar() {
             ))}
           </div>
 
-          {/* Add Room */}
           <button
             type="button"
             onClick={addRoom}
             disabled={rooms.length >= 8}
-            className="
-              w-full mt-3 py-2
-              text-xs font-semibold text-blue-600
-              hover:bg-blue-50 rounded-[6px]
-              transition-colors text-start
-              disabled:opacity-40 disabled:cursor-not-allowed
-            "
+            className="w-full mt-3 py-2 text-xs font-semibold text-blue-600 hover:bg-blue-50 rounded-[6px] transition-colors text-start disabled:opacity-40 disabled:cursor-not-allowed"
           >
             + {t("Add Another Room")}
           </button>

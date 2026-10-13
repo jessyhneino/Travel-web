@@ -14,7 +14,7 @@ export default function ImageGallery() {
           <img
             src={mainImage.src}
             alt={mainImage.alt}
-            className="block w-full h-full object-cover rounded-[5px]  transition-transform duration-300 hover:scale-[1.02]"
+            className="block w-full h-full object-cover rounded-[6px]  transition-transform duration-300 hover:scale-[1.02]"
           />
         </div>
 
@@ -26,7 +26,7 @@ export default function ImageGallery() {
             return (
               <div
                 key={image.src}
-                className="relative h-[130px] sm:h-[170px] md:h-auto min-w-0 overflow-hidden rounded-[5px]"
+                className="relative h-[130px] sm:h-[170px] md:h-auto min-w-0 overflow-hidden rounded-[6px]"
               >
                 <img
                   src={image.src}
@@ -39,7 +39,7 @@ export default function ImageGallery() {
                 {isLastImage && (
                   <button
                     type="button"
-                    className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1 rounded-sm bg-black/65 px-2 py-1 sm:px-2.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/85 cursor-pointer"
+                    className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1 rounded-[6px] bg-black/65 px-2 py-1 sm:px-2.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/85 cursor-pointer"
                   >
                     <svg
                       className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"

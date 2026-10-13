@@ -21,7 +21,7 @@ export default function RoomSelection() {
           <button
             key={idx}
             type="button"
-            className="w-full min-w-0 bg-slate-50 border border-gray-200 rounded-[5px] p-3 sm:p-3.5 flex justify-between items-center gap-3 text-left transition-all duration-200 hover:border-blue-300 hover:bg-blue-50/50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full min-w-0 bg-slate-50 border border-gray-200 rounded-[6px] p-3 sm:p-3.5 flex justify-between items-center gap-3 text-left transition-all duration-200 hover:border-blue-300 hover:bg-blue-50/50 focus:outline-none focus:ring-2 focus:ring-blue-200"
           >
             <div className="min-w-0">
               <span className="text-[11px] sm:text-xs text-gray-400 block mb-1">

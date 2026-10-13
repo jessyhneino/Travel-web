@@ -239,7 +239,7 @@ export default function Hero() {
 
             {/* Search Box */}
             <motion.div
-              className="w-full max-w-[315px] sm:max-w-[450px] bg-white rounded-xl p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
+              className="w-full max-w-[315px] sm:max-w-[450px] bg-white rounded-[6px] p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
               variants={SLOW_FADE_IN}
               initial="hidden"
               animate="visible"
@@ -252,7 +252,7 @@ export default function Hero() {
                     key={id}
                     type="button"
                     onClick={() => setActiveTab(id)}
-                    className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm transition-all rounded-lg flex-1 sm:flex-none ${
+                    className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm transition-all rounded-[6px] flex-1 sm:flex-none ${
                       activeTab === id
                         ? "bg-blue-50 text-blue-600 font-semibold"
                         : "text-slate-700 hover:text-slate-900 hover:bg-slate-50 font-medium"
@@ -275,7 +275,7 @@ export default function Hero() {
                         activeDropdown === "destination" ? null : "destination"
                       )
                     }
-                    className="w-full cursor-pointer border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all text-left"
+                    className="w-full cursor-pointer border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all text-left"
                   >
                     <span className="text-xs sm:text-sm text-slate-500 whitespace-nowrap">
                       {t("Going to:")}
@@ -306,7 +306,7 @@ export default function Hero() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-xl p-2 max-h-56 overflow-y-auto"
+                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-2 max-h-56 overflow-y-auto"
                       >
                         <p className="px-3 py-2 text-xs font-semibold text-slate-400">
                           {t("Choose your destination")}
@@ -320,7 +320,7 @@ export default function Hero() {
                               setGoingTo(country);
                               setActiveDropdown(null);
                             }}
-                            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm cursor-pointer transition-colors ${
+                            className={`w-full text-left px-3 py-2.5 rounded-[6px] text-sm cursor-pointer transition-colors ${
                               goingTo === country
                                 ? "bg-blue-50 text-blue-600 font-semibold"
                                 : "text-slate-700 hover:bg-slate-50"
@@ -345,7 +345,7 @@ export default function Hero() {
                           activeDropdown === "dates" ? null : "dates"
                         )
                       }
-                      className={`w-full border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
+                      className={`w-full border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
                         i18n.language.startsWith("ar")
                           ? "text-right"
                           : "text-left"
@@ -376,7 +376,7 @@ export default function Hero() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 right-0 sm:left-auto sm:right-0 sm:w-80 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-xl p-4"
+                          className="absolute top-full left-0 right-0 sm:left-auto sm:right-0 sm:w-80 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-4"
                         >
                           <div className="flex items-center gap-2 mb-4">
                             <CalendarDays className="w-5 h-5 text-blue-500" />
@@ -423,7 +423,7 @@ export default function Hero() {
 
                                   updateDateRange(newCheckIn, newCheckOut);
                                 }}
-                                className="w-full min-w-0 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                                className="w-full min-w-0 border border-slate-200 rounded-[6px] px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
                               />
                             </div>
 
@@ -460,7 +460,7 @@ export default function Hero() {
                                 onChange={(e) =>
                                   updateDateRange(checkIn, e.target.value)
                                 }
-                                className="w-full min-w-0 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                                className="w-full min-w-0 border border-slate-200 rounded-[6px] px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
                               />
                             </div>
                           </div>
@@ -483,7 +483,7 @@ export default function Hero() {
                                 setActiveDropdown(null);
                               }
                             }}
-                            className="w-full cursor-pointer mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                            className="w-full cursor-pointer mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-semibold py-2.5 rounded-[6px] transition-colors"
                           >
                             {t("Apply dates")}
                           </button>
@@ -501,7 +501,7 @@ export default function Hero() {
                           activeDropdown === "travelers" ? null : "travelers"
                         )
                       }
-                      className={`w-full border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
+                      className={`w-full border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
                         i18n.language.startsWith("ar")
                           ? "text-right"
                           : "text-left"
@@ -532,7 +532,7 @@ export default function Hero() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 right-0 sm:left-auto sm:right-0 sm:w-80 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-xl p-4 max-h-80 overflow-y-auto"
+                          className="absolute top-full left-0 right-0 sm:left-auto sm:right-0 sm:w-80 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-4 max-h-80 overflow-y-auto"
                         >
                           <div className="flex items-center gap-2 mb-4">
                             <Users className="w-5 h-5 text-blue-500" />
@@ -559,7 +559,7 @@ export default function Hero() {
                                       aria-label={`${t("Remove room")} ${
                                         index + 1
                                       }`}
-                                      className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                      className="p-1.5 rounded-[6px] text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                                     >
                                       <Trash2 className="w-4 h-4" />
                                     </button>
@@ -671,7 +671,7 @@ export default function Hero() {
                           <button
                             type="button"
                             onClick={() => setActiveDropdown(null)}
-                            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 rounded-[6px] transition-colors"
                           >
                             {t("Apply")}
                           </button>
@@ -685,7 +685,7 @@ export default function Hero() {
                 <button
                   type="button"
                   onClick={() => setActiveDropdown(null)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold py-3 sm:py-3.5 rounded-xl transition-all text-xs sm:text-sm mt-2 cursor-pointer shadow-md shadow-blue-500/20"
+                  className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold py-3 sm:py-3.5 rounded-[6px] transition-all text-xs sm:text-sm mt-2 cursor-pointer shadow-md shadow-blue-500/20"
                 >
                   {t("Find Now")}
                 </button>

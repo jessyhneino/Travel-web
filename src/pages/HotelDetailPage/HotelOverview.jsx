@@ -70,7 +70,7 @@ export default function HotelOverview() {
         {/* CTA Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-full sm:w-auto bg-blue-600 text-white text-sm font-medium py-[8px] px-[12px] mb-[10px] rounded-md hover:bg-blue-700 active:scale-95 transition-all shadow-sm shrink-0"
+          className="w-full sm:w-auto bg-blue-600 text-white text-sm font-medium py-[8px] px-[12px] mb-[10px] rounded-[6px] hover:bg-blue-700 active:scale-95 transition-all shadow-sm shrink-0"
         >
           {t("Reserve a room")}
         </button>
@@ -120,7 +120,7 @@ export default function HotelOverview() {
             {t("Location")}
           </h2>
 
-          <div className="rounded-[5px] overflow-hidden border border-gray-100 shadow-sm mb-2">
+          <div className="rounded-[6px] overflow-hidden border border-gray-100 shadow-sm mb-2">
             <img
               src="/images/Rectan1.png"
               alt={t("Map View")}
@@ -148,7 +148,7 @@ export default function HotelOverview() {
       {/* Reservation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/50 backdrop-blur-md overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
+          <div className="bg-white rounded-[6px] shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-[#202747]">
@@ -165,7 +165,7 @@ export default function HotelOverview() {
             </div>
 
             {/* Room Image */}
-            <div className="rounded-md overflow-hidden mb-6 h-40 sm:h-44 w-full">
+            <div className="rounded-[6px] overflow-hidden mb-6 h-40 sm:h-44 w-full">
               <img
                 src="/images/Rectangle18.png"
                 alt={t("Room")}
@@ -236,7 +236,7 @@ export default function HotelOverview() {
             </div>
 
             {/* Check-in / Guest Box */}
-            <div className="bg-[#EAF9FE] rounded-lg p-4 mb-6">
+            <div className="bg-[#EAF9FE] rounded-[6px] p-4 mb-6">
               <div className="grid grid-cols-2 gap-4 text-sm mb-5">
                 <div>
                   <span className="text-sm text-[#818BA2] block mb-1">
@@ -320,7 +320,7 @@ export default function HotelOverview() {
             </div>
 
             {/* Price Details */}
-            <div className="bg-[#F8F9FE] rounded-lg p-5 mb-7 space-y-4 text-base">
+            <div className="bg-[#F8F9FE] rounded-[6px] p-5 mb-7 space-y-4 text-base">
               <h5 className="font-semibold text-[#202747] mb-6">
                 {t("Price details")}
               </h5>
@@ -392,7 +392,7 @@ export default function HotelOverview() {
               <div className="space-y-3">
                 {/* Mastercard */}
                 <label
-                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-[6px] border transition cursor-pointer ${
                     paymentMethod === "mastercard"
                       ? "border-transparent bg-[#F8F9FD]"
                       : "border-transparent bg-[#F8F9FD]"
@@ -421,7 +421,7 @@ export default function HotelOverview() {
 
                 {/* Mada */}
                 <label
-                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-[6px] border transition cursor-pointer ${
                     paymentMethod === "mada"
                       ? "border-transparent bg-[#F8F9FD]"
                       : "border-transparent bg-[#F8F9FD]"
@@ -450,7 +450,7 @@ export default function HotelOverview() {
 
                 {/* Visa */}
                 <label
-                  className={`flex items-center justify-between p-3.5 rounded-xl border transition cursor-pointer ${
+                  className={`flex items-center justify-between p-3.5 rounded-[6px] border transition cursor-pointer ${
                     paymentMethod === "visa"
                       ? "border-transparent bg-[#F8F9FD]"
                       : "border-transparent bg-[#F8F9FD]"
@@ -480,7 +480,7 @@ export default function HotelOverview() {
             </div>
 
             {/* Reserve Button */}
-            <button className="w-full bg-[#25B9F5] hover:bg-[#13A9E8] text-white font-semibold py-4 rounded-xl transition shadow-sm text-base active:scale-[0.99]">
+            <button className="w-full bg-[#25B9F5] hover:bg-[#13A9E8] text-white font-semibold py-4 rounded-[6px] transition shadow-sm text-base active:scale-[0.99]">
               {t("Reserve")}
             </button>
           </div>

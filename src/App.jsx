@@ -4,18 +4,19 @@ import Layout from "./Layout";
 import Hotels from "./pages/Hotels/Hotels";
 import HotelDetailPage from "./pages/HotelDetailPage/HotelDetailPage";
 import "./i18n";
-import './App.css'
-
+import "./App.css";
+import LanguageSync from "./pages/LanguageSync/LanguageSync";
 
 function App() {
   return (
     <BrowserRouter>
+      <LanguageSync />
       <Routes>
         <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/hotels" element={<Hotels />} />
-            {/* مسار تفاصيل الفندق باستخدام الـ id كمتغير ديناميكي */}
-            <Route path="/hotels/:id" element={<HotelDetailPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/hotels" element={<Hotels />} />
+          {/* مسار تفاصيل الفندق باستخدام الـ id كمتغير ديناميكي */}
+          <Route path="/hotels/:id" element={<HotelDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

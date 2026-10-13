@@ -25,10 +25,10 @@ export default function MoreForYou() {
             {topCardsData.map((card) => (
               <div
                 key={card.id}
-                className="group flex flex-col bg-transparent rounded-2xl transition-all duration-300 hover:-translate-y-1"
+                className="group flex flex-col bg-transparent rounded-[6px] transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Image Container */}
-                <div className="w-full h-48 sm:h-52 md:h-44 lg:h-52 rounded-2xl overflow-hidden bg-slate-200 border border-slate-100 relative shadow-sm group-hover:shadow-md transition-shadow">
+                <div className="w-full h-48 sm:h-52 md:h-44 lg:h-52 rounded-[6px] overflow-hidden bg-slate-200 border border-slate-100 relative shadow-sm group-hover:shadow-md transition-shadow">
                   <img
                     src={card.imageSrc}
                     alt={t(card.title)}
@@ -71,7 +71,7 @@ export default function MoreForYou() {
           {/* Bottom Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Quick Trips Card */}
-            <div className="md:col-span-2 group relative h-60 sm:h-64 md:h-56 lg:h-64 rounded-2xl overflow-hidden bg-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+            <div className="md:col-span-2 group relative h-60 sm:h-64 md:h-56 lg:h-64 rounded-[6px] overflow-hidden bg-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
               <img
                 src="/images/Rect4.png"
                 alt={t("Quick Trips")}
@@ -86,7 +86,7 @@ export default function MoreForYou() {
             </div>
 
             {/* Blue Banner Card */}
-            <div className="md:col-span-1 bg-[#2563eb] rounded-2xl p-6 sm:p-8 flex flex-col justify-between h-60 sm:h-64 md:h-56 lg:h-64 text-white shadow-md hover:shadow-lg hover:bg-blue-700 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+            <div className="md:col-span-1 bg-[#2563eb] rounded-[6px] p-6 sm:p-8 flex flex-col justify-between h-60 sm:h-64 md:h-56 lg:h-64 text-white shadow-md hover:shadow-lg hover:bg-blue-700 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
               <div className="space-y-2">
                 <h3 className="text-2xl sm:text-3xl font-extrabold leading-tight tracking-tight">
                   {t("Show all the packages, view now")}

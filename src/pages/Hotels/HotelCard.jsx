@@ -22,7 +22,7 @@ export default function HotelCard({
     <Link
       to={`/hotels/${id}`}
       dir="ltr"
-      className={`group relative p-0 overflow-hidden
+      className={`group relative p-0 hover:rounded-[6px] overflow-hidden
         flex flex-col gap-0 border-none
         hover:border-none hover:shadow-xl hover:-translate-y-1
         transition-all duration-300 ease-out
@@ -35,20 +35,20 @@ export default function HotelCard({
     >
       {/* HOTEL CONTENT */}
       <div
-        className={`flex flex-col md:flex-row gap-5 ${
+        className={`flex flex-col md:flex-row gap-5  ${
           isArabic ? "md:flex-row-reverse" : ""
         }`}
       >
         {/* HOTEL IMAGE */}
-        <div className="relative w-full md:w-64 h-44 flex-shrink-0 overflow-hidden  ">
+        <div className="relative w-full md:w-64 h-44 flex-shrink-0 overflow-hidden hover:rounded-[6px]  ">
           <img
             src={imgSrc}
             alt={t(name)}
-            className="w-full h-full object-cover rounded-[6px] transition-transform duration-500 ease-out group-hover:scale-105 "
+            className="w-full h-full object-cover rounded-[6px] hover:hover:rounded-[6px]  transition-transform duration-500 ease-out group-hover:scale-105 "
           />
 
           {/* RATING */}
-          <div className="absolute bottom-0 left-0 bg-white px-2.5 py-1 shadow-sm flex items-center gap-1 text-xs font-bold text-slate-700 transition-transform duration-300 group-hover:scale-105">
+          <div className="absolute rounded-tr-[4px] rounded-bl-[4px] bottom-0 left-0 bg-white px-2.5 py-1 shadow-sm flex items-center gap-1 text-xs font-bold text-slate-700 transition-transform duration-300 group-hover:scale-105">
             <span>{Number(rating).toFixed(1)}</span>
 
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
@@ -67,26 +67,6 @@ export default function HotelCard({
             <h3 className="text-base font-bold text-slate-800 mb-2 transition-colors duration-300 group-hover:text-blue-600">
               {t(name)}
             </h3>
-
-            {/* PROPERTY TYPE AND STARS */}
-            <div className="flex items-center gap-2 mb-2 text-xs text-slate-500">
-              <span>{t(propertyType)}</span>
-
-              <span
-                dir="ltr"
-                className="flex items-center gap-0.5 text-amber-400"
-              >
-                {Array.from({
-                  length: Math.max(0, Math.min(5, Number(stars) || 0)),
-                }).map((_, index) => (
-                  <Star
-                    key={index}
-                    size={12}
-                    className="fill-amber-400 text-amber-400"
-                  />
-                ))}
-              </span>
-            </div>
 
             {/* AMENITIES */}
             <div className="flex flex-wrap items-center gap-4 text-xs text-blue-400 mb-2">
@@ -108,7 +88,6 @@ export default function HotelCard({
             {/* DISTANCE */}
             <div className="flex items-center gap-1 text-xs text-amber-500 mb-3">
               <MapPin className="w-3.5 h-3.5 shrink-0" />
-
               <span>
                 {t("{{distance}} K.m from the city centre", {
                   distance,

@@ -9,9 +9,15 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
+
     supportedLngs: ["en", "ar"],
 
-    lng: "en",
+    // اكتشاف اللغة المحفوظة بدل فرض اللغة الإنكليزية
+    detection: {
+      order: ["localStorage", "htmlTag", "navigator"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "i18nextLng",
+    },
 
     interpolation: {
       escapeValue: false,

@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -15,13 +16,23 @@ const normalize = (value) =>
     .replace(/\s+/g, " ");
 
 const getHotelPrice = (hotel) =>
-  Number(hotel.price ?? hotel.pricePerNight ?? hotel.nightlyPrice ?? 0);
+  Number(
+    hotel.price ??
+      hotel.pricePerNight ??
+      hotel.nightlyPrice ??
+      0
+  );
 
 const getHotelRating = (hotel) =>
   Number(hotel.rating ?? hotel.guestRating ?? 0);
 
 const getHotelStars = (hotel) =>
-  Number(hotel.stars ?? hotel.starRating ?? hotel.star_rating ?? 0);
+  Number(
+    hotel.stars ??
+      hotel.starRating ??
+      hotel.star_rating ??
+      0
+  );
 
 const getHotelType = (hotel) =>
   hotel.propertyType ??
@@ -30,12 +41,28 @@ const getHotelType = (hotel) =>
   hotel.category ??
   "";
 
+function getHotelLocation(hotel) {
+  return normalize(
+    [
+      hotel.city,
+      hotel.location,
+      hotel.country,
+      hotel.address,
+      hotel.destination,
+      hotel.name,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+}
+
 function getOptionDetails(section, selectedValue) {
   const items = FILTER_DATA[section] ?? [];
 
   const item = items.find(
     (option) =>
-      String(option.value ?? option.id) === String(selectedValue)
+      String(option.value ?? option.id) ===
+      String(selectedValue)
   );
 
   return {
@@ -62,7 +89,9 @@ function matchesNumericFilter(
     const numbers = text.match(/\d+(?:\.\d+)?/g);
 
     if (!numbers?.length) {
-      return normalize(text).includes(normalize(hotelValue));
+      return normalize(text).includes(
+        normalize(hotelValue)
+      );
     }
 
     const threshold = Number(numbers[0]);
@@ -81,7 +110,10 @@ function matchesPropertyType(hotel, selectedValues) {
   const hotelType = normalize(getHotelType(hotel));
 
   return selectedValues.some((selected) => {
-    const option = getOptionDetails("propertyType", selected);
+    const option = getOptionDetails(
+      "propertyType",
+      selected
+    );
 
     return [option.value, option.label].some((value) => {
       const normalizedValue = normalize(value);
@@ -95,41 +127,41 @@ function matchesPropertyType(hotel, selectedValues) {
   });
 }
 
-function getHotelLocation(hotel) {
-  return normalize([
-    hotel.city,
-    hotel.location,
-    hotel.country,
-    hotel.address,
-    hotel.destination,
-    hotel.name,
-  ].filter(Boolean).join(" "));
+function matchesDestination(hotel, destination) {
+  if (!destination?.trim()) return true;
+
+  const hotelLocation = getHotelLocation(hotel);
+  const searchLocation = normalize(destination);
+
+  // لا نعرض نتائج غير مطابقة للوجهة المختارة.
+  return hotelLocation.includes(searchLocation);
 }
 
 export default function Hotels() {
   const { t } = useTranslation();
 
+  // الفلاتر الجانبية
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
+  // قيم البحث العلوي المطبقة
   const [search, setSearch] = useState({
     destination: "",
     checkIn: "",
     checkOut: "",
-    rooms: 2,
-    travelers: 4,
-    guests: [{ adults: 1, children: 0 }],
+    rooms: 0,
+    travelers: 0,
+    guests: [],
   });
 
+  // تطبيق الفلاتر العلوية والجانبية معاً
   const filteredHotels = useMemo(() => {
     return HOTELS_DATA.filter((hotel) => {
       const price = getHotelPrice(hotel);
       const rating = getHotelRating(hotel);
       const stars = getHotelStars(hotel);
 
-      // PRICE
       const matchesPrice = price <= filters.price;
 
-      // GUEST RATING
       const matchesGuestRating = matchesNumericFilter(
         rating,
         filters.guestRating,
@@ -137,32 +169,28 @@ export default function Hotels() {
         true
       );
 
-      // STAR RATING
       const matchesStarRating = matchesNumericFilter(
         stars,
         filters.starRating,
         "starRating"
       );
 
-      // PROPERTY TYPE
       const matchesType = matchesPropertyType(
         hotel,
         filters.propertyType
       );
 
-      // DESTINATION
-      const matchesDestination = search.destination
-        ? getHotelLocation(hotel).includes(
-            normalize(search.destination)
-          )
-        : true;
+      const matchesLocation = matchesDestination(
+        hotel,
+        search.destination
+      );
 
       return (
         matchesPrice &&
         matchesGuestRating &&
         matchesStarRating &&
         matchesType &&
-        matchesDestination
+        matchesLocation
       );
     });
   }, [filters, search.destination]);
@@ -180,7 +208,11 @@ export default function Hotels() {
     <div className="min-h-screen bg-slate-50/50 px-7 md:px-20 lg:px-35 py-5 md:py-10 xl:py-13 font-sans">
       <div className="flex flex-col gap-8">
         {/* SEARCH BAR */}
-        <SearchBar onSearch={setSearch} />
+        <SearchBar
+          onSearch={(searchData) => {
+            setSearch(searchData);
+          }}
+        />
 
         {/* MAIN CONTENT */}
         <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -205,15 +237,21 @@ export default function Hotels() {
                   id={hotel.id}
                   imgSrc={hotel.imgSrc ?? hotel.image}
                   name={hotel.name ?? "Royal Hotel"}
-                  rating={hotel.rating ?? hotel.guestRating ?? 4.5}
+                  rating={
+                    hotel.rating ?? hotel.guestRating ?? 4.5
+                  }
                   price={getHotelPrice(hotel)}
                   currency={hotel.currency ?? "SAR"}
                   stars={getHotelStars(hotel)}
-                  propertyType={getHotelType(hotel) || "Hotel"}
-                  amenities={hotel.amenities ?? [
-                    "Pool",
-                    "Breakfast included",
-                  ]}
+                  propertyType={
+                    getHotelType(hotel) || "Hotel"
+                  }
+                  amenities={
+                    hotel.amenities ?? [
+                      "Pool",
+                      "Breakfast included",
+                    ]
+                  }
                   distance={hotel.distance ?? 30}
                   description={
                     hotel.description ?? "Hotel description"
@@ -221,19 +259,21 @@ export default function Hotels() {
                 />
               ))
             ) : (
-              <div className="bg-white rounded-2xl border border-slate-100 p-8 text-center">
+              <div className="bg-white rounded-[6px] border border-slate-100 p-8 text-center">
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">
                   {t("No hotels found")}
                 </h3>
 
                 <p className="text-sm text-slate-500 mb-4">
-                  {t("Try changing your filters to see more results.")}
+                  {t(
+                    "Try changing your filters to see more results."
+                  )}
                 </p>
 
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="px-5 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
+                  className="px-5 py-2 rounded-[6px] bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
                 >
                   {t("Reset filters")}
                 </button>

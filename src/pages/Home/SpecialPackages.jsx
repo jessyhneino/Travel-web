@@ -222,7 +222,7 @@ export default function SpecialPackages() {
                   }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ duration: 0.3 }}
-                  className="rounded-lg border border-sky-300 bg-white px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm sm:px-6"
+                  className="rounded-[6px] border border-sky-300  px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm sm:px-6"
                 >
                   {t("View Details")}
                 </motion.button>
