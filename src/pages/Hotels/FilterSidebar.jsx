@@ -14,7 +14,12 @@ export default function FilterSidebar({
   filters = INITIAL_FILTERS,
   onApplyFilters = () => {},
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const isArabic =
+    i18n.language?.startsWith("ar") ||
+    document.documentElement.dir === "rtl";
+
   const [isOpen, setIsOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState(filters);
 
@@ -63,12 +68,16 @@ export default function FilterSidebar({
     updatePrice,
     toggleOption,
     onReset: resetFilters,
+    isArabic,
   };
 
   return (
     <>
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden lg:block w-full max-w-[260px] bg-white p-5 rounded-2xl shadow-sm">
+      <aside
+        dir={isArabic ? "rtl" : "ltr"}
+        className="hidden lg:block w-full max-w-[260px] p-5 rounded-[6px]"
+      >
         <FilterContent {...contentProps} />
       </aside>
 
@@ -92,8 +101,9 @@ export default function FilterSidebar({
 
       {/* MOBILE BOTTOM SHEET */}
       <div
+        dir={isArabic ? "rtl" : "ltr"}
         aria-hidden={!isOpen}
-        className={`lg:hidden fixed left-0 right-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[85vh] overflow-y-auto ${
+        className={`lg:hidden fixed left-0 right-0 bottom-0 z-[60] bg-white rounded-t-[6px] shadow-2xl transition-transform duration-300 ease-out max-h-[85vh] overflow-y-auto ${
           isOpen
             ? "translate-y-0"
             : "translate-y-full pointer-events-none"
@@ -122,13 +132,19 @@ function FilterContent({
   onReset,
   isMobile = false,
   onClose,
+  isArabic,
 }) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-6 text-left">
+    <div
+      dir={isArabic ? "rtl" : "ltr"}
+      className={`flex flex-col gap-6 ${
+        isArabic ? "text-right" : "text-left"
+      }`}
+    >
       {/* HEADER */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="flex items-center justify-between border-b border-[#26BBFD29] pb-3">
         <h2 className="text-lg font-bold text-slate-800">
           {t("Filter by")}
         </h2>
@@ -155,41 +171,55 @@ function FilterContent({
         </div>
       </div>
 
+      {/* PRICE FILTER */}
       <PriceFilter
         price={filters.price}
         setPrice={updatePrice}
+        isArabic={isArabic}
       />
 
+      {/* GUEST RATING */}
       <FilterSection
         title="Guest rating"
         items={FILTER_DATA.guestRating}
         selected={filters.guestRating}
         onToggle={(value) => toggleOption("guestRating", value)}
+        isArabic={isArabic}
       />
 
+      {/* STAR RATING */}
       <FilterSection
         title="Star rating"
         items={FILTER_DATA.starRating}
         selected={filters.starRating}
         onToggle={(value) => toggleOption("starRating", value)}
+        isArabic={isArabic}
       />
 
+      {/* PROPERTY TYPE */}
       <FilterSection
         title="Property type"
         items={FILTER_DATA.propertyType}
         selected={filters.propertyType}
         onToggle={(value) => toggleOption("propertyType", value)}
+        isArabic={isArabic}
       />
     </div>
   );
 }
 
-function PriceFilter({ price, setPrice }) {
+function PriceFilter({ price, setPrice, isArabic }) {
   const { t } = useTranslation();
+
   const percentage = ((price - 10) / 290) * 100;
 
   return (
-    <div className="flex flex-col gap-3">
+    <div
+      dir={isArabic ? "rtl" : "ltr"}
+      className={`flex flex-col gap-3 ${
+        isArabic ? "text-right" : "text-left"
+      }`}
+    >
       <span className="text-sm font-semibold text-slate-700">
         {t("Price per night")}
       </span>
@@ -202,13 +232,20 @@ function PriceFilter({ price, setPrice }) {
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
           aria-label={t("Price per night")}
+          dir={isArabic ? "rtl" : "ltr"}
           style={{
-            background: `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #dbeafe ${percentage}%, #dbeafe 100%)`,
+            direction: isArabic ? "rtl" : "ltr",
+            background: isArabic
+              ? `linear-gradient(to left, #2563eb 0%, #2563eb ${percentage}%, #dbeafe ${percentage}%, #dbeafe 100%)`
+              : `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #dbeafe ${percentage}%, #dbeafe 100%)`,
           }}
-          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-blue-600"
+          className="w-full h-1.5 rounded-[6px] appearance-none cursor-pointer accent-blue-600"
         />
 
-        <div className="flex justify-between text-xs font-semibold mt-2">
+        <div
+          dir={isArabic ? "rtl" : "ltr"}
+          className="flex justify-between text-xs font-semibold mt-2"
+        >
           <span className="text-blue-600">${price}</span>
           <span className="text-slate-400">$300</span>
         </div>
@@ -222,11 +259,17 @@ function FilterSection({
   items,
   selected = [],
   onToggle,
+  isArabic,
 }) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div
+      dir={isArabic ? "rtl" : "ltr"}
+      className={`flex flex-col gap-2.5 ${
+        isArabic ? "text-right" : "text-left"
+      }`}
+    >
       <span className="text-sm font-semibold text-slate-700">
         {t(title)}
       </span>
@@ -243,7 +286,7 @@ function FilterSection({
               type="checkbox"
               checked={selected.includes(value)}
               onChange={() => onToggle(value)}
-              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
+              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0"
             />
 
             <span>{t(item.label)}</span>

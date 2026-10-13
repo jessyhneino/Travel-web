@@ -29,7 +29,7 @@ export default function AreaSection() {
             {t("Map")}
           </h2>
 
-          <div className="overflow-hidden rounded-xl border border-gray-100 shadow-sm sm:rounded-2xl">
+          <div className="overflow-hidden rounded-[6px] border border-gray-100 shadow-sm sm:rounded-[6px]">
             <img
               src="/images/Rectan2.png"
               alt={t("Map showing the hotel's surrounding area")}

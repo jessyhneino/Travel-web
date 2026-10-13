@@ -250,13 +250,13 @@
   "Choose your room": "اختر غرفتك",
   "Check in:": "تسجيل الدخول:",
   "Oct 23": "23 أكتوبر",
-   "About this area": "حول هذه المنطقة",
+  "About this area": "حول هذه المنطقة",
   "Map": "الخريطة",
   "Map showing the hotel's surrounding area": "خريطة توضح المنطقة المحيطة بالفندق",
   "Terminal 1 / Gate z 25, Frankfurt am Main Airport, Frankfurt, Hessen, 60549": "المبنى رقم 1 / البوابة Z25، مطار فرانكفورت أم ماين، فرانكفورت، هيسن، 60549",
   "View in a map": "عرض على الخريطة",
   "Located in Frankfurt Airport Area neighborhood, MY CLOUD Transit Hotel is connected to a rail/subway station. Neues Theater Höchst and Jahrhunderthalle are cultural highlights, and some of the area's landmarks include Hoechst Castle and Henninger Turm. Looking to enjoy an event or a game while in town? See what's happening at Deutsche Bank Park or Fraport Arena.": "يقع فندق MY CLOUD Transit Hotel في منطقة مطار فرانكفورت، ويتصل بمحطة للقطارات أو مترو الأنفاق. يُعد كل من مسرح Neues Theater Höchst وقاعة Jahrhunderthalle من أبرز المعالم الثقافية، كما تشمل معالم المنطقة قلعة Hoechst وبرج Henninger Turm. إذا كنت ترغب في حضور فعالية أو مباراة أثناء إقامتك، يمكنك الاطلاع على الفعاليات في ملعب Deutsche Bank Park أو صالة Fraport Arena.",
-   "Economy Double Room": "غرفة اقتصادية مزدوجة",
+  "Economy Double Room": "غرفة اقتصادية مزدوجة",
   "Economy Double Room, 1 Double Bed, Non Smoking": "غرفة اقتصادية مزدوجة، سرير مزدوج واحد، لغير المدخنين",
   "sq ft": "قدم مربع",
   "Sleeps 2": "تتسع لشخصين",
@@ -266,7 +266,7 @@
   "More details": "المزيد من التفاصيل",
   "total": "الإجمالي",
   "Reserve": "احجز",
-   "Choose your rating": "اختر تقييمك",
+  "Choose your rating": "اختر تقييمك",
   "Rate {{full}} stars or {{half}} stars": "قيّم بـ {{full}} نجوم أو {{half}} نجمة",
   "Excellent": "ممتاز",
   "Very good": "جيد جداً",
@@ -297,5 +297,6 @@
   "Frankfurt (FRA-Frank...)": "مطار فرانكفورت (FRA)...",
   "Gateway Gardens": "غيتواي غاردنز",
 
-  "5 min drive": "5 دقائق بالسيارة"
+  "5 min drive": "5 دقائق بالسيارة",
+  "VISA REQUIREMENTS": "متطلبات التأشيرات"
 }

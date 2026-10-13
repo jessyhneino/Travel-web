@@ -20,71 +20,57 @@ import { features } from "./data/features";
 export default function HotelOverview() {
   const { t } = useTranslation();
 
-  // حالة فتح وإغلاق النافذة
+  // حالة فتح وإغلاق نافذة الحجز
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // تحديد التبويب النشط
+  const [activeTab, setActiveTab] = useState("overview");
 
   // حالات الخيارات داخل المودال
   const [selectedExtra, setSelectedExtra] = useState("no-extras");
   const [paymentMethod, setPaymentMethod] = useState("mastercard");
 
+  // التبويبات والتنقل بين الأقسام
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "rooms", label: "Rooms" },
+    { id: "location", label: "Location" },
+    { id: "reviews", label: "Reviews" },
+  ];
+
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+
+    document.getElementById(tabId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   return (
-    <div id="overview" className="my-6 px-4 md:px-0">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-3 mb-6 gap-4">
+    <div id="overview" className="my-6 px-4 md:px-0 scroll-mt-24">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 mb-6 gap-4">
         {/* Navigation Tabs Header */}
         <div className="flex items-center gap-4 sm:gap-8 text-sm font-medium overflow-x-auto no-scrollbar scroll-smooth -mb-3 pb-3">
-          <button
-            onClick={() =>
-              document.getElementById("overview")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              })
-            }
-            className="text-blue-600 border-b-2 border-blue-600 pb-3 -mb-3 font-semibold whitespace-nowrap transition-colors"
-          >
-            {t("Overview")}
-          </button>
-
-          <button
-            onClick={() =>
-              document.getElementById("rooms")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              })
-            }
-            className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
-          >
-            {t("Rooms")}
-          </button>
-
-          <button
-            onClick={() =>
-              document.getElementById("location")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              })
-            }
-            className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
-          >
-            {t("Location")}
-          </button>
-
-          <button
-            onClick={() =>
-              document.getElementById("reviews")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              })
-            }
-            className="text-gray-400 hover:text-blue-600 pb-3 -mb-3 whitespace-nowrap transition-colors"
-          >
-            {t("Reviews")}
-          </button>
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabClick(tab.id)}
+              className={`pb-4 -mb-3 whitespace-nowrap border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? "text-blue-600 border-blue-600 font-semibold"
+                  : "text-gray-400 border-transparent hover:text-blue-600"
+              }`}
+            >
+              {t(tab.label)}
+            </button>
+          ))}
         </div>
 
         {/* CTA Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-full sm:w-auto bg-blue-600 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-blue-700 active:scale-95 transition-all shadow-sm shrink-0"
+          className="w-full sm:w-auto bg-blue-600 text-white text-sm font-medium py-[8px] px-[12px] mb-[10px] rounded-md hover:bg-blue-700 active:scale-95 transition-all shadow-sm shrink-0"
         >
           {t("Reserve a room")}
         </button>
@@ -134,7 +120,7 @@ export default function HotelOverview() {
             {t("Location")}
           </h2>
 
-          <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm mb-2">
+          <div className="rounded-[5px] overflow-hidden border border-gray-100 shadow-sm mb-2">
             <img
               src="/images/Rectan1.png"
               alt={t("Map View")}
@@ -189,9 +175,7 @@ export default function HotelOverview() {
 
             {/* Room Title */}
             <h4 className="font-bold text-lg text-[#202747] mb-3">
-              {t(
-                "MEconomy Double Room, 1 Double Bed, Non Smoking"
-              )}
+              {t("MEconomy Double Room, 1 Double Bed, Non Smoking")}
             </h4>
 
             {/* Room Sub-info */}

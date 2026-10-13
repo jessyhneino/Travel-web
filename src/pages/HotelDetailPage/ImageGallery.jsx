@@ -7,14 +7,14 @@ export default function ImageGallery() {
   const secondaryImages = IMAGES.slice(1);
 
   return (
-    <div className="w-full my-6 px-4 md:px-0 overflow-hidden rounded-2xl">
+    <div className="w-full my-6 px-4 md:px-0 overflow-hidden">
       <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-12">
         {/* الصورة الرئيسية الكبيرة */}
         <div className="col-span-2 h-[240px] sm:h-[320px] md:col-span-6 md:h-[340px] lg:h-[400px]">
           <img
             src={mainImage.src}
             alt={mainImage.alt}
-            className="block w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-[1.02]"
+            className="block w-full h-full object-cover rounded-[5px]  transition-transform duration-300 hover:scale-[1.02]"
           />
         </div>
 
@@ -26,20 +26,20 @@ export default function ImageGallery() {
             return (
               <div
                 key={image.src}
-                className="relative h-[130px] sm:h-[170px] md:h-auto min-w-0 overflow-hidden rounded-xl"
+                className="relative h-[130px] sm:h-[170px] md:h-auto min-w-0 overflow-hidden rounded-[5px]"
               >
                 <img
                   src={image.src}
                   alt={image.alt}
                   loading="lazy"
-                  className="block w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105"
+                  className="block w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />
 
                 {/* زر عرض المزيد من الصور */}
                 {isLastImage && (
                   <button
                     type="button"
-                    className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1 rounded-md bg-black/65 px-2 py-1 sm:px-2.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/85 cursor-pointer"
+                    className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1 rounded-sm bg-black/65 px-2 py-1 sm:px-2.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/85 cursor-pointer"
                   >
                     <svg
                       className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"

@@ -4,6 +4,8 @@ import Layout from "./Layout";
 import Hotels from "./pages/Hotels/Hotels";
 import HotelDetailPage from "./pages/HotelDetailPage/HotelDetailPage";
 import "./i18n";
+import './App.css'
+
 
 function App() {
   return (

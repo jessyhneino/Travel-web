@@ -61,7 +61,7 @@ function RatingStars({ rating, onSelectRating }) {
               aria-pressed={rating === star || rating === star - 0.5}
               className="
                 relative flex items-center justify-center
-                w-7 h-8 rounded-md
+                w-7 h-8 rounded-[6px]
                 transition-transform duration-200
                 hover:scale-110 active:scale-95
                 focus-visible:outline-none
@@ -208,7 +208,7 @@ export default function ReviewsSection() {
               w-full
               bg-white
               border border-[#dceeff]
-              rounded-xl
+              rounded-[6px]
               px-5 py-5
               sm:px-[22px] sm:py-[22px]
               shadow-[0_4px_20px_rgba(37,99,235,0.04)]
@@ -243,7 +243,7 @@ export default function ReviewsSection() {
                 min-h-[94px]
                 bg-white
                 border border-[#cfe3f8]
-                rounded-lg
+                rounded-[6px]
                 px-3 py-2
                 text-xs text-slate-700
                 placeholder:text-[#a0a0a0]
@@ -270,7 +270,7 @@ export default function ReviewsSection() {
                 text-white
                 text-xs
                 font-semibold
-                rounded-lg
+                rounded-[6px]
                 shadow-sm shadow-sky-100
                 transition-all duration-200
                 hover:shadow-md

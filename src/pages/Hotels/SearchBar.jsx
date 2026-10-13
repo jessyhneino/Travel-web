@@ -15,7 +15,9 @@ import {
 } from "lucide-react";
 
 export default function SearchBar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const isRTL = i18n.language?.startsWith("ar");
 
   const COUNTRIES = [
     "Germany",
@@ -45,9 +47,9 @@ export default function SearchBar() {
 
   const [selectedCountry, setSelectedCountry] = useState("Germany");
   const [showCountries, setShowCountries] = useState(false);
-
   const [activeModal, setActiveModal] = useState(null);
   const [distance, setDistance] = useState(10);
+
   const [rooms, setRooms] = useState([
     { id: 1, adults: 1, children: 1 },
     { id: 2, adults: 1, children: 1 },
@@ -55,7 +57,7 @@ export default function SearchBar() {
 
   const searchBarRef = useRef(null);
 
-  // إغلاق النافذة المنبثقة عند الضغط خارج شريط البحث
+  // Close popups when clicking outside the search bar
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -74,16 +76,21 @@ export default function SearchBar() {
     };
   }, []);
 
-  // إدارة أعداد المسافرين
+  // Update travelers
   const updateGuests = (roomId, type, delta) => {
     setRooms((prevRooms) =>
       prevRooms.map((room) => {
         if (room.id === roomId) {
           const newVal = room[type] + delta;
 
+          // Keep at least one adult in each room
+          if (type === "adults" && newVal < 1) {
+            return room;
+          }
+
           return {
             ...room,
-            [type]: newVal < 0 ? 0 : newVal,
+            [type]: Math.max(0, newVal),
           };
         }
 
@@ -92,7 +99,10 @@ export default function SearchBar() {
     );
   };
 
+  // Add a room
   const addRoom = () => {
+    if (rooms.length >= 8) return;
+
     setRooms((prevRooms) => [
       ...prevRooms,
       {
@@ -103,10 +113,12 @@ export default function SearchBar() {
     ]);
   };
 
+  // Remove a room
   const removeRoom = (id) => {
-    if (rooms.length > 1) {
-      setRooms((prevRooms) => prevRooms.filter((r) => r.id !== id));
-    }
+    setRooms((prevRooms) => {
+      if (prevRooms.length <= 1) return prevRooms;
+      return prevRooms.filter((room) => room.id !== id);
+    });
   };
 
   const totalTravelers = rooms.reduce(
@@ -114,12 +126,50 @@ export default function SearchBar() {
     0
   );
 
+  const closeModal = () => {
+    setActiveModal(null);
+    setShowCountries(false);
+  };
+
+  const popupPosition = `
+    max-lg:fixed
+    max-lg:top-1/2
+    max-lg:left-1/2
+    max-lg:right-auto
+    max-lg:-translate-x-1/2
+    max-lg:-translate-y-1/2
+    max-lg:w-[80vw]
+    max-lg:max-w-none
+    max-lg:max-h-[80vh]
+    max-lg:overflow-y-auto
+    max-lg:z-[70]
+  `;
+
+  const arrowClass = isRTL ? "rotate-180" : "";
+
   return (
-    <div ref={searchBarRef} className="relative w-full">
+    <div
+      ref={searchBarRef}
+      dir={isRTL ? "rtl" : "ltr"}
+      className="relative w-full"
+    >
       {/* ================= SEARCH BAR ================= */}
-      <div className="bg-white p-4 flex item-center justify-center max-lg:p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap lg:flex-nowrap max-lg:flex-col items-center max-lg:items-stretch gap-3 max-lg:gap-2.5 w-[100%]">
+      <div
+        className={`
+          bg-white p-4
+          flex items-center justify-center
+          flex-wrap lg:flex-nowrap
+          max-lg:flex-col max-lg:items-stretch
+          gap-3 max-lg:gap-2.5
+          shadow-sm
+          border border-[#26BBFD29]
+          rounded-l-[6px]
+          w-full max-lg:p-3
+        `}
+      >
         {/* Location Selector */}
-        <div
+        <button
+          type="button"
           onClick={() =>
             setActiveModal((prev) => {
               if (prev === "location") return null;
@@ -127,11 +177,25 @@ export default function SearchBar() {
               return "location";
             })
           }
-          className="flex-1 min-w-[240px] max-lg:w-full max-lg:min-w-0 flex items-center gap-3 border border-blue-200 rounded-xl px-4 py-2.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
+          aria-expanded={activeModal === "location"}
+          className="
+            flex-1 min-w-[240px]
+            max-lg:w-full max-lg:min-w-0
+            flex items-center gap-3
+            rounded-[6px]
+            border border-blue-200
+            px-4 py-2.5
+            max-lg:px-3.5 max-lg:py-3
+            bg-white
+            cursor-pointer select-none
+            hover:border-blue-400
+            transition-colors
+            text-start
+          "
         >
-          <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
+          <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
 
-          <div className="flex flex-col text-left min-w-0">
+          <div className="flex flex-col text-start min-w-0 flex-1">
             <span className="text-[11px] text-slate-400 font-medium">
               {t("Going to:")}
             </span>
@@ -140,19 +204,34 @@ export default function SearchBar() {
               {t("Berlin (and vicinity), Germany")}
             </span>
           </div>
-        </div>
+        </button>
 
         {/* Date Selector */}
-        <div
+        <button
+          type="button"
           onClick={() =>
             setActiveModal((prev) => (prev === "date" ? null : "date"))
           }
-          className="flex-1 min-w-[200px] max-lg:w-full max-lg:min-w-0 flex items-center justify-between border border-blue-200 rounded-xl px-4 py-2.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
+          aria-expanded={activeModal === "date"}
+          className="
+            flex-1 min-w-[200px]
+            max-lg:w-full max-lg:min-w-0
+            rounded-[6px]
+            flex items-center justify-between gap-3
+            border border-blue-200
+            px-4 py-2.5
+            max-lg:px-3.5 max-lg:py-3
+            bg-white
+            cursor-pointer select-none
+            hover:border-blue-400
+            transition-colors
+            text-start
+          "
         >
           <div className="flex items-center gap-3 min-w-0">
-            <Calendar className="w-5 h-5 text-blue-600 flex-shrink-0" />
+            <Calendar className="w-5 h-5 text-blue-600 shrink-0" />
 
-            <div className="flex flex-col text-left min-w-0">
+            <div className="flex flex-col text-start min-w-0">
               <span className="text-[11px] text-slate-400 font-medium">
                 {t("Check in-out:")}
               </span>
@@ -163,30 +242,43 @@ export default function SearchBar() {
             </div>
           </div>
 
-          <ChevronDown className="w-4 h-4 text-slate-400 ml-2 flex-shrink-0" />
-        </div>
+          <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+        </button>
 
         {/* Travelers Selector */}
-        <div
+        <button
+          type="button"
           onClick={() =>
             setActiveModal((prev) =>
               prev === "travelers" ? null : "travelers"
             )
           }
-          className="flex-1 min-w-[200px] max-lg:w-full max-lg:min-w-0 flex items-center justify-between border border-blue-200 rounded-xl px-4 py-4.5 max-lg:px-3.5 max-lg:py-3 bg-white cursor-pointer select-none hover:border-blue-400 transition-colors"
+          aria-expanded={activeModal === "travelers"}
+          className="
+            flex-1 min-w-[200px]
+            max-lg:w-full max-lg:min-w-0
+            rounded-[6px]
+            flex items-center justify-between gap-3
+            border border-blue-200
+            px-4 py-4.5
+            max-lg:px-3.5 max-lg:py-3
+            bg-white
+            cursor-pointer select-none
+            hover:border-blue-400
+            transition-colors
+            text-start
+          "
         >
           <div className="flex items-center gap-3 min-w-0">
-            <Users className="w-5 h-5 text-blue-600 flex-shrink-0" />
+            <Users className="w-5 h-5 text-blue-600 shrink-0" />
 
-            <div className="flex flex-col text-left min-w-0">
+            <div className="flex flex-col text-start min-w-0">
               <span className="text-[11px] text-slate-400 font-medium">
                 {t("Travelers:")}
               </span>
 
               <span className="text-sm font-semibold text-blue-600 truncate">
-                {t("{{count}} room", {
-                  count: rooms.length,
-                })}{" "}
+                {t("{{count}} room", { count: rooms.length })}{" "}
                 {t("{{count}} travelers", {
                   count: totalTravelers,
                 })}
@@ -194,49 +286,54 @@ export default function SearchBar() {
             </div>
           </div>
 
-          <ChevronDown className="w-4 h-4 text-slate-400 ml-2 flex-shrink-0" />
-        </div>
+          <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+        </button>
 
         {/* Search Button */}
         <button
           type="button"
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-xl flex flex-col max-lg:flex-row items-center justify-center gap-1 max-lg:gap-2 transition-colors min-w-[120px] max-lg:w-full max-lg:min-w-0"
+          className="
+            bg-blue-600 hover:bg-blue-700
+            text-white font-medium
+            rounded-[6px]
+            px-8 py-2
+            flex flex-col max-lg:flex-row
+            items-center justify-center gap-1 max-lg:gap-2
+            transition-colors
+            min-w-[120px]
+            max-lg:w-full max-lg:min-w-0
+          "
         >
           <Search className="w-5 h-5" />
+
           <span className="text-xs font-semibold">
             {t("Find Now")}
           </span>
         </button>
       </div>
 
-      {/* ================= MOBILE MODAL BACKDROP ================= */}
+      {/* ================= MOBILE BACKDROP ================= */}
       {activeModal && (
         <div
           className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
-          onClick={() => {
-            setActiveModal(null);
-            setShowCountries(false);
-          }}
+          onClick={closeModal}
+          aria-hidden="true"
         />
       )}
 
       {/* ================= LOCATION MODAL ================= */}
       {activeModal === "location" && (
         <div
-          className="
-            absolute top-full left-0
-            max-lg:fixed max-lg:top-1/2 max-lg:left-1/2
-            max-lg:-translate-x-1/2 max-lg:-translate-y-1/2
-            max-lg:w-[80vw] max-lg:max-w-none
-            max-lg:max-h-[80vh] max-lg:overflow-y-auto
-            max-lg:z-[70]
-            mt-2
-            w-80
-            bg-white rounded-2xl shadow-xl
+          dir={isRTL ? "rtl" : "ltr"}
+          className={`
+            absolute top-full
+            ${isRTL ? "right-0" : "left-0"}
+            mt-2 w-80
+            ${popupPosition}
+            bg-white rounded-[6px] shadow-xl
             border border-slate-100
-            p-5
-            z-50 text-left
-          "
+            p-5 z-50 text-start
+          `}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
@@ -247,11 +344,13 @@ export default function SearchBar() {
             <button
               type="button"
               aria-label={t("Close")}
-              onClick={() => {
-                setActiveModal(null);
-                setShowCountries(false);
-              }}
-              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
+              onClick={closeModal}
+              className="
+                lg:hidden w-8 h-8 rounded-full
+                bg-slate-100 flex items-center justify-center
+                text-slate-500 hover:bg-slate-200
+                transition-colors
+              "
             >
               <X className="w-4 h-4" />
             </button>
@@ -262,15 +361,20 @@ export default function SearchBar() {
             <div className="relative">
               <button
                 type="button"
-                onClick={() =>
-                  setShowCountries((prev) => !prev)
-                }
-                className="w-full flex items-center justify-between gap-2 border border-slate-200 rounded-lg px-3 py-3 text-xs text-slate-600 hover:border-blue-400 transition-colors"
+                onClick={() => setShowCountries((prev) => !prev)}
+                aria-expanded={showCountries}
+                className="
+                  w-full flex items-center justify-between gap-2
+                  border border-slate-200 rounded-[6px]
+                  px-3 py-3 text-xs text-slate-600
+                  hover:border-blue-400 transition-colors
+                  text-start
+                "
               >
                 <span className="flex items-center gap-2 min-w-0">
-                  <span>🌐</span>
+                  <span className="shrink-0">🌐</span>
 
-                  <span className="text-slate-400">
+                  <span className="text-slate-400 shrink-0">
                     {t("Country")}
                   </span>
 
@@ -280,14 +384,23 @@ export default function SearchBar() {
                 </span>
 
                 <ChevronDown
-                  className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${
-                    showCountries ? "rotate-180" : ""
-                  }`}
+                  className={`
+                    w-4 h-4 text-slate-400 shrink-0
+                    transition-transform
+                    ${showCountries ? "rotate-180" : ""}
+                  `}
                 />
               </button>
 
               {showCountries && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-[80] max-h-52 overflow-y-auto">
+                <div
+                  className="
+                    absolute top-full start-0 end-0 mt-1
+                    bg-white border border-slate-200
+                    rounded-[6px] shadow-xl z-[80]
+                    max-h-52 overflow-y-auto
+                  "
+                >
                   {COUNTRIES.map((country) => (
                     <button
                       key={country}
@@ -296,17 +409,24 @@ export default function SearchBar() {
                         setSelectedCountry(country);
                         setShowCountries(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-blue-50 ${
-                        selectedCountry === country
-                          ? "bg-blue-50 text-blue-600 font-semibold"
-                          : "text-slate-700"
-                      }`}
+                      className={`
+                        w-full text-start
+                        px-4 py-2.5 text-sm
+                        transition-colors hover:bg-blue-50
+                        ${
+                          selectedCountry === country
+                            ? "bg-blue-50 text-blue-600 font-semibold"
+                            : "text-slate-700"
+                        }
+                      `}
                     >
-                      <span className="flex items-center justify-between">
-                        {t(country)}
+                      <span className="flex items-center justify-between gap-2">
+                        <span className="truncate">{t(country)}</span>
 
                         {selectedCountry === country && (
-                          <span className="text-blue-600">✓</span>
+                          <span className="text-blue-600 shrink-0">
+                            ✓
+                          </span>
                         )}
                       </span>
                     </button>
@@ -316,20 +436,37 @@ export default function SearchBar() {
             </div>
 
             {/* Destination Input */}
-            <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-400">
-              <MapPin className="w-4 h-4 text-slate-400" />
+            <button
+              type="button"
+              className="
+                w-full flex items-center gap-2
+                border border-slate-200 rounded-[6px]
+                px-3 py-2.5 text-xs text-slate-400
+                hover:border-blue-400 transition-colors
+                text-start
+              "
+            >
+              <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+
               <span>{t("Where are you going?")}</span>
-            </div>
+            </button>
           </div>
 
+          {/* Set Point On Map */}
           <button
             type="button"
-            className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:underline mb-4"
+            className="
+              flex items-center gap-1.5
+              text-xs font-medium text-blue-600
+              hover:underline mb-4
+            "
           >
-            <MapPin className="w-3.5 h-3.5" />
+            <MapPin className="w-3.5 h-3.5 shrink-0" />
+
             {t("Set Point On Map")}
           </button>
 
+          {/* Distance Slider */}
           <div className="mb-4">
             <span className="text-xs font-semibold text-slate-700 block mb-2">
               {t("Distance from my location")}
@@ -343,23 +480,36 @@ export default function SearchBar() {
               onChange={(e) => setDistance(Number(e.target.value))}
               aria-label={t("Distance from my location")}
               style={{
-                background: `linear-gradient(
-                  to right,
-                  #2563eb 0%,
-                  #2563eb ${((distance - 10) / (50 - 10)) * 100}%,
-                  #dbeafe ${((distance - 10) / (50 - 10)) * 100}%,
-                  #dbeafe 100%
-                )`,
+                background: isRTL
+                  ? `linear-gradient(
+                      to left,
+                      #2563eb 0%,
+                      #2563eb ${((distance - 10) / 40) * 100}%,
+                      #dbeafe ${((distance - 10) / 40) * 100}%,
+                      #dbeafe 100%
+                    )`
+                  : `linear-gradient(
+                      to right,
+                      #2563eb 0%,
+                      #2563eb ${((distance - 10) / 40) * 100}%,
+                      #dbeafe ${((distance - 10) / 40) * 100}%,
+                      #dbeafe 100%
+                    )`,
               }}
-              className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              className="
+                w-full h-1.5 rounded-[6px]
+                appearance-none cursor-pointer accent-blue-600
+              "
             />
 
             <div className="flex justify-between text-[11px] text-blue-600 font-semibold mt-1">
               <span>{t("{{distance}} Km", { distance })}</span>
+
               <span>{t("{{distance}} Km", { distance: 50 })}</span>
             </div>
           </div>
 
+          {/* Results */}
           <div>
             <span className="text-xs font-semibold text-slate-700 block mb-2">
               {t("Results")}
@@ -367,14 +517,19 @@ export default function SearchBar() {
 
             <div className="space-y-2">
               {[1, 2, 3].map((item) => (
-                <div
+                <button
                   key={item}
-                  className="flex items-start gap-2 cursor-pointer hover:bg-slate-50 p-1 rounded-lg"
+                  type="button"
+                  className="
+                    w-full flex items-start gap-2
+                    cursor-pointer hover:bg-slate-50
+                    p-2 rounded-[6px] text-start
+                  "
                 >
-                  <MapPin className="w-3.5 h-3.5 text-slate-500 mt-0.5" />
+                  <MapPin className="w-3.5 h-3.5 text-slate-500 mt-0.5 shrink-0" />
 
-                  <div>
-                    <p className="text-xs font-medium text-slate-700 leading-none">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-slate-700">
                       {t("Makkah")}
                     </p>
 
@@ -382,7 +537,7 @@ export default function SearchBar() {
                       {t("Province, Saudi Arabia")}
                     </p>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -392,20 +547,16 @@ export default function SearchBar() {
       {/* ================= DATE MODAL ================= */}
       {activeModal === "date" && (
         <div
-          className="
-            absolute top-full left-1/4
-            max-lg:fixed max-lg:top-1/2 max-lg:left-1/2
-            max-lg:-translate-x-1/2 max-lg:-translate-y-1/2
-            max-lg:w-[80vw] max-lg:max-w-none
-            max-lg:max-h-[80vh] max-lg:overflow-y-auto
-            max-lg:z-[70]
-            mt-2
-            w-[480px]
-            bg-white rounded-2xl shadow-xl
+          dir={isRTL ? "rtl" : "ltr"}
+          className={`
+            absolute top-full
+            ${isRTL ? "right-1/4" : "left-1/4"}
+            mt-2 w-[480px]
+            ${popupPosition}
+            bg-white rounded-[6px] shadow-xl
             border border-slate-100
-            p-6
-            z-50 text-left
-          "
+            p-6 z-50 text-start
+          `}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
@@ -416,16 +567,21 @@ export default function SearchBar() {
             <button
               type="button"
               aria-label={t("Close")}
-              onClick={() => setActiveModal(null)}
-              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
+              onClick={closeModal}
+              className="
+                lg:hidden w-8 h-8 rounded-full
+                bg-slate-100 flex items-center justify-center
+                text-slate-500 hover:bg-slate-200
+                transition-colors
+              "
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Date Summary */}
-          <div className="flex items-center justify-between bg-slate-50/70 rounded-xl p-3 mb-6">
-            <div>
+          <div className="flex items-center justify-between gap-2 bg-slate-50/70 rounded-[6px] p-3 mb-6">
+            <div className="text-start">
               <p className="text-base font-bold text-slate-700">
                 {t("13 Oct")}
               </p>
@@ -435,11 +591,17 @@ export default function SearchBar() {
               </p>
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-sky-400 text-white flex items-center justify-center flex-shrink-0">
+            <div
+              className={`
+                w-8 h-8 rounded-full bg-sky-400
+                text-white flex items-center justify-center
+                shrink-0 ${arrowClass}
+              `}
+            >
               →
             </div>
 
-            <div className="text-right">
+            <div className="text-end">
               <p className="text-base font-bold text-slate-700">
                 {t("19 Oct")}
               </p>
@@ -460,17 +622,26 @@ export default function SearchBar() {
                   aria-label={t("Previous month")}
                   className="text-slate-400 hover:text-slate-600"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft
+                    className={`w-4 h-4 ${arrowClass}`}
+                  />
                 </button>
 
                 <span className="text-xs font-semibold text-slate-600">
                   {t("February")}
                 </span>
 
-                <span className="w-4"></span>
+                <span className="w-4" />
               </div>
 
-              <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-slate-400 mb-2">
+              {/* Keep weekday order consistent in both languages */}
+              <div
+                dir="ltr"
+                className="
+                  grid grid-cols-7 gap-1 text-center
+                  text-[10px] font-medium text-slate-400 mb-2
+                "
+              >
                 {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(
                   (day) => (
                     <span key={day}>{t(day)}</span>
@@ -478,17 +649,25 @@ export default function SearchBar() {
                 )}
               </div>
 
-              <div className="grid grid-cols-7 gap-1 text-center text-xs">
+              <div
+                dir="ltr"
+                className="grid grid-cols-7 gap-1 text-center text-xs"
+              >
                 {Array.from({ length: 28 }, (_, i) => i + 1).map(
                   (day) => (
                     <button
                       type="button"
                       key={day}
-                      className={`h-7 w-7 rounded-full flex items-center justify-center text-[11px] ${
-                        day === 23
-                          ? "bg-blue-600 text-white font-bold"
-                          : "text-slate-600 hover:bg-slate-100"
-                      }`}
+                      className={`
+                        h-7 w-7 rounded-full
+                        flex items-center justify-center
+                        text-[11px]
+                        ${
+                          day === 23
+                            ? "bg-blue-600 text-white font-bold"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }
+                      `}
                     >
                       {day}
                     </button>
@@ -500,7 +679,7 @@ export default function SearchBar() {
             {/* March */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="w-4"></span>
+                <span className="w-4" />
 
                 <span className="text-xs font-semibold text-slate-600">
                   {t("March")}
@@ -511,11 +690,19 @@ export default function SearchBar() {
                   aria-label={t("Next month")}
                   className="text-slate-400 hover:text-slate-600"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight
+                    className={`w-4 h-4 ${arrowClass}`}
+                  />
                 </button>
               </div>
 
-              <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-slate-400 mb-2">
+              <div
+                dir="ltr"
+                className="
+                  grid grid-cols-7 gap-1 text-center
+                  text-[10px] font-medium text-slate-400 mb-2
+                "
+              >
                 {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(
                   (day) => (
                     <span key={day}>{t(day)}</span>
@@ -523,17 +710,25 @@ export default function SearchBar() {
                 )}
               </div>
 
-              <div className="grid grid-cols-7 gap-1 text-center text-xs">
+              <div
+                dir="ltr"
+                className="grid grid-cols-7 gap-1 text-center text-xs"
+              >
                 {Array.from({ length: 28 }, (_, i) => i + 1).map(
                   (day) => (
                     <button
                       type="button"
                       key={day}
-                      className={`h-7 w-7 rounded-full flex items-center justify-center text-[11px] ${
-                        day === 27
-                          ? "bg-blue-600 text-white font-bold"
-                          : "text-slate-600 hover:bg-slate-100"
-                      }`}
+                      className={`
+                        h-7 w-7 rounded-full
+                        flex items-center justify-center
+                        text-[11px]
+                        ${
+                          day === 27
+                            ? "bg-blue-600 text-white font-bold"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }
+                      `}
                     >
                       {day}
                     </button>
@@ -548,21 +743,16 @@ export default function SearchBar() {
       {/* ================= TRAVELERS MODAL ================= */}
       {activeModal === "travelers" && (
         <div
-          className="
-            absolute top-full right-0
-            max-lg:fixed max-lg:top-1/2 max-lg:left-1/2
-            max-lg:right-auto
-            max-lg:-translate-x-1/2 max-lg:-translate-y-1/2
-            max-lg:w-[80vw] max-lg:max-w-none
-            max-lg:max-h-[80vh] max-lg:overflow-y-auto
-            max-lg:z-[70]
-            mt-2
-            w-80
-            bg-white rounded-2xl shadow-xl
+          dir={isRTL ? "rtl" : "ltr"}
+          className={`
+            absolute top-full
+            ${isRTL ? "left-0" : "right-0"}
+            mt-2 w-80
+            ${popupPosition}
+            bg-white rounded-[6px] shadow-xl
             border border-slate-100
-            p-5
-            z-50 text-left
-          "
+            p-5 z-50 text-start
+          `}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
@@ -573,14 +763,20 @@ export default function SearchBar() {
             <button
               type="button"
               aria-label={t("Close")}
-              onClick={() => setActiveModal(null)}
-              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
+              onClick={closeModal}
+              className="
+                lg:hidden w-8 h-8 rounded-full
+                bg-slate-100 flex items-center justify-center
+                text-slate-500 hover:bg-slate-200
+                transition-colors
+              "
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="space-y-5 max-h-72 overflow-y-auto pr-1">
+          {/* Rooms */}
+          <div className="space-y-5 max-h-72 overflow-y-auto pe-1">
             {rooms.map((room, idx) => (
               <div
                 key={room.id}
@@ -588,7 +784,9 @@ export default function SearchBar() {
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold text-slate-700">
-                    {t("Room {{number}}", { number: idx + 1 })}
+                    {t("Room {{number}}", {
+                      number: idx + 1,
+                    })}
                   </span>
 
                   {rooms.length > 1 && (
@@ -606,7 +804,7 @@ export default function SearchBar() {
                 </div>
 
                 {/* Adults */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between gap-3 mb-2">
                   <span className="text-xs text-slate-500">
                     {t("Adults")}
                   </span>
@@ -615,8 +813,17 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Decrease adults")}
-                      onClick={() => updateGuests(room.id, "adults", -1)}
-                      className="w-6 h-6 border rounded-md flex items-center justify-center text-slate-400 hover:border-slate-400"
+                      disabled={room.adults <= 1}
+                      onClick={() =>
+                        updateGuests(room.id, "adults", -1)
+                      }
+                      className="
+                        w-6 h-6 border rounded-[6px]
+                        flex items-center justify-center
+                        text-slate-400
+                        hover:border-slate-400
+                        disabled:opacity-40 disabled:cursor-not-allowed
+                      "
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -628,8 +835,15 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Increase adults")}
-                      onClick={() => updateGuests(room.id, "adults", 1)}
-                      className="w-6 h-6 border rounded-md flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
+                      onClick={() =>
+                        updateGuests(room.id, "adults", 1)
+                      }
+                      className="
+                        w-6 h-6 border rounded-[6px]
+                        flex items-center justify-center
+                        text-blue-600 border-blue-200
+                        hover:border-blue-400
+                      "
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -637,7 +851,7 @@ export default function SearchBar() {
                 </div>
 
                 {/* Children */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs text-slate-500">
                       {t("Children")}
@@ -652,10 +866,16 @@ export default function SearchBar() {
                     <button
                       type="button"
                       aria-label={t("Decrease children")}
+                      disabled={room.children <= 0}
                       onClick={() =>
                         updateGuests(room.id, "children", -1)
                       }
-                      className="w-6 h-6 border rounded-md flex items-center justify-center text-slate-400 hover:border-slate-400"
+                      className="
+                        w-6 h-6 border rounded-[6px]
+                        flex items-center justify-center
+                        text-slate-400 hover:border-slate-400
+                        disabled:opacity-40 disabled:cursor-not-allowed
+                      "
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -670,7 +890,12 @@ export default function SearchBar() {
                       onClick={() =>
                         updateGuests(room.id, "children", 1)
                       }
-                      className="w-6 h-6 border rounded-md flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
+                      className="
+                        w-6 h-6 border rounded-[6px]
+                        flex items-center justify-center
+                        text-blue-600 border-blue-200
+                        hover:border-blue-400
+                      "
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -680,10 +905,18 @@ export default function SearchBar() {
             ))}
           </div>
 
+          {/* Add Room */}
           <button
             type="button"
             onClick={addRoom}
-            className="w-full mt-3 py-2 text-xs font-semibold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-right"
+            disabled={rooms.length >= 8}
+            className="
+              w-full mt-3 py-2
+              text-xs font-semibold text-blue-600
+              hover:bg-blue-50 rounded-[6px]
+              transition-colors text-start
+              disabled:opacity-40 disabled:cursor-not-allowed
+            "
           >
             + {t("Add Another Room")}
           </button>

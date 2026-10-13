@@ -4,8 +4,12 @@ import VisaCard from "./VisaCard";
 import { visaRequirements } from "../Home/data/VisaRequirements";
 import MoreForYou from "./MoreForYou";
 import Hero from "./Hero";
+import { useTranslation } from "react-i18next";
+
 
 export default function Home() {
+    const { t } = useTranslation();
+  
   const carouselRef = useRef(null);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -91,14 +95,16 @@ export default function Home() {
       <Hero />
       <div className="px-3 md:px-10 lg:px-25">
         <SpecialPackages />
+      </div>
 
-        {/* VISA REQUIREMENTS CAROUSEL */}
-        <section className="bg-[#f8faff] py-12 px-4 sm:px-12 md:px-16">
+      {/* VISA REQUIREMENTS CAROUSEL */}
+      <div className="pl-3 md:pl-10 lg:pl-25">
+        <section className=" py-12 pl-4 sm:pl-12 md:pl-16">
           <div className="mx-auto w-full">
             {/* Section Title */}
             <div className="flex items-center justify-between mb-6 sm:mb-8">
               <h2 className="text-xl sm:text-2xl font-black text-[#1e293b] tracking-wider uppercase">
-                VISA REQUIREMENTS
+                {t("VISA REQUIREMENTS")}
               </h2>
 
               {/* Navigation Arrows */}
@@ -218,7 +224,8 @@ export default function Home() {
             </p>
           </div>
         </section>
-
+      </div>
+      <div className="px-3 md:px-10 lg:px-25">
         <MoreForYou />
       </div>
     </div>

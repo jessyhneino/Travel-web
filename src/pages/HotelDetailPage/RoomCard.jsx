@@ -6,13 +6,13 @@ const RoomCard = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex h-full w-full min-w-0 flex-col justify-between gap-4 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-4 lg:p-5">
+    <div className="flex h-full w-full min-w-0 flex-col justify-between gap-4 rounded-[6px] border border-gray-100 bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-3 lg:p-3">
       {/* Room Image */}
-      <div className="w-full overflow-hidden rounded-m">
+      <div className="w-full overflow-hidden rounded-[6px]">
         <img
           src="/images/Rectangle17.png"
           alt={t("Economy Double Room")}
-          className="h-40 w-full rounded-m object-cover transition-transform duration-300 hover:scale-105 xs:h-44 sm:h-48 md:h-44 lg:h-48 xl:h-30"
+          className="h-40 w-full object-cover transition-transform duration-300 hover:scale-105 xs:h-44 sm:h-48 md:h-44 lg:h-48 xl:h-30"
         />
       </div>
 
@@ -73,7 +73,7 @@ const RoomCard = () => {
 
         <button
           type="button"
-          className="shrink-0 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition duration-200 hover:bg-blue-700 active:scale-95 sm:px-5 sm:text-sm"
+          className="shrink-0 rounded-[6px] bg-blue-600 px-[12px] py-[8px] text-xs font-semibold text-white transition duration-200 hover:bg-blue-700 active:scale-95 sm:px-5 sm:text-sm"
         >
           {t("Reserve")}
         </button>

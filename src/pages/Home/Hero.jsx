@@ -63,7 +63,7 @@ const formatDate = (date, language = "en") => {
   const [year, month, day] = date.split("-").map(Number);
 
   return new Date(year, month - 1, day).toLocaleDateString(
-    language === "ar" ? "ar" : "en-US",
+    language.startsWith("ar") ? "ar" : "en-US",
     {
       month: "short",
       day: "numeric",
@@ -76,23 +76,28 @@ export default function Hero() {
 
   const [activeTab, setActiveTab] = useState("hotel");
   const [goingTo, setGoingTo] = useState("Spain");
-  const [dateRange, setDateRange] = useState(
-    `${formatDate("2026-10-23")} - ${formatDate("2026-11-20")}`
-  );
-  const [travelers, setTravelers] = useState(
-    `1 ${t("room")}, 2 ${t("travelers")}`
-  );
-  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const [checkIn, setCheckIn] = useState("2026-10-23");
   const [checkOut, setCheckOut] = useState("2026-11-20");
+
+  const [dateRange, setDateRange] = useState(
+    `${formatDate("2026-10-23", i18n.language)} - ${formatDate(
+      "2026-11-20",
+      i18n.language
+    )}`
+  );
+
+  const [travelers, setTravelers] = useState(
+    `1 ${t("room")}, 2 ${t("travelers")}`
+  );
+
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
   const [rooms, setRooms] = useState([{ id: 1, adults: 2, children: 0 }]);
 
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    // i18n.changeLanguage("en");
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setActiveDropdown(null);
@@ -107,6 +112,29 @@ export default function Hero() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    setDateRange(
+      `${formatDate(checkIn, i18n.language)} - ${formatDate(
+        checkOut,
+        i18n.language
+      )}`
+    );
+  }, [i18n.language, checkIn, checkOut]);
+
+  useEffect(() => {
+    const totalTravelers = rooms.reduce(
+      (sum, room) => sum + room.adults + room.children,
+      0
+    );
+
+    const roomLabel = rooms.length === 1 ? t("room") : t("rooms");
+    const travelerLabel = totalTravelers === 1 ? t("traveler") : t("travelers");
+
+    setTravelers(
+      `${rooms.length} ${roomLabel}, ${totalTravelers} ${travelerLabel}`
+    );
+  }, [rooms, i18n.language, t]);
 
   const updateDateRange = (newCheckIn, newCheckOut) => {
     setCheckIn(newCheckIn);
@@ -128,48 +156,41 @@ export default function Hero() {
     }
   };
 
-  const updateTravelers = (updatedRooms) => {
-    setRooms(updatedRooms);
-
-    const totalTravelers = updatedRooms.reduce(
-      (sum, room) => sum + room.adults + room.children,
-      0
-    );
-
-    const roomLabel = updatedRooms.length === 1 ? t("room") : t("rooms");
-
-    const travelerLabel = totalTravelers === 1 ? t("traveler") : t("travelers");
-
-    setTravelers(
-      `${updatedRooms.length} ${roomLabel}, ${totalTravelers} ${travelerLabel}`
-    );
-  };
-
   const updateRoom = (roomId, field, amount) => {
-    const updatedRooms = rooms.map((room) => {
-      if (room.id !== roomId) return room;
+    setRooms((previousRooms) =>
+      previousRooms.map((room) => {
+        if (room.id !== roomId) return room;
 
-      const minVal = field === "adults" ? 1 : 0;
+        const minVal = field === "adults" ? 1 : 0;
+        const updatedValue = Math.max(minVal, room[field] + amount);
 
-      return {
-        ...room,
-        [field]: Math.max(minVal, room[field] + amount),
-      };
-    });
+        if (amount > 0 && room.adults + room.children >= 8) {
+          return room;
+        }
 
-    updateTravelers(updatedRooms);
+        return {
+          ...room,
+          [field]: updatedValue,
+        };
+      })
+    );
   };
 
   const addRoom = () => {
     if (rooms.length >= 8) return;
 
-    updateTravelers([...rooms, { id: Date.now(), adults: 1, children: 0 }]);
+    setRooms((previousRooms) => [
+      ...previousRooms,
+      { id: Date.now(), adults: 1, children: 0 },
+    ]);
   };
 
   const removeRoom = (roomId) => {
     if (rooms.length <= 1) return;
 
-    updateTravelers(rooms.filter((room) => room.id !== roomId));
+    setRooms((previousRooms) =>
+      previousRooms.filter((room) => room.id !== roomId)
+    );
   };
 
   return (
@@ -260,7 +281,14 @@ export default function Hero() {
                       {t("Going to:")}
                     </span>
 
-                    <span className="w-full text-xs font-semibold text-blue-600 sm:text-sm truncate">
+                    <span
+                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
+                      className={`w-full text-xs font-semibold text-blue-600 sm:text-sm truncate ${
+                        i18n.language.startsWith("ar")
+                          ? "text-right"
+                          : "text-left"
+                      }`}
+                    >
                       {t(goingTo)}
                     </span>
 
@@ -317,7 +345,12 @@ export default function Hero() {
                           activeDropdown === "dates" ? null : "dates"
                         )
                       }
-                      className="w-full text-left border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className={`w-full border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
+                        i18n.language.startsWith("ar")
+                          ? "text-right"
+                          : "text-left"
+                      }`}
+                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
                         <label className="block text-[10px] sm:text-xs text-slate-400 mb-0.5">
@@ -468,7 +501,12 @@ export default function Hero() {
                           activeDropdown === "travelers" ? null : "travelers"
                         )
                       }
-                      className="w-full text-left border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className={`w-full border border-blue-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${
+                        i18n.language.startsWith("ar")
+                          ? "text-right"
+                          : "text-left"
+                      }`}
+                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
                         <label className="block text-[10px] sm:text-xs text-slate-400 mb-0.5">

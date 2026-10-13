@@ -20,7 +20,10 @@ const featureItemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
   },
 };
 
@@ -31,6 +34,7 @@ const slideVariants = {
     opacity: 0,
     scale: 0.96,
   }),
+
   center: {
     x: 0,
     opacity: 1,
@@ -40,6 +44,7 @@ const slideVariants = {
       ease: [0.16, 1, 0.3, 1],
     },
   },
+
   exit: (direction) => ({
     x: direction < 0 ? 100 : -100,
     opacity: 0,
@@ -52,20 +57,27 @@ const slideVariants = {
 };
 
 export default function SpecialPackages() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  // Detect Arabic language
+  const isArabic = i18n.language?.startsWith("ar");
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  // Next Package
   const handleNext = () => {
-    setDirection(1);
+    setDirection(isArabic ? -1 : 1);
+
     setCurrentIndex(
       (prevIndex) => (prevIndex + 1) % packagesData.length
     );
   };
 
+  // Previous Package
   const handlePrev = () => {
-    setDirection(-1);
+    setDirection(isArabic ? 1 : -1);
+
     setCurrentIndex((prevIndex) =>
       prevIndex === 0
         ? packagesData.length - 1
@@ -79,7 +91,10 @@ export default function SpecialPackages() {
     num < 10 ? `0${num}` : num;
 
   return (
-    <section className="relative w-full overflow-hidden bg-white text-[#1e293b] px-4 sm:px-8 ">
+    <section
+      dir={isArabic ? "rtl" : "ltr"}
+      className="relative w-full overflow-hidden bg-[#FAFBFF] px-4 text-[#1e293b] sm:px-12"
+    >
       {/* Background Floating Circle */}
       <motion.div
         animate={{
@@ -91,18 +106,28 @@ export default function SpecialPackages() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/2 -right-20 sm:-right-16 -translate-y-1/2 w-36 h-36 sm:w-48 sm:h-48 rounded-full border border-sky-300 opacity-60 pointer-events-none"
+        className={`pointer-events-none absolute top-1/2 h-36 w-36 -translate-y-1/2 rounded-full border border-sky-300 opacity-60 sm:h-48 sm:w-48 ${
+          isArabic
+            ? "-left-20 sm:-left-16"
+            : "-right-20 sm:-right-16"
+        }`}
       />
 
       {/* Main Title */}
-      <div className="relative text-center mb-8 sm:mb-10 lg:mb-12">
-        <h2 className="text-lg sm:text-xl font-bold tracking-[0.2em] text-[#1d2753] uppercase">
+      <div className="relative mb-8 text-center sm:mb-10 lg:mb-12">
+        <h2
+          className={`text-lg font-bold text-[#1d2753] sm:text-xl ${
+            isArabic
+              ? "tracking-normal"
+              : "tracking-[0.2em] uppercase"
+          }`}
+        >
           {t("SPECIAL PACKAGES")}
         </h2>
       </div>
 
       {/* Main Content Area */}
-      <div className="relative w-full  min-h-[420px] flex items-center">
+      <div className="relative flex min-h-[420px] w-full items-center">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentIndex}
@@ -111,10 +136,16 @@ export default function SpecialPackages() {
             initial="enter"
             animate="center"
             exit="exit"
-            className="grid w-full grid-cols-1 px-5 items-center gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10"
+            className="grid w-full grid-cols-1 items-center gap-6 px-5 sm:gap-8 lg:grid-cols-12 lg:gap-10"
           >
-            {/* Right Column - Image */}
-            <div className="order-1 flex w-full items-center justify-center lg:order-2 lg:col-span-6 lg:justify-end">
+            {/* Image Column */}
+            <div
+              className={`order-1 flex w-full items-center justify-center lg:col-span-6 ${
+                isArabic
+                  ? "lg:order-1 lg:justify-start"
+                  : "lg:order-2 lg:justify-end"
+              }`}
+            >
               <motion.div
                 whileHover={{ scale: 1.03 }}
                 transition={{
@@ -131,12 +162,21 @@ export default function SpecialPackages() {
               </motion.div>
             </div>
 
-            {/* Left Column - Text */}
-            <div className="order-2 flex w-full flex-col items-center justify-between gap-5 text-center sm:gap-6 lg:order-1 lg:col-span-6 lg:items-start lg:text-left">
+            {/* Text Column */}
+            <div
+              dir={isArabic ? "rtl" : "ltr"}
+              className={`order-2 flex w-full flex-col justify-between gap-5 sm:gap-6 lg:col-span-6 ${
+                isArabic
+                  ? "items-center text-center lg:order-2 lg:items-start lg:text-right"
+                  : "items-center text-center lg:order-1 lg:items-start lg:text-left"
+              }`}
+            >
+              {/* Package Title */}
               <h3 className="w-full text-xl font-bold text-[#1d2753] sm:text-2xl md:text-3xl">
                 {t(currentPackage.title)}
               </h3>
 
+              {/* Package Description */}
               <p className="w-full max-w-xl text-sm leading-relaxed text-gray-500 sm:text-[15px] md:text-base">
                 {t(currentPackage.description)}
               </p>
@@ -157,6 +197,7 @@ export default function SpecialPackages() {
                     <svg
                       className="h-4 w-4 shrink-0 fill-none stroke-current stroke-2"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -192,42 +233,69 @@ export default function SpecialPackages() {
       </div>
 
       {/* Navigation Footer */}
-      <div className="relative flex items-center justify-between min-[640px]:mx-4 min-[755px]:mx-8  mt-8 sm:mt-10 lg:mt-12 pt-5 sm:pt-6 border-t border-gray-100 text-sm font-medium text-sky-500">
+      <div
+        dir={isArabic ? "rtl" : "ltr"}
+        className={`relative mx-0 mt-8 flex items-center justify-between border-t border-gray-100 pt-5 text-sm font-medium text-sky-500 sm:mx-4 sm:mt-10 sm:pt-6 min-[755px]:mx-8 lg:mt-12`}
+      >
+        {/* Previous Button */}
         <motion.button
           onClick={handlePrev}
-          whileHover={{ x: -4 }}
+          whileHover={{ x: isArabic ? 4 : -4 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer select-none shrink-0"
+          aria-label={t("PREVIOUS")}
+          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-opacity hover:opacity-80"
         >
-          <div className="w-7 h-7 rounded-full border border-sky-400 flex items-center justify-center text-sm">
-            &#8592;
-          </div>
+          <span
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-400 text-sm ${
+              isArabic ? "scale-x-[-1]" : ""
+            }`}
+          >
+            ←
+          </span>
 
-          <span className="uppercase tracking-wider text-[10px] sm:text-xs font-bold">
+          <span
+            className={`text-[10px] font-bold sm:text-xs ${
+              isArabic ? "" : "uppercase tracking-wider"
+            }`}
+          >
             {t("PREVIOUS")}
           </span>
         </motion.button>
 
-        <div className="text-gray-400 text-[10px]  sm:text-xs tracking-wider font-semibold text-center whitespace-nowrap">
+        {/* Package Counter */}
+        <div
+          dir="ltr"
+          className="whitespace-nowrap text-center text-[10px] font-semibold tracking-wider text-gray-400 sm:text-xs"
+        >
           {t("Showing")} {formatNumber(currentIndex + 1)}/
           {formatNumber(packagesData.length)}
         </div>
 
+        {/* Next Button */}
         <motion.button
           onClick={handleNext}
-          whileHover={{ x: 4 }}
+          whileHover={{ x: isArabic ? -4 : 4 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer select-none shrink-0"
+          aria-label={t("NEXT")}
+          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-opacity hover:opacity-80"
         >
-          <span className="uppercase tracking-wider text-[10px] sm:text-xs font-bold">
+          <span
+            className={`text-[10px] font-bold sm:text-xs ${
+              isArabic ? "" : "uppercase tracking-wider"
+            }`}
+          >
             {t("NEXT")}
           </span>
 
-          <div className="w-7 h-7 rounded-full border border-sky-400 flex items-center justify-center text-sm">
-            &#8594;
-          </div>
+          <span
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-400 text-sm ${
+              isArabic ? "scale-x-[-1]" : ""
+            }`}
+          >
+            →
+          </span>
         </motion.button>
       </div>
     </section>
