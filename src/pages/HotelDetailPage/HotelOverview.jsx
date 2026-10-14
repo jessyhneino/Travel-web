@@ -147,7 +147,7 @@ export default function HotelOverview() {
 
       {/* Reservation Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/50 backdrop-blur-md overflow-y-auto">
+        <div className=" fixed inset-0 z-50 flex items-center justify-center m-[30px] md:m-[0px] bg-blue-600/25 backdrop-blur-[0.25px] overflow-y-auto">
           <div className="bg-white rounded-[6px] shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">

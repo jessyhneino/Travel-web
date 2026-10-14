@@ -17,7 +17,8 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
     await i18n.changeLanguage(newLanguage);
 
     document.documentElement.lang = newLanguage;
-    document.documentElement.dir = newLanguage === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir =
+      newLanguage === "ar" ? "rtl" : "ltr";
 
     setIsMenuOpen(false);
   };
@@ -44,21 +45,23 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         {/* User Profile Button */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={t("Toggle user menu")}
-            className="bg-[rgba(38,187,253,1)] hover:bg-cyan-400 text-white p-1.5 sm:p-2 rounded-lg shadow-sm transition-colors duration-200 flex items-center gap-1 focus:outline-none cursor-pointer"
+            aria-expanded={isMenuOpen}
+            className="bg-[rgba(38,187,253,1)] hover:bg-cyan-400 text-white p-1.5 sm:p-2 rounded-[6px] shadow-sm transition-colors duration-200 flex items-center gap-1 focus:outline-none cursor-pointer"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5" />
             <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          {/* Desktop Dropdown */}
+          {/* Desktop Dropdown: يظهر فقط فوق 1150px */}
           {isMenuOpen && (
             <div
               dir={isArabic ? "rtl" : "ltr"}
-              className={`hidden lg:block absolute ${
+              className={`hidden min-[1151px]:block absolute ${
                 isArabic ? "left-0" : "right-0"
-              } top-full mt-2 z-50 bg-white rounded-xl shadow-xl p-6 border border-slate-100/80 w-[280px] text-slate-800`}
+              } top-full mt-2 z-50 bg-white rounded-[6px] shadow-xl p-6 border border-slate-100/80 w-[280px] text-slate-800`}
             >
               {/* User Info */}
               <div className="flex items-center gap-3.5 pb-6 border-b border-slate-100">
@@ -72,6 +75,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                   <h3 className="font-bold text-slate-900 text-base leading-tight">
                     {t("John Dou")}
                   </h3>
+
                   <p className="text-xs text-slate-500 truncate mt-1 font-normal">
                     Johndouemail@gmail.com
                   </p>
@@ -147,9 +151,9 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         </div>
       </header>
 
-      {/* Backdrop */}
+      {/* Backdrop: يظهر عند 1150px أو أقل */}
       <div
-        className={`lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+        className={`min-[1151px]:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
           isMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -157,15 +161,14 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         onClick={() => setIsMenuOpen(false)}
       />
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Sidebar: يظهر عند 1150px أو أقل */}
       <aside
         dir={isArabic ? "rtl" : "ltr"}
-        className={`lg:hidden fixed top-0 ${
+        aria-hidden={!isMenuOpen}
+        className={`min-[1151px]:hidden fixed top-0 ${
           isArabic ? "left-0" : "right-0"
         } h-full w-[280px] sm:w-[320px] bg-white shadow-2xl z-50 p-6 border-slate-100 flex flex-col justify-between overflow-y-auto transform transition-transform duration-300 ease-in-out ${
-          isArabic
-            ? "border-r"
-            : "border-l"
+          isArabic ? "border-r" : "border-l"
         } ${
           isMenuOpen
             ? "translate-x-0"
@@ -188,6 +191,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <h3 className="font-bold text-slate-900 text-base leading-tight">
                   {t("John Dou")}
                 </h3>
+
                 <p className="text-xs text-slate-500 truncate mt-1 font-normal">
                   Johndouemail@gmail.com
                 </p>
@@ -195,8 +199,9 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             </div>
 
             <button
+              type="button"
               onClick={() => setIsMenuOpen(false)}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition-colors cursor-pointer"
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-[6px] transition-colors cursor-pointer"
               aria-label={t("Close menu")}
             >
               <X className="w-5 h-5" />

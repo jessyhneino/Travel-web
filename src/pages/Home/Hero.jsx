@@ -239,7 +239,7 @@ export default function Hero() {
 
             {/* Search Box */}
             <motion.div
-              className="w-full max-w-[315px] sm:max-w-[450px] bg-white rounded-[6px] p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
+              className="w-[93%] sm:max-w-[90%] md:max-w-[450px] bg-white rounded-[6px] p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm"
               variants={SLOW_FADE_IN}
               initial="hidden"
               animate="visible"

@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="w-full bg-white text-gray-600 font-sans py-12 px-4 sm:px-12 md:px-40 border-t border-gray-100">
+    <footer className="w-full bg-white text-gray-600 font-sans py-12 px-7 sm:px-12 md:px-26 lg:px-40 border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         {/* Logo Header Section */}
         <div className="mb-8">

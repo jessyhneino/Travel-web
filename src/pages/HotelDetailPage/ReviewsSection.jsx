@@ -168,7 +168,7 @@ export default function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="w-full bg-[#f8faff] pt-5 sm:pt-6 lg:pt-6 px-4 sm:px-5 lg:px-0"
+      className="w-full bg-[#f8faff] pt-5 sm:pt-6 lg:pt-6 px-4 sm:px-0 "
     >
       {/* عنوان القسم */}
       <h2 className="text-sm font-semibold text-[#202746] mb-7">

@@ -8,11 +8,12 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: "en", // اللغة الافتراضية عند تشغيل الموقع
+
     fallbackLng: "en",
 
     supportedLngs: ["en", "ar"],
 
-    // اكتشاف اللغة المحفوظة بدل فرض اللغة الإنكليزية
     detection: {
       order: ["localStorage", "htmlTag", "navigator"],
       caches: ["localStorage"],
