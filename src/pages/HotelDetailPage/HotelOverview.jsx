@@ -147,8 +147,14 @@ export default function HotelOverview() {
 
       {/* Reservation Modal */}
       {isModalOpen && (
-        <div className=" fixed inset-0 z-50 flex items-center justify-center m-[30px] md:m-[0px] bg-blue-600/25 backdrop-blur-[0.25px] overflow-y-auto">
-          <div className="bg-white rounded-[6px] shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-blue-600/25 backdrop-blur-[0.25px] overflow-y-auto p-8"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-[6px] shadow-2xl w-full max-w-xl my-auto max-h-[90vh] overflow-y-auto p-5 sm:p-6 lg:p-7 text-[#202747] relative animate-in fade-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-[#202747]">
@@ -327,6 +333,7 @@ export default function HotelOverview() {
 
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">{t("Room")}</span>
+
                 <span className="text-[#3478FF] font-medium">
                   960.00
                 </span>
@@ -336,6 +343,7 @@ export default function HotelOverview() {
                 <span className="text-[#303956]">
                   {t("Fully refundable")}
                 </span>
+
                 <span className="text-[#3478FF] font-medium">
                   30.00
                 </span>
@@ -358,6 +366,7 @@ export default function HotelOverview() {
 
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">{t("Taxes")}</span>
+
                 <span className="text-[#3478FF] font-medium">
                   30.00
                 </span>

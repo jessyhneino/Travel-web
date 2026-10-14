@@ -6,12 +6,13 @@ import MoreForYou from "./MoreForYou";
 import Hero from "./Hero";
 import { useTranslation } from "react-i18next";
 
-
 export default function Home() {
-    const { t } = useTranslation();
-  
-  const carouselRef = useRef(null);
+  const { t, i18n } = useTranslation();
 
+  const currentLanguage = i18n.resolvedLanguage || i18n.language;
+  const isArabic = currentLanguage?.startsWith("ar");
+
+  const carouselRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const dragState = useRef({
@@ -23,7 +24,6 @@ export default function Home() {
 
   // بدء السحب بالماوس أو اللمس
   const handlePointerDown = (e) => {
-    // السماح بزر الماوس الأيسر فقط
     if (e.pointerType === "mouse" && e.button !== 0) {
       return;
     }
@@ -40,13 +40,12 @@ export default function Home() {
 
     setIsDragging(true);
 
-    // إبقاء السحب مستمراً حتى لو خرج المؤشر عن الحاوية
     if (e.pointerType === "mouse") {
       carousel.setPointerCapture(e.pointerId);
     }
   };
 
-  // تحريك البطاقات مباشرة مع حركة المؤشر
+  // تحريك البطاقات مع حركة المؤشر
   const handlePointerMove = (e) => {
     const carousel = carouselRef.current;
 
@@ -54,13 +53,13 @@ export default function Home() {
 
     const distance = e.clientX - dragState.current.startX;
 
-    // تجاهل الحركات الصغيرة لتجنب اعتبار النقر سحباً
     if (Math.abs(distance) > 4) {
       dragState.current.moved = true;
     }
 
     if (dragState.current.moved) {
-      carousel.scrollLeft = dragState.current.scrollLeft - distance;
+      carousel.scrollLeft =
+        dragState.current.scrollLeft - distance;
     }
   };
 
@@ -85,7 +84,7 @@ export default function Home() {
       : carousel.clientWidth * 0.8;
 
     carousel.scrollBy({
-      left: direction * cardWidth * 1,
+      left: direction * cardWidth,
       behavior: "smooth",
     });
   };
@@ -93,13 +92,26 @@ export default function Home() {
   return (
     <div>
       <Hero />
+
       <div className="px-3 md:px-10 lg:px-25">
         <SpecialPackages />
       </div>
 
       {/* VISA REQUIREMENTS CAROUSEL */}
-      <div className="pl-3 md:pl-10 lg:pl-25">
-        <section className=" py-12 pl-4 sm:pl-12 md:pl-16">
+      <div
+        className={
+          isArabic
+            ? "pl-0 pr-3 md:pr-10 lg:pr-25"
+            : "pl-3 md:pl-10 lg:pl-25"
+        }
+      >
+        <section
+          className={`py-12 ${
+            isArabic
+              ? "pl-0 pr-4 sm:pr-12 md:pr-16"
+              : "pl-4 sm:pl-12 md:pl-16"
+          }`}
+        >
           <div className="mx-auto w-full">
             {/* Section Title */}
             <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -108,12 +120,15 @@ export default function Home() {
               </h2>
 
               {/* Navigation Arrows */}
-              <div className="flex items-center gap-2">
+              <div
+                dir={isArabic ? "rtl" : "ltr"}
+                className="flex items-center gap-2"
+              >
                 {/* Previous Button */}
                 <button
                   type="button"
-                  aria-label="Previous visa cards"
-                  onClick={() => scrollCarousel(-1)}
+                  aria-label={t("Previous visa cards")}
+                  onClick={() => scrollCarousel(isArabic ? 1 : -1)}
                   className="w-10 h-10 rounded-full bg-white
                   shadow-sm border border-slate-200
                   flex items-center justify-center text-slate-700
@@ -131,6 +146,7 @@ export default function Home() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    className={isArabic ? "rotate-180" : ""}
                   >
                     <path d="m15 18-6-6 6-6" />
                   </svg>
@@ -139,8 +155,8 @@ export default function Home() {
                 {/* Next Button */}
                 <button
                   type="button"
-                  aria-label="Next visa cards"
-                  onClick={() => scrollCarousel(1)}
+                  aria-label={t("Next visa cards")}
+                  onClick={() => scrollCarousel(isArabic ? -1 : 1)}
                   className="w-10 h-10 rounded-full bg-white
                   shadow-sm border border-slate-200
                   flex items-center justify-center text-slate-700
@@ -158,6 +174,7 @@ export default function Home() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    className={isArabic ? "rotate-180" : ""}
                   >
                     <path d="m9 18 6-6-6-6" />
                   </svg>
@@ -220,11 +237,14 @@ export default function Home() {
 
             {/* Mobile Hint */}
             <p className="mt-3 text-xs text-slate-400 sm:hidden">
-              اسحبي لاكتشاف المزيد من الدول ←
+              {isArabic
+                ? "اسحبي لاكتشاف المزيد من الدول ←"
+                : "Swipe to discover more countries →"}
             </p>
           </div>
         </section>
       </div>
+
       <div className="px-3 md:px-10 lg:px-25">
         <MoreForYou />
       </div>

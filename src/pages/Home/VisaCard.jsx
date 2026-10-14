@@ -4,21 +4,22 @@ import { useTranslation } from "react-i18next";
 export default function VisaCard({ country, imageSrc, flagSrc }) {
   const { t, i18n } = useTranslation();
 
-  const isArabic = i18n.language?.startsWith("ar");
+  const currentLanguage = i18n.resolvedLanguage || i18n.language;
+  const isArabic = currentLanguage?.startsWith("ar");
 
   return (
     <div
       dir={isArabic ? "rtl" : "ltr"}
       className="flex flex-col gap-3 group transition-transform duration-300"
     >
-      {/* Container for the image and flag icon */}
-      <div className="relative w-full aspect-[16/10] bg-slate-200 rounded-[6px] md:rounded-[6px] overflow-hidden shadow-sm border border-slate-100">
-
+      {/* Image and Flag Container */}
+      <div className="relative w-full aspect-[16/10] bg-slate-200 rounded-[6px] overflow-hidden shadow-sm border border-slate-100">
         {/* Main Background Image */}
         {imageSrc ? (
           <img
             src={imageSrc}
             alt={t(country)}
+            draggable="false"
             className="w-full h-full object-cover"
           />
         ) : (
@@ -37,6 +38,7 @@ export default function VisaCard({ country, imageSrc, flagSrc }) {
             <img
               src={flagSrc}
               alt={`${t(country)} ${t("flag")}`}
+              draggable="false"
               className="w-full h-full object-cover"
             />
           ) : (
