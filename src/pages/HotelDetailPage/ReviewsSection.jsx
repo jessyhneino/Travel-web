@@ -8,15 +8,21 @@ function ReviewItem({ review, isLast }) {
   const { t } = useTranslation();
 
   return (
-    <article className={`pb-4 ${!isLast ? "border-b border-slate-200" : ""}`}>
+    <article
+      className={`pb-4 ${
+        !isLast ? "border-b border-slate-200" : ""
+      }`}
+    >
       <div className="flex items-center gap-3 mb-1.5">
         <span className="text-[13px] font-medium text-[#202746]">
           {t(review.name)}
         </span>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" dir="ltr">
           <span className="text-[13px] font-medium text-blue-500">
-            {Number(review.rating).toFixed(1).replace(/\.0$/, "")}
+            {Number(review.rating)
+              .toFixed(1)
+              .replace(/\.0$/, "")}
           </span>
 
           <Star
@@ -33,22 +39,27 @@ function ReviewItem({ review, isLast }) {
   );
 }
 
-// النجوم التفاعلية - دعم نصف نجمة
+// النجوم التفاعلية - دعم نصف نجمة بالعربي والإنكليزي
 function RatingStars({ rating, onSelectRating }) {
   const { t } = useTranslation();
+
   const [hoveredRating, setHoveredRating] = useState(null);
+
   const activeRating = hoveredRating ?? rating;
 
   return (
     <div className="mb-4">
       <div
-        className="flex items-center gap-1.5"
+        dir="ltr"
+        className="flex items-center justify-start gap-1.5"
         role="group"
         aria-label={t("Choose your rating")}
-        onMouseLeave={() => setHoveredRating(null)}
       >
         {[1, 2, 3, 4, 5].map((star) => {
-          const fill = Math.max(0, Math.min(1, activeRating - star + 1));
+          const fill = Math.max(
+            0,
+            Math.min(1, activeRating - star + 1)
+          );
 
           return (
             <button
@@ -58,7 +69,10 @@ function RatingStars({ rating, onSelectRating }) {
                 full: star,
                 half: star - 0.5,
               })}
-              aria-pressed={rating === star || rating === star - 0.5}
+              aria-pressed={
+                rating === star || rating === star - 0.5
+              }
+              onMouseLeave={() => setHoveredRating(null)}
               className="
                 relative flex items-center justify-center
                 w-7 h-8 rounded-[6px]
@@ -69,8 +83,9 @@ function RatingStars({ rating, onSelectRating }) {
                 focus-visible:ring-amber-300
               "
             >
+              {/* شكل النجمة وتعبئتها */}
               <span className="relative block w-6 h-6 pointer-events-none">
-                {/* النجمة غير الممتلئة */}
+                {/* النجمة الفارغة */}
                 <Star
                   className="absolute inset-0 w-6 h-6"
                   fill="#FFF1C2"
@@ -78,13 +93,15 @@ function RatingStars({ rating, onSelectRating }) {
                   strokeWidth={1.8}
                 />
 
-                {/* الجزء الذهبي الممتلئ */}
+                {/* الجزء الذهبي */}
                 <span
                   className="absolute inset-y-0 left-0 overflow-hidden"
-                  style={{ width: `${fill * 100}%` }}
+                  style={{
+                    width: `${fill * 100}%`,
+                  }}
                 >
                   <Star
-                    className="w-6 h-6 max-w-none"
+                    className="block w-6 h-6 max-w-none"
                     fill="#FBBF24"
                     stroke="#F59E0B"
                     strokeWidth={1.8}
@@ -95,15 +112,23 @@ function RatingStars({ rating, onSelectRating }) {
               {/* النصف الأيسر: نصف نجمة */}
               <span
                 className="absolute inset-y-0 left-0 w-1/2 cursor-pointer"
-                onMouseEnter={() => setHoveredRating(star - 0.5)}
-                onClick={() => onSelectRating(star - 0.5)}
+                onMouseEnter={() =>
+                  setHoveredRating(star - 0.5)
+                }
+                onClick={() =>
+                  onSelectRating(star - 0.5)
+                }
               />
 
               {/* النصف الأيمن: نجمة كاملة */}
               <span
                 className="absolute inset-y-0 right-0 w-1/2 cursor-pointer"
-                onMouseEnter={() => setHoveredRating(star)}
-                onClick={() => onSelectRating(star)}
+                onMouseEnter={() =>
+                  setHoveredRating(star)
+                }
+                onClick={() =>
+                  onSelectRating(star)
+                }
               />
             </button>
           );
@@ -111,10 +136,13 @@ function RatingStars({ rating, onSelectRating }) {
       </div>
 
       {/* قيمة التقييم */}
-      <p className="mt-2 text-xs text-slate-500">
+      <p className="mt-2 text-xs text-slate-500" dir="auto">
         {activeRating > 0 ? (
           <span className="inline-flex items-center gap-1.5">
-            <span className="font-semibold text-amber-600">
+            <span
+              dir="ltr"
+              className="font-semibold text-amber-600"
+            >
               {activeRating.toFixed(1).replace(/\.0$/, "")} / 5
             </span>
 
@@ -146,7 +174,8 @@ export default function ReviewsSection() {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
-  const isFormInvalid = rating === 0 || !reviewText.trim();
+  const isFormInvalid =
+    rating === 0 || !reviewText.trim();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -160,7 +189,11 @@ export default function ReviewsSection() {
       comment: reviewText.trim(),
     };
 
-    setReviews((prevReviews) => [newReview, ...prevReviews]);
+    setReviews((prevReviews) => [
+      newReview,
+      ...prevReviews,
+    ]);
+
     setRating(0);
     setReviewText("");
   };
@@ -168,7 +201,7 @@ export default function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="w-full pt-5 sm:pt-6 lg:pt-6 px-4 sm:px-0 "
+      className="w-full pt-5 sm:pt-6 lg:pt-6 px-4 sm:px-0"
     >
       {/* عنوان القسم */}
       <h2 className="text-sm font-semibold text-[#202746] mb-7">
@@ -227,13 +260,19 @@ export default function ReviewsSection() {
             </p>
 
             {/* النجوم التفاعلية */}
-            <RatingStars rating={rating} onSelectRating={setRating} />
+            <RatingStars
+              rating={rating}
+              onSelectRating={setRating}
+            />
 
             {/* حقل كتابة المراجعة */}
             <textarea
+              dir="auto"
               rows={4}
               value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
+              onChange={(e) =>
+                setReviewText(e.target.value)
+              }
               placeholder={t("Share your experience...")}
               aria-label={t("Write your review")}
               className="

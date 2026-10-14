@@ -14,6 +14,8 @@ import {
   User,
   Baby,
 } from "lucide-react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import { useTranslation } from "react-i18next";
 import { features } from "./data/features";
 
@@ -115,19 +117,27 @@ export default function HotelOverview() {
         </div>
 
         {/* Small Location Map Preview */}
-        <div className="md:col-span-5">
+        <div className="md:col-span-5 z-0">
           <h2 className="text-base font-bold text-slate-800 mb-3">
             {t("Location")}
           </h2>
-
           <div className="rounded-[6px] overflow-hidden border border-gray-100 shadow-sm mb-2">
-            <img
-              src="/images/Rectan1.png"
-              alt={t("Map View")}
-              className="w-full h-36 object-cover bg-slate-100"
-            />
-          </div>
+            <MapContainer
+              center={[30.0444, 31.2357]}
+              zoom={13}
+              scrollWheelZoom={false}
+              className="w-full h-36"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
 
+              <Marker position={[30.0444, 31.2357]}>
+                <Popup>{t("Map View")}</Popup>
+              </Marker>
+            </MapContainer>
+          </div>
           <div className="flex justify-between items-start text-[11px] text-gray-500">
             <p>
               {t(
@@ -297,9 +307,7 @@ export default function HotelOverview() {
                       className="accent-[#25B9F5] w-5 h-5"
                     />
 
-                    <span className="text-[#202747]">
-                      {t("No extras")}
-                    </span>
+                    <span className="text-[#202747]">{t("No extras")}</span>
                   </div>
 
                   <span className="text-[#8A90A5]">+$0</span>
@@ -334,28 +342,20 @@ export default function HotelOverview() {
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">{t("Room")}</span>
 
-                <span className="text-[#3478FF] font-medium">
-                  960.00
-                </span>
+                <span className="text-[#3478FF] font-medium">960.00</span>
               </div>
 
               <div className="flex justify-between items-center gap-3">
-                <span className="text-[#303956]">
-                  {t("Fully refundable")}
-                </span>
+                <span className="text-[#303956]">{t("Fully refundable")}</span>
 
-                <span className="text-[#3478FF] font-medium">
-                  30.00
-                </span>
+                <span className="text-[#3478FF] font-medium">30.00</span>
               </div>
 
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">
                   {t("Extras")}{" "}
                   <span className="text-xs text-[#3478FF] ml-1">
-                    {selectedExtra === "breakfast"
-                      ? t("Breakfast buffet")
-                      : ""}
+                    {selectedExtra === "breakfast" ? t("Breakfast buffet") : ""}
                   </span>
                 </span>
 
@@ -367,9 +367,7 @@ export default function HotelOverview() {
               <div className="flex justify-between items-center gap-3">
                 <span className="text-[#303956]">{t("Taxes")}</span>
 
-                <span className="text-[#3478FF] font-medium">
-                  30.00
-                </span>
+                <span className="text-[#3478FF] font-medium">30.00</span>
               </div>
 
               <div className="border-t border-[#D8E4FF] pt-4 mt-5 flex justify-between items-center gap-3">
@@ -384,9 +382,9 @@ export default function HotelOverview() {
                 </div>
 
                 <span className="font-bold text-[#25B9F5] text-lg whitespace-nowrap">
-                  {(
-                    1698 + (selectedExtra === "breakfast" ? 25 : -25)
-                  ).toFixed(2)}{" "}
+                  {(1698 + (selectedExtra === "breakfast" ? 25 : -25)).toFixed(
+                    2
+                  )}{" "}
                   SAR
                 </span>
               </div>

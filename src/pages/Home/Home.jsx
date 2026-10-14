@@ -122,7 +122,7 @@ export default function Home() {
               {/* Navigation Arrows */}
               <div
                 dir={isArabic ? "rtl" : "ltr"}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 mx-4"
               >
                 {/* Previous Button */}
                 <button

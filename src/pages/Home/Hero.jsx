@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Plane,
   Building2,
@@ -73,6 +74,7 @@ const formatDate = (date, language = "en") => {
 
 export default function Hero() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("hotel");
   const [goingTo, setGoingTo] = useState("Spain");
@@ -191,6 +193,35 @@ export default function Hero() {
     setRooms((previousRooms) =>
       previousRooms.filter((room) => room.id !== roomId)
     );
+  };
+
+  // إرسال بيانات البحث إلى صفحة الفنادق
+  const handleFindNow = () => {
+    if (!checkIn || !checkOut || checkOut <= checkIn) {
+      setActiveDropdown("dates");
+      return;
+    }
+
+    const totalTravelers = rooms.reduce(
+      (sum, room) => sum + room.adults + room.children,
+      0
+    );
+
+    navigate("/hotels", {
+      state: {
+        search: {
+          destination: goingTo,
+          checkIn,
+          checkOut,
+          rooms: rooms.length,
+          travelers: totalTravelers,
+          guests: rooms.map(({ adults, children }) => ({
+            adults,
+            children,
+          })),
+        },
+      },
+    });
   };
 
   return (
@@ -684,7 +715,7 @@ export default function Hero() {
                 {/* Find Now */}
                 <button
                   type="button"
-                  onClick={() => setActiveDropdown(null)}
+                  onClick={handleFindNow}
                   className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold py-3 sm:py-3.5 rounded-[6px] transition-all text-xs sm:text-sm mt-2 cursor-pointer shadow-md shadow-blue-500/20"
                 >
                   {t("Find Now")}

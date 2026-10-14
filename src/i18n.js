@@ -8,20 +8,22 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    lng: "en", // اللغة الافتراضية عند تشغيل الموقع
-
     fallbackLng: "en",
 
     supportedLngs: ["en", "ar"],
 
     detection: {
-      order: ["localStorage", "htmlTag", "navigator"],
+      order: ["localStorage"],
       caches: ["localStorage"],
       lookupLocalStorage: "i18nextLng",
     },
 
     interpolation: {
       escapeValue: false,
+    },
+
+    react: {
+      useSuspense: false,
     },
   });
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { MapPin } from "lucide-react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import { useTranslation } from "react-i18next";
 import { NEARBY_PLACES } from "./data/nearby";
 
@@ -24,18 +26,27 @@ export default function AreaSection() {
         </div>
 
         {/* Map Section */}
-        <div className="min-w-0 lg:col-span-6">
+        <div className="min-w-0 lg:col-span-6 z-0">
           <h2 className="mb-3 text-base font-bold text-slate-800 sm:text-lg">
             {t("Map")}
           </h2>
 
           <div className="overflow-hidden rounded-[6px] border border-gray-100 shadow-sm sm:rounded-[6px]">
-            <img
-              src="/images/Rectan2.png"
-              alt={t("Map showing the hotel's surrounding area")}
-              loading="lazy"
-              className="h-36 w-full bg-slate-100 object-cover"
-            />
+            <MapContainer
+              center={[30.0444, 31.2357]}
+              zoom={14}
+              scrollWheelZoom={false}
+              className="h-36 w-full bg-slate-100"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              <Marker position={[30.0444, 31.2357]}>
+                <Popup>{t("Map showing the hotel's surrounding area")}</Popup>
+              </Marker>
+            </MapContainer>
           </div>
 
           {/* Address Information */}

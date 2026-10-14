@@ -14,7 +14,10 @@ import {
   X,
 } from "lucide-react";
 
-export default function SearchBar({ onSearch = () => {} }) {
+export default function SearchBar({
+  onSearch = () => {},
+  initialSearch = null,
+}) {
   const { t, i18n } = useTranslation();
 
   const isRTL = i18n.language?.startsWith("ar");
@@ -45,30 +48,130 @@ export default function SearchBar({ onSearch = () => {} }) {
     "Maldives",
   ];
 
-  const [selectedCountry, setSelectedCountry] = useState("Germany");
+  const [selectedCountry, setSelectedCountry] = useState(
+    initialSearch?.destination || "Germany"
+  );
+
   const [showCountries, setShowCountries] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [distance, setDistance] = useState(10);
 
-  const [checkIn, setCheckIn] = useState("2026-10-23");
-  const [checkOut, setCheckOut] = useState("2026-11-20");
+  const [checkIn, setCheckIn] = useState(
+    initialSearch?.checkIn || "2026-10-23"
+  );
 
-  // التقويم الأول: Check-in
-  const [calendarMonth, setCalendarMonth] = useState(9);
-  const [calendarYear, setCalendarYear] = useState(2026);
+  const [checkOut, setCheckOut] = useState(
+    initialSearch?.checkOut || "2026-11-20"
+  );
 
-  // التقويم الثاني: Check-out مستقل عن التقويم الأول
-  const [checkOutCalendarMonth, setCheckOutCalendarMonth] = useState(10);
-  const [checkOutCalendarYear, setCheckOutCalendarYear] = useState(2026);
+  // تقويم Check-in
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const date = new Date(
+      `${initialSearch?.checkIn || "2026-10-23"}T12:00:00`
+    );
+    return date.getMonth();
+  });
+
+  const [calendarYear, setCalendarYear] = useState(() => {
+    const date = new Date(
+      `${initialSearch?.checkIn || "2026-10-23"}T12:00:00`
+    );
+    return date.getFullYear();
+  });
+
+  // تقويم Check-out مستقل عن تقويم Check-in
+  const [checkOutCalendarMonth, setCheckOutCalendarMonth] = useState(() => {
+    const date = new Date(
+      `${initialSearch?.checkOut || "2026-11-20"}T12:00:00`
+    );
+    return date.getMonth();
+  });
+
+  const [checkOutCalendarYear, setCheckOutCalendarYear] = useState(() => {
+    const date = new Date(
+      `${initialSearch?.checkOut || "2026-11-20"}T12:00:00`
+    );
+    return date.getFullYear();
+  });
 
   const [selectingCheckOut, setSelectingCheckOut] = useState(false);
 
-  const [rooms, setRooms] = useState([
-    { id: 1, adults: 1, children: 1 },
-    { id: 2, adults: 1, children: 1 },
-  ]);
+  const [rooms, setRooms] = useState(() => {
+    if (initialSearch?.guests?.length) {
+      return initialSearch.guests.map((guest, index) => ({
+        id: index + 1,
+        adults: Math.max(1, Number(guest.adults) || 1),
+        children: Math.max(0, Number(guest.children) || 0),
+      }));
+    }
+
+    const initialRoomCount = Math.min(
+      8,
+      Math.max(1, Number(initialSearch?.rooms) || 2)
+    );
+
+    return Array.from({ length: initialRoomCount }, (_, index) => ({
+      id: index + 1,
+      adults: 1,
+      children: 1,
+    }));
+  });
 
   const searchBarRef = useRef(null);
+
+  // مزامنة البيانات إذا وصلت عملية بحث جديدة من Hero
+  useEffect(() => {
+    if (!initialSearch) return;
+
+    if (initialSearch.destination) {
+      setSelectedCountry(initialSearch.destination);
+    }
+
+    if (initialSearch.checkIn) {
+      setCheckIn(initialSearch.checkIn);
+
+      const date = new Date(`${initialSearch.checkIn}T12:00:00`);
+
+      if (!Number.isNaN(date.getTime())) {
+        setCalendarMonth(date.getMonth());
+        setCalendarYear(date.getFullYear());
+      }
+    }
+
+    if (initialSearch.checkOut) {
+      setCheckOut(initialSearch.checkOut);
+
+      const date = new Date(`${initialSearch.checkOut}T12:00:00`);
+
+      if (!Number.isNaN(date.getTime())) {
+        setCheckOutCalendarMonth(date.getMonth());
+        setCheckOutCalendarYear(date.getFullYear());
+      }
+    }
+
+    if (initialSearch.guests?.length) {
+      setRooms(
+        initialSearch.guests.slice(0, 8).map((guest, index) => ({
+          id: index + 1,
+          adults: Math.max(1, Number(guest.adults) || 1),
+          children: Math.max(0, Number(guest.children) || 0),
+        }))
+      );
+    } else if (initialSearch.rooms) {
+      const roomCount = Math.min(
+        8,
+        Math.max(1, Number(initialSearch.rooms) || 1)
+      );
+
+      setRooms((previousRooms) =>
+        Array.from({ length: roomCount }, (_, index) => ({
+          id: index + 1,
+          adults: previousRooms[index]?.adults ?? 1,
+          children: previousRooms[index]?.children ?? 0,
+        }))
+      );
+    }
+  }, [initialSearch]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -93,15 +196,22 @@ export default function SearchBar({ onSearch = () => {} }) {
       prevRooms.map((room) => {
         if (room.id !== roomId) return room;
 
-        const newVal = room[type] + delta;
+        const newValue = room[type] + delta;
 
-        if (type === "adults" && newVal < 1) {
+        if (type === "adults" && newValue < 1) {
+          return room;
+        }
+
+        // الحد الأقصى 8 مسافرين في الغرفة الواحدة
+        const roomTotal = room.adults + room.children;
+
+        if (delta > 0 && roomTotal >= 8) {
           return room;
         }
 
         return {
           ...room,
-          [type]: Math.max(0, newVal),
+          [type]: Math.max(0, newValue),
         };
       })
     );
@@ -123,12 +233,13 @@ export default function SearchBar({ onSearch = () => {} }) {
   const removeRoom = (id) => {
     setRooms((prevRooms) => {
       if (prevRooms.length <= 1) return prevRooms;
+
       return prevRooms.filter((room) => room.id !== id);
     });
   };
 
   const totalTravelers = rooms.reduce(
-    (acc, room) => acc + room.adults + room.children,
+    (total, room) => total + room.adults + room.children,
     0
   );
 
@@ -142,6 +253,8 @@ export default function SearchBar({ onSearch = () => {} }) {
 
     const date = new Date(`${dateString}T12:00:00`);
 
+    if (Number.isNaN(date.getTime())) return "";
+
     return new Intl.DateTimeFormat(isRTL ? "ar" : "en", {
       day: "numeric",
       month: "short",
@@ -151,16 +264,18 @@ export default function SearchBar({ onSearch = () => {} }) {
   const dateSummary = `${formatDate(checkIn)} - ${formatDate(checkOut)}`;
 
   const hasValidDates =
-    Boolean(checkIn) && Boolean(checkOut) && checkOut > checkIn;
+    Boolean(checkIn) &&
+    Boolean(checkOut) &&
+    checkOut > checkIn;
 
   const handleSearch = () => {
     if (!hasValidDates) {
       setActiveModal("date");
-      setSelectingCheckOut(!checkIn || !checkOut);
+      setSelectingCheckOut(Boolean(checkIn) && !checkOut);
       return;
     }
 
-    onSearch({
+    const searchData = {
       destination: selectedCountry,
       checkIn,
       checkOut,
@@ -170,8 +285,9 @@ export default function SearchBar({ onSearch = () => {} }) {
         adults,
         children,
       })),
-    });
+    };
 
+    onSearch(searchData);
     closeModal();
   };
 
@@ -183,32 +299,32 @@ export default function SearchBar({ onSearch = () => {} }) {
       String(day).padStart(2, "0"),
     ].join("-");
 
-    // بدء فترة حجز جديدة عند اختيار Check-in
-    if (!selectingCheckOut || !checkIn || checkOut) {
+    if (!selectingCheckOut) {
       setCheckIn(selectedDate);
       setCheckOut("");
       setSelectingCheckOut(true);
       return;
     }
 
-    // يجب أن يكون Check-out بعد Check-in بيوم واحد على الأقل
     if (selectedDate <= checkIn) {
-      // عند اختيار تاريخ أقدم أو مساوٍ، اعتبريه Check-in جديدًا
       setCheckIn(selectedDate);
       setCheckOut("");
       setSelectingCheckOut(true);
       return;
     }
 
-    // حفظ تاريخ المغادرة الصحيح
     setCheckOut(selectedDate);
     setSelectingCheckOut(false);
   };
 
-  // تغيير شهر تقويم محدد دون تغيير التقويم الآخر
+  // تغيير شهر التقويم المحدد فقط
   const changeMonth = (delta, calendarIndex) => {
     if (calendarIndex === 0) {
-      const nextDate = new Date(calendarYear, calendarMonth + delta, 1);
+      const nextDate = new Date(
+        calendarYear,
+        calendarMonth + delta,
+        1
+      );
 
       setCalendarMonth(nextDate.getMonth());
       setCalendarYear(nextDate.getFullYear());
@@ -230,7 +346,6 @@ export default function SearchBar({ onSearch = () => {} }) {
 
   const getMonthOffset = (year, month) => {
     const day = new Date(year, month, 1).getDay();
-
     return (day + 6) % 7;
   };
 
@@ -253,7 +368,9 @@ export default function SearchBar({ onSearch = () => {} }) {
             onClick={() => changeMonth(-1, calendarIndex)}
             className="text-slate-400 hover:text-slate-600"
           >
-            <ChevronLeft className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
+            <ChevronLeft
+              className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`}
+            />
           </button>
 
           <span className="text-xs font-semibold text-slate-600">
@@ -266,7 +383,9 @@ export default function SearchBar({ onSearch = () => {} }) {
             onClick={() => changeMonth(1, calendarIndex)}
             className="text-slate-400 hover:text-slate-600"
           >
-            <ChevronRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
+            <ChevronRight
+              className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`}
+            />
           </button>
         </div>
 
@@ -279,50 +398,55 @@ export default function SearchBar({ onSearch = () => {} }) {
           ))}
         </div>
 
-        <div dir="ltr" className="grid grid-cols-7 gap-1 text-center text-xs">
-          {Array.from({ length: offset }, (_, i) => (
-            <span key={`empty-${i}`} />
+        <div
+          dir="ltr"
+          className="grid grid-cols-7 gap-1 text-center text-xs"
+        >
+          {Array.from({ length: offset }, (_, index) => (
+            <span key={`empty-${index}`} />
           ))}
 
-          {Array.from({ length: days }, (_, i) => i + 1).map((day) => {
-            const dateString = `${year}-${String(month + 1).padStart(
-              2,
-              "0"
-            )}-${String(day).padStart(2, "0")}`;
+          {Array.from({ length: days }, (_, index) => index + 1).map(
+            (day) => {
+              const dateString = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+              )}-${String(day).padStart(2, "0")}`;
 
-            const isSelected =
-              dateString === checkIn || dateString === checkOut;
+              const isSelected =
+                dateString === checkIn || dateString === checkOut;
 
-            const isBetween =
-              checkIn &&
-              checkOut &&
-              dateString > checkIn &&
-              dateString < checkOut;
+              const isBetween =
+                checkIn &&
+                checkOut &&
+                dateString > checkIn &&
+                dateString < checkOut;
 
-            return (
-              <button
-                type="button"
-                key={day}
-                aria-pressed={isSelected}
-                aria-label={`${day} ${monthName} ${year}`}
-                onClick={() => handleDateSelect(day, year, month)}
-                className={`
-                  h-7 w-7 rounded-full
-                  flex items-center justify-center
-                  text-[11px] mx-auto
-                  ${
-                    isSelected
-                      ? "bg-blue-600 text-white font-bold"
-                      : isBetween
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }
-                `}
-              >
-                {day}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  type="button"
+                  key={day}
+                  aria-pressed={isSelected}
+                  aria-label={`${day} ${monthName} ${year}`}
+                  onClick={() => handleDateSelect(day, year, month)}
+                  className={`
+                    h-7 w-7 rounded-full
+                    flex items-center justify-center
+                    text-[11px] mx-auto
+                    ${
+                      isSelected
+                        ? "bg-blue-600 text-white font-bold"
+                        : isBetween
+                        ? "bg-blue-100 text-blue-700"
+                        : "text-slate-600 hover:bg-slate-100"
+                    }
+                  `}
+                >
+                  {day}
+                </button>
+              );
+            }
+          )}
         </div>
       </div>
     );
@@ -409,7 +533,6 @@ export default function SearchBar({ onSearch = () => {} }) {
           onClick={() => {
             setActiveModal((prev) => {
               if (prev === "date") return null;
-
               setSelectingCheckOut(false);
               return "date";
             });
@@ -634,7 +757,9 @@ export default function SearchBar({ onSearch = () => {} }) {
                 background: isRTL
                   ? `linear-gradient(to left, #2563eb 0%, #2563eb ${
                       ((distance - 10) / 40) * 100
-                    }%, #dbeafe ${((distance - 10) / 40) * 100}%, #dbeafe 100%)`
+                    }%, #dbeafe ${
+                      ((distance - 10) / 40) * 100
+                    }%, #dbeafe 100%)`
                   : `linear-gradient(to right, #2563eb 0%, #2563eb ${
                       ((distance - 10) / 40) * 100
                     }%, #dbeafe ${
@@ -698,7 +823,6 @@ export default function SearchBar({ onSearch = () => {} }) {
             transition-all duration-200 ease-out
           `}
         >
-          {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-bold text-slate-800">
               {t("Check in-out")}
@@ -714,7 +838,6 @@ export default function SearchBar({ onSearch = () => {} }) {
             </button>
           </div>
 
-          {/* Selected Dates Summary Box */}
           <div className="flex items-center justify-between gap-3 bg-slate-50 border border-slate-100 rounded-lg p-3.5 mb-5">
             <div className="text-start">
               <p className="text-xs font-medium text-slate-400 mb-1">
@@ -743,7 +866,6 @@ export default function SearchBar({ onSearch = () => {} }) {
             </div>
           </div>
 
-          {/* Selection Status Prompt */}
           <p className="text-xs font-medium text-slate-500 mb-4">
             {t(
               selectingCheckOut
@@ -752,21 +874,17 @@ export default function SearchBar({ onSearch = () => {} }) {
             )}
           </p>
 
-          {/* Calendars Grid */}
           <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-6 max-sm:gap-8">
             {renderCalendar(calendarYear, calendarMonth, 0)}
 
             {renderCalendar(checkOutCalendarYear, checkOutCalendarMonth, 1)}
           </div>
 
-          {/* Confirm Button */}
           <button
             type="button"
             disabled={!hasValidDates}
             onClick={() => {
-              if (hasValidDates) {
-                closeModal();
-              }
+              if (hasValidDates) closeModal();
             }}
             className="w-full mt-6 py-3 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           >
@@ -831,14 +949,18 @@ export default function SearchBar({ onSearch = () => {} }) {
 
                 {/* ADULTS */}
                 <div className="flex items-center justify-between gap-3 mb-2">
-                  <span className="text-xs text-slate-500">{t("Adults")}</span>
+                  <span className="text-xs text-slate-500">
+                    {t("Adults")}
+                  </span>
 
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       aria-label={t("Decrease adults")}
                       disabled={room.adults <= 1}
-                      onClick={() => updateGuests(room.id, "adults", -1)}
+                      onClick={() =>
+                        updateGuests(room.id, "adults", -1)
+                      }
                       className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-slate-400 hover:border-slate-400 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Minus className="w-3 h-3" />
@@ -851,7 +973,9 @@ export default function SearchBar({ onSearch = () => {} }) {
                     <button
                       type="button"
                       aria-label={t("Increase adults")}
-                      onClick={() => updateGuests(room.id, "adults", 1)}
+                      onClick={() =>
+                        updateGuests(room.id, "adults", 1)
+                      }
                       className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
                     >
                       <Plus className="w-3 h-3" />
@@ -862,7 +986,9 @@ export default function SearchBar({ onSearch = () => {} }) {
                 {/* CHILDREN */}
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs text-slate-500">{t("Children")}</p>
+                    <p className="text-xs text-slate-500">
+                      {t("Children")}
+                    </p>
 
                     <p className="text-[9px] text-slate-400">
                       {t("Age: 0-17")}
@@ -874,7 +1000,9 @@ export default function SearchBar({ onSearch = () => {} }) {
                       type="button"
                       aria-label={t("Decrease children")}
                       disabled={room.children <= 0}
-                      onClick={() => updateGuests(room.id, "children", -1)}
+                      onClick={() =>
+                        updateGuests(room.id, "children", -1)
+                      }
                       className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-slate-400 hover:border-slate-400 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Minus className="w-3 h-3" />
@@ -887,7 +1015,9 @@ export default function SearchBar({ onSearch = () => {} }) {
                     <button
                       type="button"
                       aria-label={t("Increase children")}
-                      onClick={() => updateGuests(room.id, "children", 1)}
+                      onClick={() =>
+                        updateGuests(room.id, "children", 1)
+                      }
                       className="w-6 h-6 border rounded-[6px] flex items-center justify-center text-blue-600 border-blue-200 hover:border-blue-400"
                     >
                       <Plus className="w-3 h-3" />
