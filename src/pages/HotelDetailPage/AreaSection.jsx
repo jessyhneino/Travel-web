@@ -18,7 +18,7 @@ export default function AreaSection() {
             {t("About this area")}
           </h2>
 
-          <p className="text-xs leading-6 text-gray-500 break-words sm:text-sm">
+          <p className="text-xs leading-6 text-gray-600 break-words sm:text-sm">
             {t(
               "Located in Frankfurt Airport Area neighborhood, MY CLOUD Transit Hotel is connected to a rail/subway station. Neues Theater Höchst and Jahrhunderthalle are cultural highlights, and some of the area's landmarks include Hoechst Castle and Henninger Turm. Looking to enjoy an event or a game while in town? See what's happening at Deutsche Bank Park or Fraport Arena."
             )}
@@ -50,7 +50,7 @@ export default function AreaSection() {
           </div>
 
           {/* Address Information */}
-          <div className="mt-3 flex flex-col gap-3 text-xs text-gray-700 sm:flex-row sm:items-start sm:justify-between sm:text-sm">
+          <div className="mt-3 flex flex-col gap-3 text-xs text-gray-600 sm:flex-row sm:items-start sm:justify-between sm:text-sm">
             <div className="flex items-start gap-2 min-w-0">
               <p className="leading-5 break-words min-w-0">
                 {t(
@@ -84,20 +84,20 @@ export default function AreaSection() {
                 {section.items.map((item, index) => (
                   <li
                     key={`${section.title}-${index}`}
-                    className="flex items-center justify-between gap-4 text-xs text-gray-700 sm:text-sm"
+                    className="flex items-center justify-between gap-4 text-xs text-gray-600 sm:text-sm"
                   >
                     <div className="flex items-center gap-2 min-w-0">
-                      <Icon className="h-4 w-4 shrink-0 text-gray-700" />
+                      <Icon className="h-4 w-4 shrink-0 text-gray-600" />
 
                       <span
-                        className="truncate text-gray-700"
+                        className="truncate text-gray-600"
                         title={item.name}
                       >
                         {t(item.name)}
                       </span>
                     </div>
 
-                    <span className="shrink-0 text-gray-700 font-normal">
+                    <span className="shrink-0 text-gray-600 font-normal">
                       {t(item.time)}
                     </span>
                   </li>

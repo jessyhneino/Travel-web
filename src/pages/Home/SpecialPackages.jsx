@@ -96,7 +96,7 @@ export default function SpecialPackages() {
             </h3>
 
             {/* Package Description */}
-            <p className="w-full max-w-xl text-sm leading-relaxed text-gray-700 sm:text-[15px] md:text-base">
+            <p className="w-full max-w-xl text-sm leading-relaxed text-gray-600 sm:text-[15px] md:text-base">
               {t(currentPackage.description)}
             </p>
 
@@ -119,7 +119,7 @@ export default function SpecialPackages() {
                     />
                   </svg>
 
-                  <span className="text-gray-700">
+                  <span className="text-gray-600">
                     {t(feature)}
                   </span>
                 </div>
@@ -171,7 +171,7 @@ export default function SpecialPackages() {
         {/* Package Counter */}
         <div
           dir="ltr"
-          className="whitespace-nowrap text-center text-[10px] font-semibold tracking-wider text-gray-700 sm:text-xs"
+          className="whitespace-nowrap text-center text-[10px] font-semibold tracking-wider text-gray-600 sm:text-xs"
         >
           {t("Showing")} {formatNumber(currentIndex + 1)}/
           {formatNumber(packagesData.length)}

@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="w-full bg-white text-gray-700 font-sans py-12 px-7 sm:px-12 md:px-26 lg:px-40 border-t border-gray-100">
+    <footer className="w-full bg-white text-gray-600 font-sans py-12 px-7 sm:px-12 md:px-26 lg:px-40 border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         {/* Logo Header Section */}
         <div className="mb-8">
@@ -30,7 +30,7 @@ export default function Footer() {
                 <span>{t("TRAVEL WITH US")}</span>
               </div>
 
-              <p className="text-gray-700 text-[13px] leading-relaxed pl-4 max-w-sm">
+              <p className="text-gray-600 text-[13px] leading-relaxed pl-4 max-w-sm">
                 {t(
                   "No matter who you are, or where you are going, our travel brands help every type of traveler not only find the trip that's right for them, but get the best value every time."
                 )}
@@ -53,7 +53,7 @@ export default function Footer() {
                 <span>{t("PARTNER WITH US")}</span>
               </div>
 
-              <p className="text-gray-700 text-[13px] leading-relaxed pl-4 max-w-sm">
+              <p className="text-gray-600 text-[13px] leading-relaxed pl-4 max-w-sm">
                 {t(
                   "We connect partners big and small to the universe of travelers, giving access to data, tools and technology that empowers, maximizes potential and builds their business."
                 )}
@@ -67,7 +67,7 @@ export default function Footer() {
               {t("COMPANY")}
             </h3>
 
-            <ul className="space-y-2.5 text-xs text-gray-700">
+            <ul className="space-y-2.5 text-xs text-gray-600">
               <li>
                 <a href="#" className="hover:text-cyan-500 transition-colors">
                   {t("About")}
@@ -102,7 +102,7 @@ export default function Footer() {
               {t("POLICIES")}
             </h3>
 
-            <ul className="space-y-2.5 text-xs text-gray-700">
+            <ul className="space-y-2.5 text-xs text-gray-600">
               <li>
                 <a href="#" className="hover:text-cyan-500 transition-colors">
                   {t("Privacy Policy")}
@@ -122,7 +122,7 @@ export default function Footer() {
               {t("CONNECT WITH US")}
             </h3>
 
-            <ul className="space-y-2.5 text-xs text-gray-700">
+            <ul className="space-y-2.5 text-xs text-gray-600">
               <li>
                 <a href="#" className="hover:text-cyan-500 transition-colors">
                   {t("Facebook")}
@@ -148,7 +148,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar: Copyright & Payment Gateways */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-700">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-600">
           <p>{t("© 2023 Travel Tent. All rights reserved.")}</p>
 
           {/* Payment Badges */}

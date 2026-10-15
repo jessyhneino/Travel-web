@@ -22,19 +22,19 @@ const RoomCard = () => {
           {t("Economy Double Room, 1 Double Bed, Non Smoking")}
         </h3>
 
-        <div className="mb-4 flex flex-col gap-2 text-xs text-gray-700 sm:text-sm lg:text-xs xl:text-sm">
+        <div className="mb-4 flex flex-col gap-2 text-xs text-gray-600 sm:text-sm lg:text-xs xl:text-sm">
           <p className="flex items-center gap-2">
-            <Ruler className="h-4 w-4 shrink-0 text-gray-700" />
+            <Ruler className="h-4 w-4 shrink-0 text-gray-600" />
             <span>108 {t("sq ft")}</span>
           </p>
 
           <p className="flex items-center gap-2">
-            <Users className="h-4 w-4 shrink-0 text-gray-700" />
+            <Users className="h-4 w-4 shrink-0 text-gray-600" />
             <span>{t("Sleeps 2")}</span>
           </p>
 
           <p className="flex items-center gap-2">
-            <Bed className="h-4 w-4 shrink-0 text-gray-700" />
+            <Bed className="h-4 w-4 shrink-0 text-gray-600" />
             <span>{t("1 Double Bed")}</span>
           </p>
 
@@ -44,7 +44,7 @@ const RoomCard = () => {
             <div className="min-w-0">
               <span>{t("Fully refundable")}</span>
 
-              <span className="block font-normal text-gray-700 sm:ml-1 sm:inline">
+              <span className="block font-normal text-gray-600 sm:ml-1 sm:inline">
                 ({t("Before Sat, Oct 22")})
               </span>
             </div>
@@ -66,7 +66,7 @@ const RoomCard = () => {
             $245
           </span>
 
-          <p className="mt-0.5 text-[11px] text-gray-700 sm:text-xs">
+          <p className="mt-0.5 text-[11px] text-gray-600 sm:text-xs">
             $266 {t("total")}
           </p>
         </div>
