@@ -1,7 +1,7 @@
 export const HOTELS_DATA = [
   {
     id: 1,
-    imgSrc: "/images/Rectangle16.png",
+    imgSrc: "/images/Rectangle16.avif",
     name: "Royal Hotel",
     price: 180,
     rating: 4.5,
@@ -13,7 +13,7 @@ export const HOTELS_DATA = [
   },
   {
     id: 2,
-    imgSrc: "/images/Rectangle16.png",
+    imgSrc: "/images/Rectangle16.avif",
     name: "Blue Sea Hotel",
     price: 250,
     rating: 3,
@@ -25,7 +25,7 @@ export const HOTELS_DATA = [
   },
   {
     id: 3,
-    imgSrc: "/images/Rectangle16.png",
+    imgSrc: "/images/Rectangle16.avif",
     name: "City Apart-hotel",
     price: 150,
     rating: 3.5,
@@ -37,7 +37,7 @@ export const HOTELS_DATA = [
   },
   {
     id: 4,
-    imgSrc: "/images/Rectangle16.png",
+    imgSrc: "/images/Rectangle16.avif",
     name: "Residence Suites",
     price: 220,
     rating: 4.5,

@@ -6,7 +6,7 @@ export const packagesData = [
     description:
       "Lorem ipsum dolor sit amet consectetur. Diam odio condimentum in justo orci vitae ligula quis. Lacus etiam elit mi lacus scelerisque in consectetur. Feugiat commodo aenean adipiscing maecenas feugiat. Nibh tellus suscipit auctor nam malesuada non.",
     features: ["Hajj Drafts", "Hajj Visa", "Flights to Madinah"],
-    image: "/images/Group2311.png",
+    image: "/images/Group2311.avif",
   },
   {
     id: 2,
@@ -14,7 +14,7 @@ export const packagesData = [
     description:
       "lllllllllllllll llllllllll llllllllllllll llllllllllllll llllllllllll llllllllllllll lllllllllll ll  l ll   l ",
     features: ["VIP Transport", "5 Star Hotel", "Guided Tour"],
-    image: "/images/Rectangle.png",
+    image: "/images/Group2311.avif",
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ export const packagesData = [
     description:
       "jjjjjj jjjjjjjjj jjjjj j    jjjjjjjj jjj j jjjjjjj jjjjjjj jjjjjjj jjjj jjjjjjj jjjjj jj jjjjjjjjj jjjjjjjj jjjjjjjjj j",
     features: ["Hajj Visa", "Full Board Meals", "Bus Transportation"],
-    image: "/images/icon.png",
+    image: "/images/Group2311.avif",
   },
   {
     id: 4,
@@ -30,7 +30,7 @@ export const packagesData = [
     description:
       "bbbb bbb bbbbbb bbb bbbbbbbb bbbbbbbbb bbbbbbb bbbbbbbbbbb bbbbb bbbbbbbbb bbbbbb bbbbbbbb bbbbb bbbbb bbb bbbb bbbb ",
     features: ["Direct Flight", "Iftar & Suhoor", "Free Ziyarat"],
-    image: "/images/Group2311.png",
+    image: "/images/Group2311.avif",
   },
   {
     id: 5,
@@ -38,7 +38,7 @@ export const packagesData = [
     description:
       "zzzzzz zzz zzzzzz zzzzzzz zzzzzzz zzzzzz zzzzzzzz zzzzzz zzzzzz zzzzzzz zzzzzzz zzz zzz ",
     features: ["Family Suites", "Child Discount", "Private Transport"],
-    image: "/images/Group2311.png",
+    image: "/images/Group2311.avif",
   },
   {
     id: 6,
@@ -46,6 +46,6 @@ export const packagesData = [
     description:
       "aaaaaaa aaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaaa a aaaaaaaa aaaaaaaaa aaaaaaaaaaaaaa aaaaaaaaa aaaaa aaaaaaaaaaa",
     features: ["Custom Itinerary", "Private Car", "24/7 Support"],
-    image: "/images/Group2311.png",
+    image: "/images/Group2311.avif",
   },
 ];

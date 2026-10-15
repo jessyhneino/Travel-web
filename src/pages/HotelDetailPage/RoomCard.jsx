@@ -10,7 +10,7 @@ const RoomCard = () => {
       {/* Room Image */}
       <div className="w-full overflow-hidden rounded-[6px]">
         <img
-          src="/images/Rectangle17.png"
+          src="/images/Rectangle17.avif"
           alt={t("Economy Double Room")}
           className="h-40 w-full object-cover transition-transform duration-300 hover:scale-105 xs:h-44 sm:h-48 md:h-44 lg:h-48 xl:h-30"
         />

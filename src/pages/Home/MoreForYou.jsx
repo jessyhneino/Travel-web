@@ -73,7 +73,7 @@ export default function MoreForYou() {
             {/* Quick Trips Card */}
             <div className="md:col-span-2 group relative h-60 sm:h-64 md:h-56 lg:h-64 rounded-[6px] overflow-hidden bg-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
               <img
-                src="/images/Rect4.png"
+                src="/images/Rect4.avif"
                 alt={t("Quick Trips")}
                 className="w-full h-full object-cover"
               />
