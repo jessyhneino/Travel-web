@@ -76,7 +76,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                     {t("John Dou")}
                   </h3>
 
-                  <p className="text-xs text-slate-500 truncate mt-1 font-normal">
+                  <p className="text-xs text-slate-900 truncate mt-1 font-normal">
                     Johndouemail@gmail.com
                   </p>
                 </div>
@@ -125,7 +125,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <a
                   href="#edit-profile"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+                  className="block text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors"
                 >
                   {t("Edit Profile")}
                 </a>
@@ -133,7 +133,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <button
                   type="button"
                   onClick={toggleLanguage}
-                  className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
+                  className="block text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors cursor-pointer"
                 >
                   {t("Language")} · {isArabic ? "English" : "العربية"}
                 </button>
@@ -141,7 +141,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <a
                   href="#logout"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block text-slate-400 hover:text-red-500 text-sm font-medium transition-colors"
+                  className="block text-slate-500 hover:text-red-500 text-sm font-medium transition-colors"
                 >
                   {t("Logout")}
                 </a>
@@ -201,7 +201,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <button
               type="button"
               onClick={() => setIsMenuOpen(false)}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-[6px] transition-colors cursor-pointer"
+              className="text-slate-500 hover:text-slate-600 p-1 rounded-[6px] transition-colors cursor-pointer"
               aria-label={t("Close menu")}
             >
               <X className="w-5 h-5" />
@@ -213,7 +213,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <a
               href="#requests"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
+              className="block text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors"
             >
               {t("My Requests")}
             </a>
@@ -221,7 +221,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <a
               href="#notifications"
               onClick={() => setIsMenuOpen(false)}
-              className="inline-flex items-center gap-1 text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
+              className="inline-flex items-center gap-1 text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors"
             >
               <span>{t("Notifications")}</span>
               <span className="w-2 h-2 rounded-full bg-sky-400 -mt-2"></span>
@@ -230,7 +230,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <Link
               to="/hotels"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
+              className="block text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors"
             >
               {t("About")}
             </Link>
@@ -238,7 +238,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <a
               href="#contact"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-800 hover:text-blue-600 font-bold text-sm transition-colors"
+              className="block text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors"
             >
               {t("Contact")}
             </a>
@@ -251,7 +251,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <a
               href="#edit-profile"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+              className="block text-slate-500 hover:text-slate-600 text-sm font-medium transition-colors"
             >
               {t("Edit Profile")}
             </a>
@@ -259,7 +259,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <button
               type="button"
               onClick={toggleLanguage}
-              className="block text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
+              className="block text-slate-500 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
             >
               {t("Language")} · {isArabic ? "English" : "العربية"}
             </button>
@@ -267,7 +267,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
             <a
               href="#logout"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-slate-400 hover:text-red-500 text-sm font-medium transition-colors"
+              className="block text-slate-500 hover:text-red-500 text-sm font-medium transition-colors"
             >
               {t("Logout")}
             </a>
