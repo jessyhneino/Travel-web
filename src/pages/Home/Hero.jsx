@@ -80,18 +80,13 @@ export default function Hero() {
 
   const [activeDropdown, setActiveDropdown] = useState(null);
 
-  const [rooms, setRooms] = useState([
-    { id: 1, adults: 2, children: 0 },
-  ]);
+  const [rooms, setRooms] = useState([{ id: 1, adults: 2, children: 0 }]);
 
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setActiveDropdown(null);
       }
     };
@@ -121,8 +116,7 @@ export default function Hero() {
     );
 
     const roomLabel = rooms.length === 1 ? t("room") : t("rooms");
-    const travelerLabel =
-      totalTravelers === 1 ? t("traveler") : t("travelers");
+    const travelerLabel = totalTravelers === 1 ? t("traveler") : t("travelers");
 
     setTravelers(
       `${rooms.length} ${roomLabel}, ${totalTravelers} ${travelerLabel}`
@@ -142,9 +136,7 @@ export default function Hero() {
       );
     } else if (newCheckIn) {
       setDateRange(
-        `${formatDate(newCheckIn, i18n.language)} - ${t(
-          "Select check-out"
-        )}`
+        `${formatDate(newCheckIn, i18n.language)} - ${t("Select check-out")}`
       );
     } else {
       setDateRange(t("Select dates"));
@@ -281,9 +273,7 @@ export default function Hero() {
                     type="button"
                     onClick={() =>
                       setActiveDropdown(
-                        activeDropdown === "destination"
-                          ? null
-                          : "destination"
+                        activeDropdown === "destination" ? null : "destination"
                       )
                     }
                     className="w-full cursor-pointer border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 text-left"
@@ -396,10 +386,7 @@ export default function Hero() {
                                 const newCheckIn = e.target.value;
                                 let newCheckOut = checkOut;
 
-                                if (
-                                  newCheckOut &&
-                                  newCheckOut <= newCheckIn
-                                ) {
+                                if (newCheckOut && newCheckOut <= newCheckIn) {
                                   const nextDay = new Date(
                                     `${newCheckIn}T12:00:00`
                                   );
@@ -475,11 +462,7 @@ export default function Hero() {
                             !checkIn || !checkOut || checkOut <= checkIn
                           }
                           onClick={() => {
-                            if (
-                              checkIn &&
-                              checkOut &&
-                              checkOut > checkIn
-                            ) {
+                            if (checkIn && checkOut && checkOut > checkIn) {
                               setActiveDropdown(null);
                             }
                           }}
@@ -497,9 +480,7 @@ export default function Hero() {
                       type="button"
                       onClick={() =>
                         setActiveDropdown(
-                          activeDropdown === "travelers"
-                            ? null
-                            : "travelers"
+                          activeDropdown === "travelers" ? null : "travelers"
                         )
                       }
                       className={`w-full border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
@@ -594,9 +575,7 @@ export default function Hero() {
                                     onClick={() =>
                                       updateRoom(room.id, "adults", 1)
                                     }
-                                    disabled={
-                                      room.adults + room.children >= 8
-                                    }
+                                    disabled={room.adults + room.children >= 8}
                                     aria-label={t("Increase adults")}
                                     className="w-7 h-7 flex items-center justify-center rounded-full border border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-600 disabled:opacity-40 disabled:cursor-not-allowed"
                                   >
@@ -639,9 +618,7 @@ export default function Hero() {
                                     onClick={() =>
                                       updateRoom(room.id, "children", 1)
                                     }
-                                    disabled={
-                                      room.adults + room.children >= 8
-                                    }
+                                    disabled={room.adults + room.children >= 8}
                                     aria-label={t("Increase children")}
                                     className="w-7 h-7 flex items-center justify-center rounded-full border border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-600 disabled:opacity-40 disabled:cursor-not-allowed"
                                   >
@@ -697,9 +674,11 @@ export default function Hero() {
         <img
           src="/images/Isolation_Mode.png"
           alt={t("Leaf Decorative Art")}
-          className={`w-[300px] h-[624px] transform ${
+          className={`w-[300px] h-[624px] object-cover transform ${
             i18n.language.startsWith("ar") ? "scale-x-[-1]" : ""
           }`}
+          loading="lazy"
+          decoding="async"
         />
       </div>
     </div>
