@@ -224,7 +224,7 @@ export default function Hotels() {
 
           {/* HOTELS LIST */}
           <main className="flex-1 flex flex-col gap-4 w-full">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-600">
               {t("{{count}} hotels found", {
                 count: filteredHotels.length,
               })}
@@ -264,7 +264,7 @@ export default function Hotels() {
                   {t("No hotels found")}
                 </h3>
 
-                <p className="text-sm text-slate-500 mb-4">
+                <p className="text-sm text-slate-600 mb-4">
                   {t(
                     "Try changing your filters to see more results."
                   )}

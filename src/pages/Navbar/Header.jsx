@@ -125,7 +125,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <a
                   href="#edit-profile"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors"
+                  className="block text-slate-500 hover:text-slate-600 text-sm font-medium transition-colors"
                 >
                   {t("Edit Profile")}
                 </a>
@@ -133,7 +133,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
                 <button
                   type="button"
                   onClick={toggleLanguage}
-                  className="block text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors cursor-pointer"
+                  className="block text-slate-500 hover:text-slate-600 text-sm font-medium transition-colors cursor-pointer"
                 >
                   {t("Language")} · {isArabic ? "English" : "العربية"}
                 </button>

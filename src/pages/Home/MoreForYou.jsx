@@ -37,7 +37,7 @@ export default function MoreForYou() {
 
                   {/* Placeholder Icon */}
                   {!card.imageSrc && (
-                    <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+                    <div className="absolute inset-0 flex items-center justify-center text-slate-600">
                       <svg
                         className="w-10 h-10 stroke-current opacity-40"
                         fill="none"
@@ -60,7 +60,7 @@ export default function MoreForYou() {
                     {t(card.title)}
                   </h3>
 
-                  <p className="mt-1 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-[90%]">
+                  <p className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed max-w-[90%]">
                     {t(card.description)}
                   </p>
                 </div>

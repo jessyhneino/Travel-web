@@ -136,7 +136,7 @@ function RatingStars({ rating, onSelectRating }) {
       </div>
 
       {/* قيمة التقييم */}
-      <p className="mt-2 text-xs text-slate-500" dir="auto">
+      <p className="mt-2 text-xs text-slate-600" dir="auto">
         {activeRating > 0 ? (
           <span className="inline-flex items-center gap-1.5">
             <span
@@ -146,7 +146,7 @@ function RatingStars({ rating, onSelectRating }) {
               {activeRating.toFixed(1).replace(/\.0$/, "")} / 5
             </span>
 
-            <span className="text-slate-400">
+            <span className="text-slate-600">
               {activeRating === 5
                 ? `— ${t("Excellent")}`
                 : activeRating >= 4

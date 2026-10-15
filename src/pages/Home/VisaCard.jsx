@@ -23,7 +23,7 @@ export default function VisaCard({ country, imageSrc, flagSrc }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-400 text-xs text-center p-2">
+          <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-600 text-xs text-center p-2">
             <span></span>
           </div>
         )}

@@ -89,7 +89,7 @@ export default function HotelOverview() {
           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
         </div>
 
-        <p className="text-sm font-medium text-slate-500">
+        <p className="text-sm font-medium text-slate-600">
           {t("4.2/5 Very Good")}
         </p>
 

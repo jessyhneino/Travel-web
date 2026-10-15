@@ -236,7 +236,7 @@ export default function Home() {
             </div>
 
             {/* Mobile Hint */}
-            <p className="mt-3 text-xs text-slate-400 sm:hidden">
+            <p className="mt-3 text-xs text-slate-600 sm:hidden">
               {isArabic
                 ? "اسحبي لاكتشاف المزيد من الدول ←"
                 : "Swipe to discover more countries →"}

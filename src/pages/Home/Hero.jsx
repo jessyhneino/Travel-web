@@ -278,7 +278,7 @@ export default function Hero() {
                     }
                     className="w-full cursor-pointer border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 text-left"
                   >
-                    <span className="text-xs sm:text-sm text-slate-500 whitespace-nowrap">
+                    <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">
                       {t("Going to:")}
                     </span>
 
@@ -294,7 +294,7 @@ export default function Hero() {
                     </span>
 
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-500 shrink-0 ${
+                      className={`w-4 h-4 text-slate-600 shrink-0 ${
                         activeDropdown === "destination" ? "rotate-180" : ""
                       }`}
                     />
@@ -302,7 +302,7 @@ export default function Hero() {
 
                   {activeDropdown === "destination" && (
                     <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-2 max-h-56 overflow-y-auto">
-                      <p className="px-3 py-2 text-xs font-semibold text-slate-400">
+                      <p className="px-3 py-2 text-xs font-semibold text-slate-600">
                         {t("Choose your destination")}
                       </p>
 
@@ -346,7 +346,7 @@ export default function Hero() {
                       dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
-                        <label className="block text-[10px] sm:text-xs text-slate-400 mb-0.5">
+                        <label className="block text-[10px] sm:text-xs text-slate-600 mb-0.5">
                           {t("Check in-out:")}
                         </label>
 
@@ -356,7 +356,7 @@ export default function Hero() {
                       </div>
 
                       <ChevronDown
-                        className={`w-4 h-4 ml-1 text-slate-500 shrink-0 fill-slate-500 ${
+                        className={`w-4 h-4 ml-1 text-slate-600 shrink-0 fill-slate-500 ${
                           activeDropdown === "dates" ? "rotate-180" : ""
                         }`}
                       />
@@ -374,7 +374,7 @@ export default function Hero() {
                         <div className="space-y-3">
                           {/* Check-in Field */}
                           <div>
-                            <label className="block text-xs text-slate-500 mb-1.5">
+                            <label className="block text-xs text-slate-600 mb-1.5">
                               {t("Check-in")}
                             </label>
 
@@ -412,7 +412,7 @@ export default function Hero() {
 
                           {/* Check-out Field */}
                           <div>
-                            <label className="block text-xs text-slate-500 mb-1.5">
+                            <label className="block text-xs text-slate-600 mb-1.5">
                               {t("Check-out")}
                             </label>
 
@@ -491,7 +491,7 @@ export default function Hero() {
                       dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
-                        <label className="block text-[10px] sm:text-xs text-slate-400 mb-0.5">
+                        <label className="block text-[10px] sm:text-xs text-slate-600 mb-0.5">
                           {t("Travelers")}
                         </label>
 
@@ -501,7 +501,7 @@ export default function Hero() {
                       </div>
 
                       <ChevronDown
-                        className={`w-4 h-4 ml-1 text-slate-500 shrink-0 fill-slate-500 ${
+                        className={`w-4 h-4 ml-1 text-slate-600 shrink-0 fill-slate-500 ${
                           activeDropdown === "travelers" ? "rotate-180" : ""
                         }`}
                       />
@@ -534,7 +534,7 @@ export default function Hero() {
                                     aria-label={`${t("Remove room")} ${
                                       index + 1
                                     }`}
-                                    className="p-1.5 rounded-[6px] text-slate-400 hover:text-red-500 hover:bg-red-50"
+                                    className="p-1.5 rounded-[6px] text-slate-600 hover:text-red-500 hover:bg-red-50"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -548,7 +548,7 @@ export default function Hero() {
                                     {t("Adults")}
                                   </p>
 
-                                  <p className="text-[11px] text-slate-400">
+                                  <p className="text-[11px] text-slate-600">
                                     {t("Ages 18+")}
                                   </p>
                                 </div>
@@ -591,7 +591,7 @@ export default function Hero() {
                                     {t("Children")}
                                   </p>
 
-                                  <p className="text-[11px] text-slate-400">
+                                  <p className="text-[11px] text-slate-600">
                                     {t("Ages 0–17")}
                                   </p>
                                 </div>

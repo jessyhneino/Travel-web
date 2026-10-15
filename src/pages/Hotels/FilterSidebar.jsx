@@ -163,7 +163,7 @@ function FilterContent({
               type="button"
               onClick={onClose}
               aria-label={t("Close filters")}
-              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 transition"
+              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-600 transition"
             >
               <X size={18} />
             </button>
@@ -247,7 +247,7 @@ function PriceFilter({ price, setPrice, isArabic }) {
           className="flex justify-between text-xs font-semibold mt-2"
         >
           <span className="text-blue-600">${price}</span>
-          <span className="text-slate-400">$300</span>
+          <span className="text-slate-600">$300</span>
         </div>
       </div>
     </div>
@@ -280,7 +280,7 @@ function FilterSection({
         return (
           <label
             key={item.id}
-            className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-500 hover:text-slate-800 transition"
+            className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-600 hover:text-slate-800 transition"
           >
             <input
               type="checkbox"

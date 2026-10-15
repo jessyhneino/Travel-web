@@ -96,7 +96,7 @@ export default function HotelCard({
             </div>
 
             {/* DESCRIPTION */}
-            <p className="text-xs text-slate-400 line-clamp-2 max-w-lg">
+            <p className="text-xs text-slate-600 line-clamp-2 max-w-lg">
               {t(description)}
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function HotelCard({
               {price} {currency}
             </span>
 
-            <span className="text-[10px] text-slate-400 text-right">
+            <span className="text-[10px] text-slate-600 text-right">
               {t("Total for 1 night (incl. VAT)")}
             </span>
           </div>
