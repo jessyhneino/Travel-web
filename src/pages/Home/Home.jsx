@@ -130,7 +130,7 @@ export default function Home() {
                   aria-label={t("Previous visa cards")}
                   onClick={() => scrollCarousel(isArabic ? 1 : -1)}
                   className="w-10 h-10 rounded-full bg-white
-                  shadow-sm border border-slate-200
+                  shadow-sm border border-slate-700
                   flex items-center justify-center text-slate-700
                   hover:bg-[#2563eb] hover:text-white
                   hover:border-[#2563eb]
@@ -158,7 +158,7 @@ export default function Home() {
                   aria-label={t("Next visa cards")}
                   onClick={() => scrollCarousel(isArabic ? -1 : 1)}
                   className="w-10 h-10 rounded-full bg-white
-                  shadow-sm border border-slate-200
+                  shadow-sm border border-slate-700
                   flex items-center justify-center text-slate-700
                   hover:bg-[#2563eb] hover:text-white
                   hover:border-[#2563eb]

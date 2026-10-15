@@ -130,7 +130,7 @@ export default function SpecialPackages() {
             <div className="flex w-full justify-center pt-1 lg:justify-start">
               <button
                 type="button"
-                className="rounded-[6px] border border-sky-300 px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm sm:px-6"
+                className="rounded-[6px] border border-sky-400 px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm sm:px-6"
               >
                 {t("View Details")}
               </button>
@@ -152,7 +152,7 @@ export default function SpecialPackages() {
           className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-opacity hover:opacity-80"
         >
           <span
-            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-400 text-sm ${
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm ${
               isArabic ? "scale-x-[-1]" : ""
             }`}
           >
@@ -193,7 +193,7 @@ export default function SpecialPackages() {
           </span>
 
           <span
-            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-400 text-sm ${
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm ${
               isArabic ? "scale-x-[-1]" : ""
             }`}
           >

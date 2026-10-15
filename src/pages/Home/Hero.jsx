@@ -255,7 +255,7 @@ export default function Hero() {
                     onClick={() => setActiveTab(id)}
                     className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-[6px] flex-1 sm:flex-none ${
                       activeTab === id
-                        ? "bg-blue-50 text-blue-600 font-semibold"
+                        ? "bg-[#2870FB1A] text-blue-600 font-semibold"
                         : "text-slate-700 hover:text-slate-900 hover:bg-slate-50 font-medium"
                     }`}
                   >
