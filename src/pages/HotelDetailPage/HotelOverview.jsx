@@ -61,7 +61,7 @@ export default function HotelOverview() {
               className={`pb-4 -mb-3 whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? "text-blue-600 border-blue-600 font-semibold"
-                  : "text-gray-400 border-transparent hover:text-blue-600"
+                  : "text-gray-700 border-transparent hover:text-blue-600"
               }`}
             >
               {t(tab.label)}
@@ -93,7 +93,7 @@ export default function HotelOverview() {
           {t("4.2/5 Very Good")}
         </p>
 
-        <p className="text-xs text-gray-400 mt-1">
+        <p className="text-xs text-gray-700 mt-1">
           {t("Guests rated this property 4.0/5 for cleanliness.")}
         </p>
       </div>
@@ -138,7 +138,7 @@ export default function HotelOverview() {
               </Marker>
             </MapContainer>
           </div>
-          <div className="flex justify-between items-start text-[11px] text-gray-500">
+          <div className="flex justify-between items-start text-[11px] text-gray-700">
             <p>
               {t(
                 "Terminal 1 / Gate z 25, frankfurt am Main/ Airport, Frankfurt, Hessen, 60549"
