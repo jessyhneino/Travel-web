@@ -41,10 +41,10 @@ const RoomCard = () => {
           <div className="flex items-start gap-2 font-medium leading-relaxed text-emerald-600">
             <CheckCircle className="mt-0.5 h-4 w-4 shrink-0" />
 
-            <div className="min-w-0">
+            <div className="min-w-0 text-[#0C9600]">
               <span>{t("Fully refundable")}</span>
 
-              <span className="block font-normal text-gray-600 sm:ml-1 sm:inline">
+              <span className="block font-normal text-[#0C9600] sm:ml-1 sm:inline">
                 ({t("Before Sat, Oct 22")})
               </span>
             </div>
@@ -53,16 +53,16 @@ const RoomCard = () => {
 
         <button
           type="button"
-          className="text-xs font-semibold text-blue-600 transition hover:underline sm:text-sm"
+          className="text-[14px] font-semibold text-[#2870FB] transition hover:underline sm:text-sm"
         >
           {t("More details")}
         </button>
       </div>
 
       {/* Price and Reserve */}
-      <div className="mt-auto flex items-center justify-between gap-3 border-t border-gray-100 pt-3">
+      <div className=" flex items-center justify-between gap-3 ">
         <div className="min-w-0">
-          <span className="text-lg font-bold text-blue-600 sm:text-xl">
+          <span className="text-lg font-bold text-[#26BBFD] sm:text-xl">
             $245
           </span>
 

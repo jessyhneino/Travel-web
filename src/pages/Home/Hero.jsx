@@ -61,6 +61,8 @@ export default function Hero() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  const isArabic = (i18n.resolvedLanguage || i18n.language).startsWith("ar");
+
   const [activeTab, setActiveTab] = useState("hotel");
   const [goingTo, setGoingTo] = useState("Spain");
 
@@ -83,6 +85,7 @@ export default function Hero() {
   const [rooms, setRooms] = useState([{ id: 1, adults: 2, children: 0 }]);
 
   const dropdownRef = useRef(null);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -98,6 +101,35 @@ export default function Hero() {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
+  }, []);
+
+
+
+  useEffect(() => {
+    const heroElement = heroRef.current;
+    if (!heroElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          heroElement.classList.remove("hero-animate");
+
+          // Restart animation whenever Hero enters the viewport
+          requestAnimationFrame(() => {
+            heroElement.classList.add("hero-animate");
+          });
+        } else {
+          heroElement.classList.remove("hero-animate");
+        }
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(heroElement);
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -180,7 +212,6 @@ export default function Hero() {
     );
   };
 
-  // إرسال بيانات البحث إلى صفحة الفنادق
   const handleFindNow = () => {
     if (!checkIn || !checkOut || checkOut <= checkIn) {
       setActiveDropdown("dates");
@@ -210,17 +241,18 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative w-full min-h-screen overflow-x-hidden lg:overflow-visible -top-[50px]">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0 h-[100vh] md:h-[90vh] w-full">
+<div
+  ref={heroRef}
+  className="relative w-full min-h-screen overflow-hidden -top-[50px]"
+>      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0 h-[100vh] md:h-[90vh] w-full overflow-hidden">
         <div
           className="relative w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(${BACKGROUND_IMAGE_URL})`,
-            WebkitClipPath: "url(#heroWaveClip)",
           }}
         >
-          <div className="absolute bottom-0 left-0 z-10 w-full pointer-events-none">
+          <div className="absolute bottom-0 left-0 z-10 w-full pointer-events-none overflow-hidden">
             <img
               src="/images/Group.avif"
               alt={t("Wave curves")}
@@ -231,12 +263,11 @@ export default function Hero() {
       </div>
 
       {/* Main Content */}
-      <main className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-12 sm:pb-16 lg:pb-24 min-[1000px]:-translate-y-10">
+      <main className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-12 sm:pb-16 lg:pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6 sm:mt-8 lg:mt-10">
-          {/* Search Card */}
           <div className="flex flex-col items-center justify-center w-full pt-2 lg:col-span-12">
-            {/* Logo */}
-            <div className="mb-3 opacity-90">
+            {/* Logo - Animation from top */}
+            <div className="mb-3 opacity-90 hero-logo-animation">
               <img
                 src="/images/icon.png"
                 alt={t("Logo Watermark")}
@@ -244,8 +275,8 @@ export default function Hero() {
               />
             </div>
 
-            {/* Search Box */}
-            <div className="w-[93%] sm:max-w-[90%] md:max-w-[450px] bg-white rounded-[6px] p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm">
+            {/* Search Box - Smooth entrance */}
+            <div className="w-[93%] sm:max-w-[90%] md:max-w-[450px] bg-white rounded-[6px] p-4 sm:p-6 shadow-lg sm:shadow-sm border border-slate-100/80 backdrop-blur-sm hero-card-animation">
               {/* Category Tabs */}
               <div className="flex items-center justify-between sm:justify-center gap-2 sm:gap-6 md:gap-8 mb-5 sm:mb-6">
                 {TABS.map(({ id, label, icon: Icon }) => (
@@ -276,18 +307,19 @@ export default function Hero() {
                         activeDropdown === "destination" ? null : "destination"
                       )
                     }
-                    className="w-full cursor-pointer border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 text-left"
+                    dir={isArabic ? "rtl" : "ltr"}
+                    className={`w-full cursor-pointer border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white flex items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500/20 ${
+                      isArabic ? "text-right" : "text-left"
+                    }`}
                   >
                     <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">
                       {t("Going to:")}
                     </span>
 
                     <span
-                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
+                      dir={isArabic ? "rtl" : "ltr"}
                       className={`w-full text-xs font-semibold text-blue-600 sm:text-sm truncate ${
-                        i18n.language.startsWith("ar")
-                          ? "text-right"
-                          : "text-left"
+                        isArabic ? "text-right" : "text-left"
                       }`}
                     >
                       {t(goingTo)}
@@ -301,8 +333,17 @@ export default function Hero() {
                   </button>
 
                   {activeDropdown === "destination" && (
-                    <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-2 max-h-56 overflow-y-auto">
-                      <p className="px-3 py-2 text-xs font-semibold text-slate-600">
+                    <div
+                      dir={isArabic ? "rtl" : "ltr"}
+                      className={`absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-[6px] shadow-xl p-2 max-h-56 overflow-y-auto ${
+                        isArabic ? "text-right" : "text-left"
+                      }`}
+                    >
+                      <p
+                        className={`px-3 py-2 text-xs font-semibold text-slate-600 ${
+                          isArabic ? "text-right" : "text-left"
+                        }`}
+                      >
                         {t("Choose your destination")}
                       </p>
 
@@ -314,7 +355,10 @@ export default function Hero() {
                             setGoingTo(country);
                             setActiveDropdown(null);
                           }}
-                          className={`w-full text-left px-3 py-2.5 rounded-[6px] text-sm cursor-pointer ${
+                          dir={isArabic ? "rtl" : "ltr"}
+                          className={`w-full ${
+                            isArabic ? "text-right" : "text-left"
+                          } px-3 py-2.5 rounded-[6px] text-sm cursor-pointer ${
                             goingTo === country
                               ? "bg-blue-50 text-blue-600 font-semibold"
                               : "text-slate-700 hover:bg-slate-50"
@@ -339,11 +383,9 @@ export default function Hero() {
                         )
                       }
                       className={`w-full border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
-                        i18n.language.startsWith("ar")
-                          ? "text-right"
-                          : "text-left"
+                        isArabic ? "text-right" : "text-left"
                       }`}
-                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
+                      dir={isArabic ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
                         <label className="block text-[10px] sm:text-xs text-slate-600 mb-0.5">
@@ -372,7 +414,6 @@ export default function Hero() {
                         </div>
 
                         <div className="space-y-3">
-                          {/* Check-in Field */}
                           <div>
                             <label className="block text-xs text-slate-600 mb-1.5">
                               {t("Check-in")}
@@ -390,7 +431,6 @@ export default function Hero() {
                                   const nextDay = new Date(
                                     `${newCheckIn}T12:00:00`
                                   );
-
                                   nextDay.setDate(nextDay.getDate() + 1);
 
                                   const year = nextDay.getFullYear();
@@ -410,7 +450,6 @@ export default function Hero() {
                             />
                           </div>
 
-                          {/* Check-out Field */}
                           <div>
                             <label className="block text-xs text-slate-600 mb-1.5">
                               {t("Check-out")}
@@ -425,7 +464,6 @@ export default function Hero() {
                                       const minOut = new Date(
                                         `${checkIn}T12:00:00`
                                       );
-
                                       minOut.setDate(minOut.getDate() + 1);
 
                                       const year = minOut.getFullYear();
@@ -448,7 +486,6 @@ export default function Hero() {
                           </div>
                         </div>
 
-                        {/* Date Validation */}
                         {checkIn && checkOut && checkOut <= checkIn && (
                           <p className="text-xs text-red-500 mt-2">
                             ⚠️{" "}
@@ -484,11 +521,9 @@ export default function Hero() {
                         )
                       }
                       className={`w-full border border-blue-400 rounded-[6px] px-3.5 sm:px-4 py-2 sm:py-2.5 bg-white flex justify-between items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
-                        i18n.language.startsWith("ar")
-                          ? "text-right"
-                          : "text-left"
+                        isArabic ? "text-right" : "text-left"
                       }`}
-                      dir={i18n.language.startsWith("ar") ? "rtl" : "ltr"}
+                      dir={isArabic ? "rtl" : "ltr"}
                     >
                       <div className="w-full min-w-0">
                         <label className="block text-[10px] sm:text-xs text-slate-600 mb-0.5">
@@ -541,13 +576,11 @@ export default function Hero() {
                                 )}
                               </div>
 
-                              {/* Adults */}
                               <div className="flex items-center justify-between gap-2 mb-3">
                                 <div>
                                   <p className="text-sm font-medium text-slate-700">
                                     {t("Adults")}
                                   </p>
-
                                   <p className="text-[11px] text-slate-600">
                                     {t("Ages 18+")}
                                   </p>
@@ -584,13 +617,11 @@ export default function Hero() {
                                 </div>
                               </div>
 
-                              {/* Children */}
                               <div className="flex items-center justify-between gap-2">
                                 <div>
                                   <p className="text-sm font-medium text-slate-700">
                                     {t("Children")}
                                   </p>
-
                                   <p className="text-[11px] text-slate-600">
                                     {t("Ages 0–17")}
                                   </p>
@@ -665,17 +696,19 @@ export default function Hero() {
         </div>
       </main>
 
-      {/* Decorative Bottom Leaf */}
+      {/* Decorative Bottom Leaf - Animation from side */}
       <div
-        className={`hidden lg:block absolute top-[130px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none ${
-          i18n.language.startsWith("ar") ? "right-0" : "left-0"
+        className={`hidden lg:block absolute top-[130px] z-30 w-96 sm:w-[500px] md:w-[650px] lg:w-[800px] pointer-events-none select-none overflow-hidden ${
+          isArabic ? "right-0" : "left-0"
         }`}
       >
         <img
           src="/images/Isolation_Mode.png"
           alt={t("Leaf Decorative Art")}
           className={`w-[300px] h-[624px] object-cover transform ${
-            i18n.language.startsWith("ar") ? "scale-x-[-1]" : ""
+            isArabic
+              ? "scale-x-[-1] hero-side-animation-rtl"
+              : "hero-side-animation"
           }`}
           loading="lazy"
           decoding="async"

@@ -1,3 +1,147 @@
 body{
   background-color: #FAFBFF !important;
 }
+
+
+/* =========================================
+   SPECIAL PACKAGES - Entrance Animations
+========================================= */
+
+@keyframes packageImageFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(90px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes packageImageFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-90px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes packageTextFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-65px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes packageTextFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(65px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes packageFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hidden state while the section is outside the viewport */
+.package-hidden {
+  opacity: 0;
+}
+
+/* Title */
+.section-title-hidden,
+.footer-hidden {
+  opacity: 0;
+}
+
+.section-title-enter {
+  animation: packageFadeUp 0.7s ease-out both;
+}
+
+.footer-enter {
+  animation: packageFadeUp 0.7s ease-out 0.3s both;
+}
+
+/* -----------------------------------------
+   English: image from right, text from left
+----------------------------------------- */
+
+.package-slide-next[data-language="en"] .package-image {
+  animation: packageImageFromRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.package-slide-next[data-language="en"] .package-text {
+  animation: packageTextFromLeft 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* Previous slide: reverse directions */
+.package-slide-prev[data-language="en"] .package-image {
+  animation: packageImageFromLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.package-slide-prev[data-language="en"] .package-text {
+  animation: packageTextFromRight 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* -----------------------------------------
+   Arabic: image from left, text from right
+----------------------------------------- */
+
+.package-slide-next[data-language="ar"] .package-image {
+  animation: packageImageFromLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.package-slide-next[data-language="ar"] .package-text {
+  animation: packageTextFromRight 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* Previous slide: reverse directions */
+.package-slide-prev[data-language="ar"] .package-image {
+  animation: packageImageFromRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.package-slide-prev[data-language="ar"] .package-text {
+  animation: packageTextFromLeft 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .package-slide-next .package-image,
+  .package-slide-next .package-text,
+  .package-slide-prev .package-image,
+  .package-slide-prev .package-text,
+  .section-title-enter,
+  .footer-enter {
+    animation: none !important;
+  }
+
+  .package-hidden,
+  .section-title-hidden,
+  .footer-hidden {
+    opacity: 1;
+  }
+}

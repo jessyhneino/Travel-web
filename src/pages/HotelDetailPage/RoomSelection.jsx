@@ -6,10 +6,7 @@ export default function RoomSelection() {
   const { t } = useTranslation();
 
   return (
-    <section
-      id="rooms"
-      className="w-full my-6 sm:my-8 lg:my-10 px-4 md:px-0"
-    >
+    <section id="rooms" className="w-full my-6 sm:my-8 lg:my-10 px-4 md:px-0">
       {/* Section Title */}
       <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-4 sm:mb-5">
         {t("Choose your room")}
@@ -39,7 +36,8 @@ export default function RoomSelection() {
       </div>
 
       {/* Room Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {" "}
         {Array.from({ length: 6 }, (_, i) => (
           <RoomCard key={i} />
         ))}

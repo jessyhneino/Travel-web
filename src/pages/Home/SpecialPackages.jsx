@@ -1,17 +1,43 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { packagesData } from "../Home/data/packagesData";
 
 export default function SpecialPackages() {
   const { t, i18n } = useTranslation();
 
-  // Detect Arabic language
   const isArabic = i18n.language?.startsWith("ar");
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [slideDirection, setSlideDirection] = useState("next");
+
+  const sectionRef = useRef(null);
+
+  // Replay the entrance animation whenever the section enters the viewport.
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
 
   // Next Package
   const handleNext = () => {
+    setSlideDirection("next");
+
     setCurrentIndex(
       (prevIndex) => (prevIndex + 1) % packagesData.length
     );
@@ -19,6 +45,8 @@ export default function SpecialPackages() {
 
   // Previous Package
   const handlePrev = () => {
+    setSlideDirection("prev");
+
     setCurrentIndex((prevIndex) =>
       prevIndex === 0
         ? packagesData.length - 1
@@ -31,8 +59,15 @@ export default function SpecialPackages() {
   const formatNumber = (num) =>
     num < 10 ? `0${num}` : num;
 
+  const animationClass = isVisible
+    ? slideDirection === "next"
+      ? "package-slide-next"
+      : "package-slide-prev"
+    : "package-hidden";
+
   return (
     <section
+      ref={sectionRef}
       dir={isArabic ? "rtl" : "ltr"}
       className="relative w-full overflow-hidden bg-[#FAFBFF] px-4 text-[#1e293b] sm:px-12"
     >
@@ -46,7 +81,11 @@ export default function SpecialPackages() {
       />
 
       {/* Main Title */}
-      <div className="relative mb-8 text-center sm:mb-10 lg:mb-12">
+      <div
+        className={`relative mb-8 text-center sm:mb-10 lg:mb-12 ${
+          isVisible ? "section-title-enter" : "section-title-hidden"
+        }`}
+      >
         <h2
           className={`text-lg font-bold text-[#1d2753] sm:text-xl ${
             isArabic
@@ -62,11 +101,15 @@ export default function SpecialPackages() {
       <div className="relative flex min-h-[420px] w-full items-center">
         <div
           key={currentIndex}
-          className="grid w-full grid-cols-1 items-center gap-6 px-5 sm:gap-8 lg:grid-cols-12 lg:gap-10"
+          dir={isArabic ? "rtl" : "ltr"}
+          data-language={isArabic ? "ar" : "en"}
+          className={`grid w-full grid-cols-1 items-center gap-6 px-5 sm:gap-8 lg:grid-cols-12 lg:gap-10 ${
+            isVisible ? animationClass : "package-hidden"
+          }`}
         >
           {/* Image Column */}
           <div
-            className={`order-1 flex w-full items-center justify-center lg:col-span-6 ${
+            className={`package-image flex w-full items-center justify-center lg:col-span-6 ${
               isArabic
                 ? "lg:order-1 lg:justify-start"
                 : "lg:order-2 lg:justify-end"
@@ -84,10 +127,10 @@ export default function SpecialPackages() {
           {/* Text Column */}
           <div
             dir={isArabic ? "rtl" : "ltr"}
-            className={`order-2 flex w-full flex-col justify-between gap-5 sm:gap-6 lg:col-span-6 ${
+            className={`package-text flex w-full flex-col justify-between gap-5 sm:gap-6 lg:col-span-6 ${
               isArabic
-                ? "items-center text-center lg:order-2 lg:items-start lg:text-right"
-                : "items-center text-center lg:order-1 lg:items-start lg:text-left"
+                ? "lg:order-2 lg:items-start lg:text-right"
+                : "lg:order-1 lg:items-start lg:text-left"
             }`}
           >
             {/* Package Title */}
@@ -130,7 +173,7 @@ export default function SpecialPackages() {
             <div className="flex w-full justify-center pt-1 lg:justify-start">
               <button
                 type="button"
-                className="rounded-[6px] border border-sky-400 px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm sm:px-6"
+                className="rounded-[6px] border border-sky-400 px-5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm transition-all duration-300 hover:bg-sky-500 hover:text-white sm:px-6"
               >
                 {t("View Details")}
               </button>
@@ -142,17 +185,19 @@ export default function SpecialPackages() {
       {/* Navigation Footer */}
       <div
         dir={isArabic ? "rtl" : "ltr"}
-        className="relative mx-0 mt-8 flex items-center justify-between border-t border-gray-100 pt-5 text-sm font-medium text-sky-500 sm:mx-4 sm:mt-10 sm:pt-6 min-[755px]:mx-8 lg:mt-12"
+        className={`relative mx-0 mt-8 flex items-center justify-between border-t border-gray-100 pt-5 text-sm font-medium text-sky-500 sm:mx-4 sm:mt-10 sm:pt-6 min-[755px]:mx-8 lg:mt-12 ${
+          isVisible ? "footer-enter" : "footer-hidden"
+        }`}
       >
         {/* Previous Button */}
         <button
           type="button"
           onClick={handlePrev}
           aria-label={t("PREVIOUS")}
-          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-opacity hover:opacity-80"
+          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-all duration-300 hover:opacity-70"
         >
           <span
-            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm ${
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm transition-transform duration-300 hover:scale-110 ${
               isArabic ? "scale-x-[-1]" : ""
             }`}
           >
@@ -182,7 +227,7 @@ export default function SpecialPackages() {
           type="button"
           onClick={handleNext}
           aria-label={t("NEXT")}
-          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-opacity hover:opacity-80"
+          className="flex shrink-0 cursor-pointer select-none items-center gap-2 transition-all duration-300 hover:opacity-70"
         >
           <span
             className={`text-[10px] font-bold sm:text-xs ${
@@ -193,7 +238,7 @@ export default function SpecialPackages() {
           </span>
 
           <span
-            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm ${
+            className={`flex h-7 w-7 items-center justify-center rounded-full border border-sky-500 text-sm transition-transform duration-300 hover:scale-110 ${
               isArabic ? "scale-x-[-1]" : ""
             }`}
           >

@@ -6,16 +6,18 @@ import HotelDetailPage from "./pages/HotelDetailPage/HotelDetailPage";
 import "./i18n";
 import "./App.css";
 import LanguageSync from "./pages/LanguageSync/LanguageSync";
+import PageTitle from "./component/PageTitle";
 
 function App() {
   return (
     <BrowserRouter>
       <LanguageSync />
+      <PageTitle />
+
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/hotels" element={<Hotels />} />
-          {/* مسار تفاصيل الفندق باستخدام الـ id كمتغير ديناميكي */}
           <Route path="/hotels/:id" element={<HotelDetailPage />} />
         </Route>
       </Routes>
